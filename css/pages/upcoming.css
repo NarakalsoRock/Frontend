@@ -1,0 +1,489 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #000000;
+    color: #ffffff;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    min-height: 100vh; /* Ensure body takes full viewport height for scrolling */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header (from index.css / now-playing.css) */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    z-index: 1000;
+}
+
+.logo {
+    color: #673AB7;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(103, 58, 183, 0.2);
+}
+
+.nav-item.active {
+    background: #673AB7;
+}
+
+/* Filter Section (Now Playing / Upcoming Page Top Section) */
+.filter-section {
+    margin-top: 80px;
+    padding: 20px 5%;
+    background: #19181C;
+    border-bottom: 1px solid rgba(103, 58, 183, 0.2);
+}
+
+.filter-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Filter Tabs (for "현재 상영작" / "상영 예정작") */
+.filter-tabs {
+    display: flex;
+    gap: 20px;
+}
+
+.filter-tab {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-tab.active {
+    background: #673AB7;
+}
+
+.sort-dropdown {
+    position: relative;
+}
+
+.sort-button {
+    background: none;
+    border: 1px solid #673AB7;
+    color: #673AB7;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.sort-options {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #19181C;
+    border: 1px solid #673AB7;
+    border-radius: 10px;
+    margin-top: 8px;
+    display: none;
+    z-index: 100;
+}
+
+.sort-dropdown:hover .sort-options {
+    display: block;
+}
+
+.sort-option {
+    display: block;
+    width: 100%;
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.sort-option:hover {
+    background: #673AB7;
+}
+
+/* Movies Section (Monthly upcoming) */
+.movies-section {
+    padding: 40px 0;
+}
+
+.month-section {
+    margin-bottom: 40px;
+}
+
+.month-title {
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 5% 20px;
+    padding-left: 10px;
+    border-left: 4px solid #673AB7;
+}
+
+.movie-list-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 20px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #673AB7 #19181C;
+}
+
+.movie-list-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.movie-list-container::-webkit-scrollbar-track {
+    background: #19181C;
+}
+
+.movie-list-container::-webkit-scrollbar-thumb {
+    background: #673AB7;
+    border-radius: 4px;
+}
+
+.movie-list-container::-webkit-scrollbar-thumb:hover {
+    background: #7b4fc9;
+}
+
+.movie-grid {
+    display: flex;
+    gap: 30px;
+    padding: 0 5%;
+    min-width: min-content;
+}
+
+.movie-item {
+    position: relative;
+    flex: 0 0 auto;
+    width: 180px;
+}
+
+.poster-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.movie-poster {
+    width: 180px;
+    height: 260px;
+    transition: transform 0.3s ease;
+}
+
+.movie-item:hover .movie-poster {
+    transform: scale(1.05);
+}
+
+.movie-info {
+    padding: 10px 0;
+}
+
+.movie-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.rating {
+    background: #673AB7;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.title {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.release-date {
+    color: #888;
+    font-size: 14px;
+}
+
+/* Movie Actions (Buttons) */
+.movie-actions {
+    display: flex;
+    gap: 5px; /* 버튼들 사이 간격 */
+    margin-top: auto; /* info 하단에 붙도록 */
+    align-items: center;
+    justify-content: flex-start; /* 버튼들을 왼쪽으로 정렬 */
+}
+
+.btn-book {
+    background-color: #673AB7; /* 보라색 */
+    color: white;
+    padding: 6px 12px; /* */
+    border-radius: 5px;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-book:hover {
+    background-color: #7B52C3;
+}
+
+.btn-special {
+    background-color: #333; /* Darker gray for special screening like Dolby Cinema */
+    color: white;
+    padding: 6px 10px; /* */
+    border-radius: 5px;
+    border: none;
+    font-size: 11px; /* */
+    cursor: pointer;
+    white-space: nowrap; /* 글자가 줄바꿈되지 않도록 */
+    transition: background-color 0.3s ease;
+}
+
+.btn-special:hover {
+    background-color: #555;
+}
+
+.btn-like {
+    background: none;
+    border: none; /* 테두리 제거 */
+    color: #999; /* 좋아요 색상 (회색) */
+    font-size: 18px; /* 하트 아이콘 크기 */
+    cursor: pointer;
+    padding: 0; /* 패딩 제거 */
+    margin-right: 5px; /* 예매 버튼과의 간격 */
+}
+
+.btn-like:hover {
+    color: #E0E0E0; /* 호버 시 밝은 회색 */
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    height: 74px;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding-left: 5%;
+    padding-right: 5%;
+    flex-shrink: 0;
+}
+
+.footer-text {
+    color: #673AB7;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .filter-container,
+    .movies-container {
+        padding: 0 3%;
+    }
+}
+
+@media (max-width: 992px) {
+    .filter-tab {
+        font-size: 18px;
+        padding: 8px 15px;
+    }
+    .sort-button {
+        padding: 8px 15px;
+        height: 32px;
+    }
+    .sort-options {
+        top: 35px;
+        min-width: 140px;
+    }
+    .sort-option {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* 포스터 크기 조정 */
+        gap: 30px 20px;
+    }
+    .poster-container {
+        padding-bottom: calc(260 / 180 * 100%); /* 비율 유지 */
+    }
+    .title {
+        font-size: 16px;
+    }
+    .rating, .booking-rate, .release-date {
+        font-size: 12px;
+    }
+    .btn-book, .btn-special {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+    .btn-like {
+        font-size: 16px;
+    }
+    .month-title {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 3%;
+    }
+    .logo {
+        font-size: 30px;
+    }
+    .nav {
+        gap: 15px;
+    }
+    .nav-item {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
+    .filter-section {
+        padding: 20px 3%;
+    }
+    .filter-tab {
+        font-size: 16px;
+        padding: 8px 15px;
+    }
+    .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 20px 15px;
+    }
+    .poster-container {
+        padding-bottom: calc(260 / 180 * 100%); /* 비율 유지 */
+    }
+    .title {
+        font-size: 14px;
+    }
+    .rating, .booking-rate, .release-date {
+        font-size: 11px;
+    }
+    .btn-book, .btn-special {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    .btn-like {
+        font-size: 14px;
+    }
+    .month-title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header {
+        height: 60px;
+    }
+    .logo {
+        font-size: 28px;
+    }
+    .nav {
+        display: none;
+    }
+    .filter-section {
+        padding: 15px 3%;
+    }
+    .filter-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .filter-tabs {
+        width: 100%;
+        justify-content: center; /* 탭들을 중앙 정렬 */
+    }
+    .filter-tab {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+    .sort-dropdown {
+        width: 100%;
+    }
+    .sort-button {
+        width: 100%;
+    }
+    .sort-options {
+        width: 100%;
+        right: auto;
+        left: 0;
+    }
+    .movie-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px 10px;
+    }
+    .month-title {
+        font-size: 20px;
+    }
+    .title {
+        font-size: 13px;
+    }
+    .rating, .booking-rate, .release-date {
+        font-size: 10px;
+    }
+    .btn-book, .btn-special {
+        padding: 3px 6px;
+        font-size: 9px;
+    }
+    .btn-like {
+        font-size: 12px;
+    }
+}

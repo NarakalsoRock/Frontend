@@ -12,7 +12,7 @@
         <nav class="nav">
             <a href="index.html" class="nav-item">Home</a>
             <a href="now-playing.html" class="nav-item active">Now playing</a>
-            <a href="#" class="nav-item">Upcoming</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
             <a href="#" class="nav-item">My page</a>
         </nav>
     </header>
@@ -210,5 +210,35 @@
             </div>
         </div>
     </section>
+
+    <script>
+        // Sort Dropdown Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortButton = document.querySelector('.sort-button');
+            const sortOptions = document.querySelector('.sort-options');
+
+            if (sortButton && sortOptions) {
+                sortButton.addEventListener('click', function() {
+                    sortOptions.style.display = sortOptions.style.display === 'block' ? 'none' : 'block';
+                });
+
+                sortOptions.querySelectorAll('.sort-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        sortButton.textContent = this.textContent + ' ▼';
+                        sortOptions.style.display = 'none';
+                        // Add logic here to actually sort movies based on selection
+                        console.log('Selected sort option:', this.textContent);
+                    });
+                });
+
+                // Close dropdown if clicked outside
+                document.addEventListener('click', function(event) {
+                    if (!sortButton.contains(event.target) && !sortOptions.contains(event.target)) {
+                        sortOptions.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
