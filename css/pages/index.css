@@ -15,43 +15,50 @@ body {
 
 /* Header */
 .header {
-    width: 100%;
-    height: 80px;
-    background: black;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 5%;
     position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9); /* Semi-transparent background for fixed header */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%; /* 5% padding on left/right */
     z-index: 1000;
+    box-sizing: border-box; /* Include padding in width/height */
 }
 
 .logo {
-    color: #673AB7;
+    color: #673AB7; /* 보라색 */
     font-size: 36px;
     font-weight: 700;
+    /* '뒤로 가기' 아이콘 대신 'CineX' 텍스트 로고로 통일 */
 }
 
 .nav {
     display: flex;
-    gap: 23px;
-    margin-right: 44px;
+    gap: 30px; /* now-playing.css와 동일한 간격 */
+    margin-right: 0; /* 우측 정렬을 위해 margin-right 제거 */
 }
 
 .nav-item {
     color: white;
-    font-size: 24px;
-    font-weight: 400;
     text-decoration: none;
+    font-size: 18px; /* now-playing.css와 동일한 폰트 사이즈 */
     padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
 .nav-item:hover {
-    opacity: 0.8;
+    background: rgba(103, 58, 183, 0.2); /* now-playing.css와 동일한 호버 효과 */
 }
+
+.nav-item.active {
+    background: #673AB7; /* 활성화된 탭 배경색 */
+}
+
 
 /* Main Movie Section */
 .main-movie {
@@ -174,12 +181,12 @@ body {
 }
 
 .coming-soon {
-    
+    /* No specific styles needed here yet if it's just a placeholder */
 }
 
 .movie-grid {
     display: flex;
-    gap: clamp(10px, 2vw, 18px);
+    gap: clamp(25px, 5vw, 40px);
     align-items: start;
     overflow-x: auto;
     padding: 20px 0;
@@ -225,16 +232,16 @@ body {
 /* Footer */
 .footer {
     width: 100%;
-    max-width: 1200px;   /* 필요시 조정 */
-    margin: 0 auto;
+    max-width: 1440px; /* Use max-width to match body max-width for consistent layout */
+    margin: 0 auto; /* Center the footer */
     height: 74px;
     background: black;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    padding-left: 5vw;
-    padding-right: 5vw;
+    padding-left: 5%; /* Use percentage for consistent padding */
+    padding-right: 5%;
 }
 
 .footer-text {

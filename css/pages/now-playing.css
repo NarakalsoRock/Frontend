@@ -1,0 +1,261 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #000000;
+    color: #ffffff;
+}
+
+/* Header Styles */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    z-index: 1000;
+}
+
+.logo {
+    color: #673AB7;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(103, 58, 183, 0.2);
+}
+
+.nav-item.active {
+    background: #673AB7;
+}
+
+/* Filter Section Styles */
+.filter-section {
+    margin-top: 80px;
+    padding: 20px 5%;
+    background: #19181C;
+    border-bottom: 1px solid rgba(103, 58, 183, 0.2);
+}
+
+.filter-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 20px;
+}
+
+.filter-tab {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-tab.active {
+    background: #673AB7;
+}
+
+.sort-dropdown {
+    position: relative;
+}
+
+.sort-button {
+    background: none;
+    border: 1px solid #673AB7;
+    color: #673AB7;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.sort-options {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #19181C;
+    border: 1px solid #673AB7;
+    border-radius: 10px;
+    margin-top: 8px;
+    display: none;
+    z-index: 100;
+}
+
+.sort-dropdown:hover .sort-options {
+    display: block;
+}
+
+.sort-option {
+    display: block;
+    width: 100%;
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.sort-option:hover {
+    background: #673AB7;
+}
+
+/* Movies Section Styles */
+.movies-section {
+    padding: 40px 0;
+    min-height: calc(100vh - 180px);
+}
+
+.movies-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 5%;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 40px 30px;
+    padding: 20px 0;
+}
+
+.movie-item {
+    position: relative;
+    width: 100%;
+}
+
+.rank {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 30px;
+    height: 30px;
+    background: #673AB7;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.poster-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.movie-poster {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 180/260;
+    transition: transform 0.3s ease;
+}
+
+.movie-item:hover .movie-poster {
+    transform: scale(1.05);
+}
+
+.movie-info {
+    padding: 10px 0;
+}
+
+.movie-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.rating {
+    background: #673AB7;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.title {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.booking-rate, .release-date {
+    color: #888;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 30px 20px;
+    }
+
+    .filter-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .filter-tabs {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .sort-dropdown {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+}
