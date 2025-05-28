@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - 회원가입</title>
+    <link rel="stylesheet" href="/css/pages/signup.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">CineX</div>
+        <nav class="nav">
+            <a href="index.html" class="nav-item">Home</a> 
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="mypage.html" class="nav-item">My page</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="signup-box">
+            <h2 class="signup-title">회원가입</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="nickname" class="input-label">닉네임</label>
+                    <input type="text" id="nickname" class="input-field" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="input-label">이메일</label>
+                    <input type="email" id="email" class="input-field" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="input-label">비밀번호</label>
+                    <input type="password" id="password" class="input-field" 
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$" 
+                           title="비밀번호는 8자 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다." required>
+                </div>
+                <div class="login-prompt">
+                    <span class="login-text">이미 회원이신가요?</span>
+                    <a href="login.html" class="login-link">로그인</a>
+                </div>
+                <button type="submit" class="signup-button">회원가입</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
+</body>
+</html>
