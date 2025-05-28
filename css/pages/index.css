@@ -7,90 +7,113 @@
 body {
     font-family: 'Inter', sans-serif;
     background: black;
-    width: 1440px;
-    height: 1024px;
-    position: relative;
-    overflow: hidden;
+    min-width: 320px;    /* 최소 너비 */
+    max-width: 1440px;   /* 최대 너비 */
+    margin: 0 auto;
+    overflow-y: auto;
 }
 
 /* Header */
 .header {
-    width: 1440px;
-    height: 80px;
-    background: black;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9); /* Semi-transparent background for fixed header */
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 0 44px;
+    align-items: center;
+    padding: 0 5%; /* 5% padding on left/right */
+    z-index: 1000;
+    box-sizing: border-box; /* Include padding in width/height */
 }
 
 .logo {
-    color: #673AB7;
+    color: #673AB7; /* 보라색 */
     font-size: 36px;
     font-weight: 700;
+    /* '뒤로 가기' 아이콘 대신 'CineX' 텍스트 로고로 통일 */
 }
 
 .nav {
     display: flex;
-    gap: 23px;
-    margin-right: 44px;
+    gap: 30px; /* now-playing.css와 동일한 간격 */
+    margin-right: 0; /* 우측 정렬을 위해 margin-right 제거 */
 }
 
 .nav-item {
     color: white;
-    font-size: 24px;
-    font-weight: 400;
     text-decoration: none;
+    font-size: 18px; /* now-playing.css와 동일한 폰트 사이즈 */
     padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
 .nav-item:hover {
-    opacity: 0.8;
+    background: rgba(103, 58, 183, 0.2); /* now-playing.css와 동일한 호버 효과 */
 }
+
+.nav-item.active {
+    background: #673AB7; /* 활성화된 탭 배경색 */
+}
+
 
 /* Main Movie Section */
 .main-movie {
-    width: 1346px;
-    height: 580px;
-    left: 47px;
-    top: 98px;
-    position: absolute;
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    box-sizing: border-box;
     background: #19181C;
-    padding: 41px 60px;
+    padding: 80px 5% 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.main-movie::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #673AB7, transparent);
 }
 
 .main-movie-title {
     color: white;
-    font-size: 40px;
+    font-size: clamp(32px, 5vw, 40px);
     font-weight: 700;
-    margin-bottom: 151px;
+    margin-bottom: 5vh;
 }
 
 .main-movie-description {
     color: white;
-    font-size: 24px;
+    font-size: clamp(18px, 3vw, 24px);
     font-weight: 500;
-    margin-bottom: 188px;
-    margin-left: 286px;
+    margin-bottom: 5vh;
+    margin-left: 0;
 }
 
 .main-movie-buttons {
     display: flex;
-    gap: 48px;
-    margin-left: 10px;
+    gap: clamp(20px, 3vw, 48px);
+    margin-left: 0;
 }
 
 .btn-detail {
-    width: 175px;
-    height: 56px;
+    width: clamp(140px, 15vw, 175px);
+    height: clamp(45px, 5vh, 56px);
     background: #673AB7;
     border-radius: 10px;
     border: none;
     color: white;
-    font-size: 24px;
+    font-size: clamp(18px, 2vw, 24px);
     font-weight: 500;
     cursor: pointer;
     display: flex;
@@ -99,13 +122,13 @@ body {
 }
 
 .btn-trailer {
-    width: 175px;
-    height: 56px;
+    width: clamp(140px, 15vw, 175px);
+    height: clamp(45px, 5vh, 56px);
     background: black;
     border-radius: 10px;
     border: 1px solid #673AB7;
     color: #673AB7;
-    font-size: 24px;
+    font-size: clamp(18px, 2vw, 24px);
     font-weight: 500;
     cursor: pointer;
     display: flex;
@@ -115,82 +138,110 @@ body {
 
 /* Movie Sections */
 .movie-section {
-    width: 1346px;
-    height: 425px;
-    left: 47px;
-    position: absolute;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 425px;
     background: #19181C;
-    padding: 32px 28px;
-}
-
-.now-playing {
-    top: 728px;
-}
-
-.coming-soon {
-    top: 1205px;
+    box-sizing: border-box;
+    padding: 40px 5%;
 }
 
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: clamp(20px, 4vh, 32px);
+    padding: 0 20px;
 }
 
 .section-title {
     color: white;
-    font-size: 36px;
+    font-size: clamp(24px, 4vw, 36px);
     font-weight: 700;
 }
 
 .arrow {
     color: white;
-    font-size: 36px;
+    font-size: clamp(24px, 4vw, 36px);
     font-weight: 500;
     cursor: pointer;
-    margin-right: 20px;
+    margin-right: 0;
+    transition: transform 0.3s ease;
 }
+
+.arrow:hover {
+    transform: scale(1.1);
+    color: #673AB7;
+}
+
+.now-playing {
+    margin-top: 40px;
+    position: relative;
+    background: linear-gradient(180deg, rgba(103, 58, 183, 0.1) 0%, rgba(25, 24, 28, 0) 100%);
+}
+
+/* .coming-soon {
+
+} */
 
 .movie-grid {
     display: flex;
-    gap: 18px;
-    align-items: flex-start;
+    gap: clamp(25px, 5vw, 40px);
+    align-items: start;
+    overflow-x: auto;
+    padding: 20px 0;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.movie-grid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .movie-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex: 0 0 auto;
+    width: 150px;
+    scroll-snap-align: start;
+    transition: transform 0.3s ease;
+}
+
+.movie-item:hover {
+    transform: scale(1.05);
 }
 
 .movie-poster {
     width: 150px;
     height: 220px;
     background: #19181C;
-    margin-bottom: 11px;
+    margin-bottom: clamp(8px, 1.5vh, 11px);
     border-radius: 4px;
+    object-fit: cover;
 }
 
 .movie-title {
     color: white;
-    font-size: 20px;
+    font-size: clamp(16px, 2vw, 20px);
     font-weight: 500;
     text-align: center;
-    width: 150px;
+    width: 100%;
+    max-width: 150px;
 }
 
 /* Footer */
 .footer {
-    width: 1440px;
+    width: 100%;
+    max-width: 1440px; /* Use max-width to match body max-width for consistent layout */
+    margin: 0 auto; /* Center the footer */
     height: 74px;
-    left: 0px;
-    top: 1696px;
-    position: absolute;
     background: black;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
+    padding-left: 5%; /* Use percentage for consistent padding */
+    padding-right: 5%;
 }
 
 .footer-text {
@@ -199,3 +250,6 @@ body {
     font-weight: 500;
 }
 
+html, body {
+    height: 100%;
+}
