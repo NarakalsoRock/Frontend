@@ -14,44 +14,42 @@ body {
     left: 0;
     width: 100%;
     height: 80px;
-    background: rgba(0, 0, 0, 0.9); /* Semi-transparent background for fixed header */
+    background: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 5%; /* 5% padding on left/right */
+    padding: 0 5%;
     z-index: 1000;
-    box-sizing: border-box; /* Include padding in width/height */
+    box-sizing: border-box;
 }
 
 .logo {
-    color: #673AB7; /* 보라색 */
+    color: #673AB7;
     font-size: 36px;
     font-weight: 700;
-    /* '뒤로 가기' 아이콘 대신 'CineX' 텍스트 로고로 통일 */
 }
 
 .nav {
     display: flex;
-    gap: 30px; /* now-playing.css와 동일한 간격 */
-    margin-right: 0; /* 우측 정렬을 위해 margin-right 제거 */
+    gap: 30px;
 }
 
 .nav-item {
     color: white;
     text-decoration: none;
-    font-size: 18px; /* now-playing.css와 동일한 폰트 사이즈 */
+    font-size: 18px;
     padding: 8px 16px;
     border-radius: 20px;
     transition: all 0.3s ease;
 }
 
 .nav-item:hover {
-    background: rgba(103, 58, 183, 0.2); /* now-playing.css와 동일한 호버 효과 */
+    background: rgba(103, 58, 183, 0.2);
 }
 
 /* 메인 컨텐츠 */
 .main-content {
-    padding: 120px 2rem 2rem;
+    padding: 100px 2rem 2rem; /* 헤더 높이(80px) + 추가 여백(20px) */
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -85,121 +83,255 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* === 포스터 핀 및 팝업 스타일 시작 === */
+.pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 10;
+}
+
+.pin-icon {
+    width: 24px;
+    height: 24px;
+    background-color: rgba(103, 58, 183, 0.8);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.pin:hover .pin-icon {
+    transform: scale(1.2);
+    background-color: #673AB7;
+}
+
+.pin-popup {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px; /* 팝업 너비 조정 */
+    background-color: #2c2c2c;
+    color: white;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 20;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s, transform 0.3s ease;
+    display: flex;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.pin:hover .pin-popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-5px);
+    transition-delay: 0s, 0s, 0s;
+    pointer-events: auto;
+}
+
+.pin-popup::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #2c2c2c transparent transparent transparent;
+}
+
+.pin-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px; /* 사각형 이미지로 변경 */
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.pin-info {
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.pin-name {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0 0 4px 0;
+}
+
+.pin-role,
+.pin-character {
+    font-size: 12px;
+    color: #ccc;
+    margin: 0;
+}
+/* === 포스터 핀 및 팝업 스타일 끝 === */
+
 /* 영화 정보 영역 */
 .movie-info {
     flex-grow: 1;
 }
 
 .movie-title {
-    font-size: 48px;
+    font-size: 48px; /* 이미지와 유사하게 매우 큰 타이틀 */
     font-weight: 700;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem; /* 타이틀과 메타정보 간격 조정 */
     line-height: 1.2;
 }
 
 .movie-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 0.75rem 1rem; /* 세로 간격, 가로 간격 */
+    margin-bottom: 1.5rem; /* 메타와 액션 버튼 간격 조정 */
+    align-items: center; /* 내부 요소들 수직 정렬 */
 }
 
 .movie-meta span {
-    padding: 0.5rem 1rem;
-    background-color: #393740;
-    border-radius: 20px;
-    font-size: 18px;
+    padding: 0.3rem 0.8rem; /* 패딩 약간 줄임 */
+    background-color: transparent; /* 이미지에서는 배경색 없음 */
+    border-radius: 0; /* 이미지에서는 radius 없음 */
+    font-size: 20px; /* 이미지와 유사한 폰트 크기, 원본 32px 은 너무 커보임. 20px 정도로 조정 */
+    color: #ccc; /* 기본 메타 텍스트 색상 */
+}
+.movie-meta span.rating { /* 15세 숫자만 */
+    width: 38px; /* 이미지의 검은색 네모 박스 크기 유사하게 */
+    height: 38px;
+    background-color: black;
+    border: 1px solid white;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    text-align: center;
+    border-radius: 2px; /* 약간의 모서리 처리 */
 }
 
-.rating {
-    color: #673AB7;
-    font-weight: 500;
+.movie-meta span.score { /* 별점 */
+    color: white; /* 이미지에서 흰색으로 보임 */
+    font-weight: bold;
 }
+.support-info-banner-text { /* 필요하다면 추가 스타일링 */
+    background-color: #333; /* 이미지 참고 (어두운 회색 계열) */
+    color: #D9D9D9; /* 이미지 참고 (밝은 회색 계열) */
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 16px; /* 기존 24px에서 조정 */
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
 
 /* 액션 버튼 */
 .action-buttons {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem; /* 버튼 간 간격 조정 */
     margin-bottom: 2rem;
+    align-items: center;
 }
 
 .btn-like, .btn-bookmark {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
-    border: 2px solid #673AB7;
     background: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s;
+    padding: 0;
+    border: 2px solid #888;
 }
-
 .btn-like:hover, .btn-bookmark:hover {
+    border-color: #673AB7;
     background: rgba(103, 58, 183, 0.1);
 }
-
 .btn-like.active, .btn-bookmark.active {
     background: #673AB7;
+    border-color: #673AB7;
 }
-
-.icon-heart, .icon-bookmark {
+.icon-heart, .icon-bookmark { /* SVG 아이콘 공통 스타일 */
     width: 24px;
     height: 24px;
-    fill: none;
-    stroke: #673AB7;
-    stroke-width: 2;
     transition: all 0.3s;
 }
-
+.icon-heart, .icon-bookmark { /* 좋아요, 북마크 아이콘 초기 스타일 */
+    fill: none;
+    stroke: #888;
+    stroke-width: 2;
+}
+.btn-like:hover .icon-heart, .btn-bookmark:hover .icon-bookmark {
+    stroke: #673AB7;
+}
 .btn-like.active .icon-heart,
 .btn-bookmark.active .icon-bookmark {
     fill: white;
     stroke: white;
 }
 
+/* 예고편 재생 버튼 (원래 스타일 - 아이콘 + 텍스트) */
 .btn-trailer {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0 1.5rem;
-    height: 48px;
+    gap: 0.5rem; /* 아이콘과 텍스트 사이 간격 */
+    padding: 0 1.5rem; /* 좌우 패딩으로 길이감 부여 */
+    height: 48px; /* 이전 높이 유지 (다른 원형 버튼들과 높이가 다를 수 있음) */
     background: #673AB7;
-    border: none;
-    border-radius: 24px;
+    border: none; /* 테두리 없음 */
+    border-radius: 24px; /* 타원형 모양 */
     color: white;
-    font-size: 18px;
+    font-size: 18px; /* 텍스트 폰트 크기 */
+    font-weight: 500; /* 텍스트 두께 */
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .btn-trailer:hover {
-    background: #7b4fc9;
+    background-color: #7b4fc9; /* 호버 시 배경색 변경 */
 }
 
-.icon-play {
-    width: 24px;
-    height: 24px;
-    fill: white;
+.btn-trailer .icon-play { /* 예고편 재생 버튼 내 아이콘 */
+    width: 20px; /* 아이콘 크기 조정 */
+    height: 20px;
+    fill: white; /* 아이콘 색상 */
 }
+.btn-trailer span { /* 예고편 재생 버튼 내 텍스트 */
+    display: inline; /* 텍스트 보이도록 */
+    line-height: 1; /* 텍스트 수직 정렬 도울 수 있음 */
+}
+
 
 /* 시놉시스 섹션 */
 .movie-synopsis {
-    margin-top: 2rem;
+    margin-top: 1rem; /* 간격 조정 */
 }
 
 .section-title {
-    font-size: 32px;
+    font-size: 28px; /* 이미지 참고하여 약간 작게 조정 */
     font-weight: 700;
     color: #673AB7;
     margin-bottom: 1rem;
 }
 
 .synopsis-text {
-    font-size: 18px;
-    line-height: 1.6;
-    color: #888;
+    font-size: 16px; /* 이미지 참고하여 약간 작게 조정 */
+    line-height: 1.7; /* 가독성 */
+    color: #ccc;
 }
 
 /* 제작진 및 출연자 섹션 */
@@ -213,86 +345,87 @@ body {
     align-items: center;
     margin-bottom: 1.5rem;
 }
+.arrow {
+    color: white;
+    font-size: 28px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+.arrow:hover {
+    transform: scale(1.1);
+    color: #673AB7;
+}
 
 .credits-grid {
     display: flex;
-    gap: 1.5rem;
+    gap: 1.5rem; /* 아이템 간 간격 */
     overflow-x: auto;
     padding-bottom: 1rem;
     scrollbar-width: thin;
     scrollbar-color: #673AB7 #393740;
 }
-
-.credits-grid::-webkit-scrollbar {
-    height: 8px;
-}
-
-.credits-grid::-webkit-scrollbar-track {
-    background: #393740;
-    border-radius: 4px;
-}
-
-.credits-grid::-webkit-scrollbar-thumb {
-    background: #673AB7;
-    border-radius: 4px;
-}
+.credits-grid::-webkit-scrollbar { height: 8px; }
+.credits-grid::-webkit-scrollbar-track { background: #393740; border-radius: 4px; }
+.credits-grid::-webkit-scrollbar-thumb { background: #673AB7; border-radius: 4px; }
 
 .credit-item {
-    flex: 0 0 150px;
+    flex: 0 0 130px; /* 이미지 너비에 맞게 조정, 이미지에서 정사각형에 가까움 */
     text-align: center;
 }
-
 .credit-image {
-    width: 150px;
-    height: 220px;
+    width: 130px; /* 정사각형 이미지 */
+    height: 130px; /* 정사각형 이미지 */
     object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
+    border-radius: 8px; /* 이미지 모서리 */
+    margin-bottom: 0.75rem; /* 이름과의 간격 */
 }
-
-.credit-info {
-    text-align: center;
-}
-
+.credit-info { text-align: center; }
 .credit-name {
     font-weight: 500;
+    font-size: 15px; /* 이름 폰트 크기 조정 */
     margin-bottom: 0.25rem;
+    color: white;
 }
-
-.credit-role {
-    font-size: 14px;
-    color: #888;
+.credit-role { /* 역할은 이미지에 표시되지 않음, 필요시 스타일링 */
+    display: none;
+    /* font-size: 14px; */
+    /* color: #888; */
 }
 
 /* 미디어 섹션 */
 .movie-media {
     margin-top: 3rem;
 }
-
+.movie-media .section-header { /* 미디어 섹션의 헤더 (타이틀 + 탭) */
+    margin-bottom: 1.5rem; /* 탭 아래 컨텐츠와의 간격 */
+}
+.movie-media .section-title { /* 미디어 타이틀은 왼쪽에 */
+    margin-bottom: 0; /* section-header 내부이므로 자체 마진 제거 */
+}
 .media-tabs {
     display: flex;
-    gap: 2rem;
-    margin-bottom: 1.5rem;
+    gap: 1.5rem; /* 탭 간격 */
+    margin-left: auto; /* 탭을 오른쪽으로 밀착 (옵션) 또는 section-header에서 space-between으로 자동 정렬 */
 }
-
 .media-tab {
     background: none;
     border: none;
     color: #888;
-    font-size: 18px;
+    font-size: 18px; /* 이미지와 유사한 크기 */
+    font-weight: 500; /* 활성/비활성 탭 구분 */
     cursor: pointer;
     padding: 0.5rem 0;
     position: relative;
+    transition: color 0.3s ease;
 }
-
 .media-tab.active {
     color: white;
 }
-
 .media-tab.active::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -2px; /* 밑줄 위치 살짝 조정 */
     left: 0;
     width: 100%;
     height: 2px;
@@ -301,55 +434,89 @@ body {
 
 .media-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 아이템 크기 조정 */
     gap: 1.5rem;
 }
-
 .media-item {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
+    background-color: #222;
 }
-
-.media-thumbnail,
-.media-image {
+.media-thumbnail, .media-image {
     width: 100%;
     aspect-ratio: 16/9;
     object-fit: cover;
+    display: block;
 }
-
 .play-button {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
+    width: 50px; /* 버튼 크기 약간 줄임 */
+    height: 50px;
     background: rgba(103, 58, 183, 0.8);
     border: none;
     border-radius: 50%;
     color: white;
-    font-size: 24px;
+    font-size: 20px; /* 아이콘 크기 약간 줄임 */
     cursor: pointer;
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
 .play-button:hover {
     background: #673AB7;
     transform: translate(-50%, -50%) scale(1.1);
 }
+.media-content.hidden { display: none; }
 
-.media-content.hidden {
-    display: none;
+/* 관련 시리즈 - 이미지 기반 스타일 */
+.related-series {
+    margin-top: 3rem;
+}
+.related-series-banner {
+    background: #392B52; /* 이미지의 보라색 계열 배경 */
+    border-radius: 8px;
+    padding: 2rem;
+    color: white;
+}
+.related-series-banner-title {
+    font-size: 20px; /* 이미지 참고 */
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+.related-series-list {
+    font-size: 15px; /* 이미지 참고 */
+    line-height: 1.6;
+    color: #e0e0e0; /* 약간 밝은 회색 */
+    margin-bottom: 1.5rem;
+}
+.btn-view-collection {
+    background-color: #673AB7;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 20px; /* 둥근 버튼 */
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.btn-view-collection:hover {
+    background-color: #7b4fc9; /* 약간 밝은 보라색 */
 }
 
-/* 관련 시리즈 & 추천 영화 */
-.related-series,
+
+/* 추천 영화 */
 .recommended-movies {
     margin-top: 3rem;
 }
-
-.movie-grid {
+/* .movie-grid, .movie-item 등은 다른 섹션의 스타일을 공유할 수 있도록 CSS 우선순위 및 클래스 명명에 유의 */
+/* 여기서는 .recommended-movies 내부의 .movie-grid, .movie-item 에만 적용되는 스타일 */
+.recommended-movies .movie-grid {
     display: flex;
     gap: 1.5rem;
     overflow-x: auto;
@@ -357,94 +524,90 @@ body {
     scrollbar-width: thin;
     scrollbar-color: #673AB7 #393740;
 }
+.recommended-movies .movie-grid::-webkit-scrollbar { height: 8px; }
+.recommended-movies .movie-grid::-webkit-scrollbar-track { background: #393740; border-radius: 4px; }
+.recommended-movies .movie-grid::-webkit-scrollbar-thumb { background: #673AB7; border-radius: 4px; }
 
-.movie-grid::-webkit-scrollbar {
-    height: 8px;
-}
-
-.movie-grid::-webkit-scrollbar-track {
-    background: #393740;
-    border-radius: 4px;
-}
-
-.movie-grid::-webkit-scrollbar-thumb {
-    background: #673AB7;
-    border-radius: 4px;
-}
-
-.movie-item {
-    flex: 0 0 150px;
+.recommended-movies .movie-item {
+    flex: 0 0 150px; /* 이미지에서 보이는 아이템 너비 */
     transition: transform 0.3s;
 }
-
-.movie-item:hover {
+.recommended-movies .movie-item:hover {
     transform: scale(1.05);
 }
-
-.movie-item .movie-poster {
+.recommended-movies .movie-poster { /* 포스터 크기 */
     width: 150px;
     height: 220px;
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 0.5rem;
+    background-color: #333; /* Placeholder 배경 */
 }
-
-.movie-item .movie-title {
+.recommended-movies .movie-title {
     font-size: 14px;
     text-align: center;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* 예고편 모달 */
+
+/* === 예고편 모달 창 스타일 === */
 .trailer-modal {
-    display: none; /* 기본적으로 숨김 */
+    display: none; /* ★★★ 중요: JS로 .active 클래스 추가 전까지는 숨김 ★★★ */
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
     z-index: 2000;
+    /* Flexbox를 사용하여 내부 컨텐츠(.modal-content)를 화면 중앙에 배치 */
     justify-content: center;
     align-items: center;
 }
-
-.trailer-modal.active {
+.trailer-modal.active { /* JS에서 이 클래스를 추가/제거하여 모달 표시/숨김 */
     display: flex;
 }
-
 .modal-content {
     background: #181818;
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     position: relative;
-    max-width: 800px;
+    max-width: 900px;
     width: 90vw;
-    max-height: 80vh;
+    max-height: 85vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
-
 .modal-close {
     position: absolute;
     top: 1rem;
     right: 1rem;
     background: none;
     border: none;
-    color: #fff;
-    font-size: 2rem;
+    color: #aaa;
+    font-size: 2.5rem;
     cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
 }
-
+.modal-close:hover { color: white; }
 .video-container {
     width: 100%;
     aspect-ratio: 16/9;
+    background-color: black;
 }
-
 .video-container iframe {
     width: 100%;
     height: 100%;
     border: none;
     border-radius: 8px;
 }
+/* === 예고편 모달 스타일 끝 === */
 
 /* 푸터 */
 .footer {
@@ -454,60 +617,69 @@ body {
     padding: 2rem;
     margin-top: 4rem;
 }
+.footer-text {
+    color: #673AB7;
+    font-size: 16px;
+    font-weight: 500;
+}
 
 /* 반응형 스타일 */
 @media (max-width: 1024px) {
     .movie-header {
         flex-direction: column;
+        align-items: center;
     }
-
     .poster-container {
-        margin: 0 auto;
+        margin: 0 auto 2rem auto;
     }
-
-    .movie-info {
-        text-align: center;
-    }
-
-    .movie-meta {
-        justify-content: center;
-    }
-
-    .action-buttons {
-        justify-content: center;
-    }
+    .movie-info { text-align: center; }
+    .movie-meta { justify-content: center; }
+    .action-buttons { justify-content: center; }
 }
-
 @media (max-width: 768px) {
-    .movie-title {
-        font-size: 36px;
-    }
-
-    .section-title {
-        font-size: 24px;
-    }
-
-    .media-grid {
-        grid-template-columns: 1fr;
-    }
+    .main-content { padding: 100px 1rem 1rem; }
+    .movie-header { gap: 1.5rem; }
+    .movie-title { font-size: 32px; } /* 타이틀 크기 조정 */
+    .movie-meta span { font-size: 16px; } /* 메타 정보 크기 조정 */
+    .movie-meta span.rating { width: 32px; height: 32px; font-size: 16px;}
+    .section-title { font-size: 24px; }
+    .media-grid { grid-template-columns: 1fr; }
+    .modal-content { padding: 1rem; width: 95vw; }
+    .modal-close { font-size: 2rem; top: 0.5rem; right: 0.5rem; }
+    .related-series-banner { padding: 1.5rem; }
+    .related-series-banner-title { font-size: 18px; }
+    .related-series-list { font-size: 14px; }
+    .btn-view-collection { padding: 0.6rem 1.2rem; font-size: 15px; }
 }
-
 @media (max-width: 480px) {
     .poster-container {
         width: 280px;
-        height: 400px;
+        height: auto;
+        aspect-ratio: 380/540;
     }
-
-    .movie-meta span {
-        font-size: 14px;
-    }
-
+    .movie-meta span { font-size: 13px; padding: 0.3rem 0.6rem; }
+    .movie-meta span.rating { width: 28px; height: 28px; font-size: 14px;}
     .action-buttons {
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem; /* 버튼 세로 간격 */
     }
-
-    .btn-trailer {
+    .btn-like, .btn-bookmark, .btn-trailer {
         width: 100%;
-        justify-content: center;
+        max-width: 280px; /* 버튼 최대 너비 */
+        height: 44px; /* 버튼 높이 통일 */
     }
+    .icon-heart, .icon-bookmark, .icon-play { width: 20px; height: 20px; }
+
+    .synopsis-text { font-size: 15px; }
+    .credits-grid, .recommended-movies .movie-grid, .related-series .movie-grid { gap: 1rem; }
+    .credit-item, .recommended-movies .movie-item, .related-series .movie-item { flex-basis: 110px; } /* 아이템 너비 더 줄임 */
+    .credit-image, .recommended-movies .movie-poster, .related-series .movie-poster {
+        width: 110px;
+        height: 160px; /* 비율 유지 */
+    }
+    .credit-name, .recommended-movies .movie-title, .related-series .movie-title { font-size: 12px; }
+    .related-series-banner-title { font-size: 16px; }
+    .related-series-list { font-size: 13px; }
+    .btn-view-collection { padding: 0.5rem 1rem; font-size: 14px; }
 }
