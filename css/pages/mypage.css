@@ -1,0 +1,502 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    min-height: 100vh; /* Ensure body takes full viewport height */
+    display: flex;
+    flex-direction: column;
+}
+
+.page-wrapper {
+    width: 100%;
+    max-width: 1440px; /* 원본 HTML의 width를 기준으로 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+    position: relative;
+    background: black;
+    /* overflow: hidden; (컨텐츠가 넘칠 경우를 대비하여 제거하거나 필요에 따라 추가) */
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    z-index: 1000;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* <와 CineX 사이 간격 */
+}
+
+.logo-back-arrow {
+    color: #673AB7; /* 보라색 */
+    font-size: 36px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.logo {
+    color: #673AB7;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(103, 58, 183, 0.2);
+}
+
+.nav-item.active {
+    background: #673AB7;
+}
+
+/* Page Title Section */
+.page-title-section {
+    margin-top: 80px;
+    padding: 40px 5%;
+    background: #19181C;
+    border-bottom: 1px solid rgba(103, 58, 183, 0.2);
+}
+
+.page-title {
+    color: white;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+/* Filter Section */
+.filter-section {
+    margin-top: 80px;
+    padding: 20px 5%;
+    background: #19181C;
+    border-bottom: 1px solid rgba(103, 58, 183, 0.2);
+}
+
+.filter-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 20px;
+}
+
+.filter-tab {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-tab.active {
+    background: #673AB7;
+}
+
+/* Main Content */
+.main-content {
+    background: #19181C;
+}
+
+/* Profile Section */
+.profile-section {
+    padding: 40px 5%;
+    border-bottom: 1px solid rgba(103, 58, 183, 0.2);
+    background: #000000;
+}
+
+.profile-content {
+    display: flex;
+    gap: 42px;
+    margin-top: 20px;
+}
+
+.profile-image-placeholder {
+    width: 260px;
+    height: 260px;
+    background: #D9D9D9;
+    flex-shrink: 0;
+    border-radius: 8px;
+}
+
+.profile-info-container {
+    flex: 1;
+    background: #19181C;
+    padding: 23px 29px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: 1px solid rgba(103, 58, 183, 0.2);
+    border-radius: 8px;
+}
+
+.info-title {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.info-label {
+    color: white;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+/* Statistics Section */
+.statistics-section {
+    padding: 40px 5%;
+    border-bottom: 1px solid rgba(103, 58, 183, 0.2);
+    background: #19181C;
+}
+
+.section-title {
+    color: white;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.stat-card {
+    background: #19181C;
+    padding: 20px;
+    border: 1px solid rgba(103, 58, 183, 0.2);
+    border-radius: 8px;
+}
+
+.stat-label {
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 25px;
+    background: #D9D9D9;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #673AB7;
+    border-radius: 5px;
+}
+
+.stat-value {
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: right;
+}
+
+/* Movie Sections */
+.movie-section {
+    padding: 40px 5%;
+    border-bottom: 1px solid rgba(103, 58, 183, 0.2);
+    background: #000000;
+}
+
+.movie-section:last-child {
+    border-bottom: none;
+}
+
+.movie-section .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.movie-section .section-title {
+    margin-bottom: 0;
+}
+
+.arrow {
+    color: white;
+    font-size: 36px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.arrow:hover {
+    transform: scale(1.1);
+    color: #673AB7;
+}
+
+.movie-grid {
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    padding: 20px 0;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.movie-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.movie-item {
+    flex: 0 0 auto;
+    width: 180px;
+    scroll-snap-align: start;
+    transition: transform 0.3s ease;
+}
+
+.movie-item:hover {
+    transform: scale(1.05);
+}
+
+.poster-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.movie-poster {
+    width: 180px;
+    height: 260px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.movie-info {
+    padding: 10px 0;
+}
+
+.movie-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.rating {
+    background: #673AB7;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.title {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.booking-rate, .release-date {
+    color: #888;
+    font-size: 14px;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    height: 74px;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.footer-text {
+    color: #673AB7;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .stats-grid {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    .profile-section {
+        flex-direction: column;
+    }
+    
+    .profile-image-placeholder {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 3%;
+    }
+    
+    .nav {
+        display: none;
+    }
+    
+    .page-title {
+        font-size: 30px;
+    }
+    
+    .profile-image-placeholder {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .info-title {
+        font-size: 20px;
+    }
+    
+    .info-label {
+        font-size: 16px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+    }
+    
+    .stat-label {
+        font-size: 16px;
+    }
+    
+    .movie-grid {
+        gap: 20px;
+    }
+    
+    .movie-item {
+        width: 150px;
+    }
+    
+    .movie-poster {
+        width: 150px;
+        height: 217px;
+    }
+    
+    .filter-tab {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
+    
+    .profile-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 24px;
+    }
+    
+    .profile-image-placeholder {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .info-title {
+        font-size: 18px;
+    }
+    
+    .info-label {
+        font-size: 14px;
+    }
+    
+    .section-title {
+        font-size: 20px;
+    }
+    
+    .stat-label {
+        font-size: 14px;
+    }
+    
+    .movie-item {
+        width: 130px;
+    }
+    
+    .movie-poster {
+        width: 130px;
+        height: 188px;
+    }
+    
+    .title {
+        font-size: 14px;
+    }
+    
+    .rating {
+        font-size: 12px;
+    }
+    
+    .booking-rate,
+    .release-date {
+        font-size: 12px;
+    }
+}

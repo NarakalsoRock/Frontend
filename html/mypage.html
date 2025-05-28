@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - MyPage</title>
+    <link rel="stylesheet" href="/css/pages/mypage.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">CineX</div>
+        <nav class="nav">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="mypage.html" class="nav-item active">My page</a>
+        </nav>
+    </header>
+
+    <section class="filter-section">
+        <div class="filter-container">
+            <div class="filter-tabs">
+                <button class="filter-tab active">My Page</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <section class="profile-section">
+            <h2 class="section-title">프로필 정보</h2>
+            <div class="profile-content">
+                <div class="profile-image-placeholder"></div>
+                <div class="profile-info-container">
+                    <div class="info-group">
+                        <div class="info-label">닉네임: 커식이</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">이메일: cursor.ai@naver.com</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">가입 일자: 2025.05.28</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="statistics-section">
+            <h2 class="section-title">통계</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">'좋아요'한 영화 수</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 37%"></div>
+                    </div>
+                    <div class="stat-value">37/100 37.00%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">'기대돼요(투표)'한 영화 수</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 37%"></div>
+                    </div>
+                    <div class="stat-value">37/100 37.00%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">'북마크'한 영화 수</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 37%"></div>
+                    </div>
+                    <div class="stat-value">37/100 37.00%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">'별로에요(투표)'한 영화 수</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 37%"></div>
+                    </div>
+                    <div class="stat-value">37/100 37.00%</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="movie-section liked-movies">
+            <h2 class="section-title">좋아요한 영화 리스트</h2>
+            <div class="movie-grid">
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">15</span>
+                            <span class="title">듄: 파트 2</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 35.2%</span>
+                            <span class="release-date">2024.02.28</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">12</span>
+                            <span class="title">웡카</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 28.5%</span>
+                            <span class="release-date">2024.01.31</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">ALL</span>
+                            <span class="title">겨울왕국 3</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 21.0%</span>
+                            <span class="release-date">2024.03.01</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">18</span>
+                            <span class="title">메이드 인 이태리</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 18.3%</span>
+                            <span class="release-date">2024.03.05</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">15</span>
+                            <span class="title">아가일</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 12.1%</span>
+                            <span class="release-date">2024.02.10</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">12</span>
+                            <span class="title">주토피아2</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 12.1%</span>
+                            <span class="release-date">2024.02.10</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">12</span>
+                            <span class="title">주토피아2</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 12.1%</span>
+                            <span class="release-date">2024.02.10</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">12</span>
+                            <span class="title">주토피아2</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 12.1%</span>
+                            <span class="release-date">2024.02.10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="movie-section bookmarked-movies">
+            <h2 class="section-title">북마크한 영화 리스트</h2>
+            <div class="movie-grid">
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">15</span>
+                            <span class="title">배트맨: 다크 나이트</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 30.2%</span>
+                            <span class="release-date">2024.04.15</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">12</span>
+                            <span class="title">인사이드 아웃 2</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 25.5%</span>
+                            <span class="release-date">2024.04.20</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">ALL</span>
+                            <span class="title">토이 스토리 5</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 20.0%</span>
+                            <span class="release-date">2024.05.01</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">18</span>
+                            <span class="title">매트릭스: 리버스</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 15.3%</span>
+                            <span class="release-date">2024.05.15</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">15</span>
+                            <span class="title">인셉션 2</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 10.1%</span>
+                            <span class="release-date">2024.06.01</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">15</span>
+                            <span class="title">인셉션 2</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 10.1%</span>
+                            <span class="release-date">2024.06.01</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">15</span>
+                            <span class="title">인셉션 2</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 10.1%</span>
+                            <span class="release-date">2024.06.01</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div class="poster-container">
+                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-header">
+                            <span class="rating">15</span>
+                            <span class="title">인셉션 2</span>
+                        </div>
+                        <div class="movie-details">
+                            <span class="booking-rate">예매율 10.1%</span>
+                            <span class="release-date">2024.06.01</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
+</body>
+</html>
