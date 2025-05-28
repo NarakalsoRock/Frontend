@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - 영화 상세</title>
+    <link rel="stylesheet" href="../css/pages/movie-detail.css">
+    <script src="../js/movie-detail.js" defer></script>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">CineX</div>
+        <nav class="nav">
+            <a href="index.html" class="nav-item">Home</a> 
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="mypage.html" class="nav-item">My page</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="movie-detail">
+            <div class="movie-header">
+                <div class="poster-container">
+                    <img src="https://placehold.co/380x540" alt="영화 포스터" class="movie-poster">
+                    <!-- 핀들 -->
+                    <div class="pin" style="left: 30%; top: 40%;" data-role="actor" data-name="John Doe" data-character="주인공">
+                        <div class="pin-icon">+</div>
+                        <div class="pin-popup">
+                            <img src="https://placehold.co/50x50" alt="배우 사진" class="pin-image">
+                            <div class="pin-info">
+                                <p class="pin-name">John Doe</p>
+                                <p class="pin-role">배우</p>
+                                <p class="pin-character">주인공 역</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="movie-info">
+                    <h1 class="movie-title">영화 제목</h1>
+                    <div class="movie-meta">
+                        <span class="rating">15세 이상</span>
+                        <span class="release-date">2024.03.15</span>
+                        <span class="score">★ 4.5/5.0</span>
+                        <span class="duration">2시간 30분</span>
+                        <span class="genre">액션, 모험</span>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-like" aria-label="좋아요">
+                            <svg class="icon-heart" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-bookmark" aria-label="북마크">
+                            <svg class="icon-bookmark" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-trailer" aria-label="예고편 재생">
+                            <svg class="icon-play" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <span>예고편 재생</span>
+                        </button>
+                    </div>
+                    <section class="movie-synopsis">
+                        <h2 class="section-title">개요</h2>
+                        <p class="synopsis-text">
+                            영화의 상세한 설명이 이 곳에 들어갑니다. 영화의 줄거리, 배경, 주요 인물들에 대한 소개 등이 포함됩니다.
+                        </p>
+                    </section>
+                </div>
+            </div>
+
+
+            <section class="movie-credits">
+                <div class="section-header">
+                    <h2 class="section-title">제작진 및 출연자</h2>
+                    <a href="credits.html" class="arrow">&gt;</a>
+                </div>
+                <div class="credits-grid">
+                    <div class="credit-item">
+                        <img src="https://placehold.co/150x220" alt="인물 사진" class="credit-image">
+                        <div class="credit-info">
+                            <p class="credit-name">John Doe</p>
+                            <p class="credit-role">감독</p>
+                        </div>
+                    </div>
+                    <!-- 더 많은 제작진/출연자 아이템 -->
+                </div>
+            </section>
+
+            <section class="movie-media">
+                <h2 class="section-title">미디어</h2>
+                <div class="media-tabs">
+                    <button class="media-tab active" data-tab="trailers">동영상/트레일러</button>
+                    <button class="media-tab" data-tab="stills">포스터/스틸컷</button>
+                </div>
+                <div class="media-content" id="trailers">
+                    <div class="media-grid">
+                        <div class="media-item video">
+                            <img src="https://placehold.co/300x169" alt="트레일러 썸네일" class="media-thumbnail">
+                            <button class="play-button">▶</button>
+                        </div>
+                        <!-- 더 많은 비디오 아이템 -->
+                    </div>
+                </div>
+                <div class="media-content hidden" id="stills">
+                    <div class="media-grid">
+                        <div class="media-item image">
+                            <img src="https://placehold.co/300x169" alt="스틸컷" class="media-image">
+                        </div>
+                        <!-- 더 많은 이미지 아이템 -->
+                    </div>
+                </div>
+            </section>
+
+            <section class="related-series">
+                <h2 class="section-title">관련 시리즈</h2>
+                <div class="movie-grid">
+                    <div class="movie-item">
+                        <img src="https://placehold.co/150x220" alt="관련 영화" class="movie-poster">
+                        <div class="movie-title">관련 영화 1</div>
+                    </div>
+                    <!-- 더 많은 관련 영화 아이템 -->
+                </div>
+            </section>
+
+            <section class="recommended-movies">
+                <div class="section-header">
+                    <h2 class="section-title">추천 영화</h2>
+                    <a href="recommendations.html" class="arrow">&gt;</a>
+                </div>
+                <div class="movie-grid">
+                    <div class="movie-item">
+                        <img src="https://placehold.co/150x220" alt="추천 영화" class="movie-poster">
+                        <div class="movie-title">추천 영화 1</div>
+                    </div>
+                    <!-- 더 많은 추천 영화 아이템 -->
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <!-- 예고편 모달 -->
+    <div class="trailer-modal" id="trailerModal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="video-container">
+                <iframe src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
+</body>
+</html>

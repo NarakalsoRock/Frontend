@@ -1,0 +1,513 @@
+/* 기본 스타일 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Inter, sans-serif;
+    background-color: black;
+    color: white;
+}
+
+/* 헤더 스타일 */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9); /* Semi-transparent background for fixed header */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%; /* 5% padding on left/right */
+    z-index: 1000;
+    box-sizing: border-box; /* Include padding in width/height */
+}
+
+.logo {
+    color: #673AB7; /* 보라색 */
+    font-size: 36px;
+    font-weight: 700;
+    /* '뒤로 가기' 아이콘 대신 'CineX' 텍스트 로고로 통일 */
+}
+
+.nav {
+    display: flex;
+    gap: 30px; /* now-playing.css와 동일한 간격 */
+    margin-right: 0; /* 우측 정렬을 위해 margin-right 제거 */
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 18px; /* now-playing.css와 동일한 폰트 사이즈 */
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(103, 58, 183, 0.2); /* now-playing.css와 동일한 호버 효과 */
+}
+
+/* 메인 컨텐츠 */
+.main-content {
+    padding: 120px 2rem 2rem;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+/* 영화 상세 섹션 */
+.movie-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+/* 영화 헤더 영역 */
+.movie-header {
+    display: flex;
+    gap: 3rem;
+}
+
+/* 포스터 컨테이너 */
+.poster-container {
+    flex-shrink: 0;
+    width: 380px;
+    height: 540px;
+    position: relative;
+}
+
+.movie-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 영화 정보 영역 */
+.movie-info {
+    flex-grow: 1;
+}
+
+.movie-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.movie-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.movie-meta span {
+    padding: 0.5rem 1rem;
+    background-color: #393740;
+    border-radius: 20px;
+    font-size: 18px;
+}
+
+.rating {
+    color: #673AB7;
+    font-weight: 500;
+}
+
+/* 액션 버튼 */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btn-like, .btn-bookmark {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #673AB7;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.btn-like:hover, .btn-bookmark:hover {
+    background: rgba(103, 58, 183, 0.1);
+}
+
+.btn-like.active, .btn-bookmark.active {
+    background: #673AB7;
+}
+
+.icon-heart, .icon-bookmark {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: #673AB7;
+    stroke-width: 2;
+    transition: all 0.3s;
+}
+
+.btn-like.active .icon-heart,
+.btn-bookmark.active .icon-bookmark {
+    fill: white;
+    stroke: white;
+}
+
+.btn-trailer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 1.5rem;
+    height: 48px;
+    background: #673AB7;
+    border: none;
+    border-radius: 24px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-trailer:hover {
+    background: #7b4fc9;
+}
+
+.icon-play {
+    width: 24px;
+    height: 24px;
+    fill: white;
+}
+
+/* 시놉시스 섹션 */
+.movie-synopsis {
+    margin-top: 2rem;
+}
+
+.section-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #673AB7;
+    margin-bottom: 1rem;
+}
+
+.synopsis-text {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #888;
+}
+
+/* 제작진 및 출연자 섹션 */
+.movie-credits {
+    margin-top: 3rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.credits-grid {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: #673AB7 #393740;
+}
+
+.credits-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.credits-grid::-webkit-scrollbar-track {
+    background: #393740;
+    border-radius: 4px;
+}
+
+.credits-grid::-webkit-scrollbar-thumb {
+    background: #673AB7;
+    border-radius: 4px;
+}
+
+.credit-item {
+    flex: 0 0 150px;
+    text-align: center;
+}
+
+.credit-image {
+    width: 150px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.credit-info {
+    text-align: center;
+}
+
+.credit-name {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.credit-role {
+    font-size: 14px;
+    color: #888;
+}
+
+/* 미디어 섹션 */
+.movie-media {
+    margin-top: 3rem;
+}
+
+.media-tabs {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.media-tab {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+.media-tab.active {
+    color: white;
+}
+
+.media-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #673AB7;
+}
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.media-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.media-thumbnail,
+.media-image {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(103, 58, 183, 0.8);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.play-button:hover {
+    background: #673AB7;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.media-content.hidden {
+    display: none;
+}
+
+/* 관련 시리즈 & 추천 영화 */
+.related-series,
+.recommended-movies {
+    margin-top: 3rem;
+}
+
+.movie-grid {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: #673AB7 #393740;
+}
+
+.movie-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.movie-grid::-webkit-scrollbar-track {
+    background: #393740;
+    border-radius: 4px;
+}
+
+.movie-grid::-webkit-scrollbar-thumb {
+    background: #673AB7;
+    border-radius: 4px;
+}
+
+.movie-item {
+    flex: 0 0 150px;
+    transition: transform 0.3s;
+}
+
+.movie-item:hover {
+    transform: scale(1.05);
+}
+
+.movie-item .movie-poster {
+    width: 150px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.movie-item .movie-title {
+    font-size: 14px;
+    text-align: center;
+}
+
+/* 예고편 모달 */
+.trailer-modal {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.trailer-modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #181818;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    position: relative;
+    max-width: 800px;
+    width: 90vw;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.video-container {
+    width: 100%;
+    aspect-ratio: 16/9;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+}
+
+/* 푸터 */
+.footer {
+    background-color: black;
+    color: #888;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1024px) {
+    .movie-header {
+        flex-direction: column;
+    }
+
+    .poster-container {
+        margin: 0 auto;
+    }
+
+    .movie-info {
+        text-align: center;
+    }
+
+    .movie-meta {
+        justify-content: center;
+    }
+
+    .action-buttons {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-title {
+        font-size: 36px;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
+
+    .media-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .poster-container {
+        width: 280px;
+        height: 400px;
+    }
+
+    .movie-meta span {
+        font-size: 14px;
+    }
+
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+
+    .btn-trailer {
+        width: 100%;
+        justify-content: center;
+    }
+}
