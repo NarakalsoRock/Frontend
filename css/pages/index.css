@@ -180,9 +180,9 @@ body {
     background: linear-gradient(180deg, rgba(103, 58, 183, 0.1) 0%, rgba(25, 24, 28, 0) 100%);
 }
 
-.coming-soon {
-    /* No specific styles needed here yet if it's just a placeholder */
-}
+/* .coming-soon {
+
+} */
 
 .movie-grid {
     display: flex;
