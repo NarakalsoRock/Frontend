@@ -346,8 +346,7 @@
 }
 
 .bookmark-button.active .bookmark-icon {
-    fill: white; /* 클릭 시 채워짐 */
-    stroke: #673AB7; /* 채워질 때 윤곽선 색상 (좋아요와 다르게) */
+    fill: #673AB7; /* 클릭 시 채워짐 */
 }
 
 

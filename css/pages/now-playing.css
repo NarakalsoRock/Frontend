@@ -182,11 +182,77 @@ body {
 
 .poster-container {
     position: relative;
-    width: 100%;
-    margin-bottom: 15px;
+    width: 180px; /* 포스터 크기에 맞게 조정 */
+    height: 260px;
     overflow: hidden;
-    border-radius: 8px;
 }
+
+/* 좋아요 버튼 (기존 스타일) */
+.like-button, .bookmark-button { /* 북마크 버튼도 함께 스타일링 */
+    position: absolute;
+    top: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0; /* 기본적으로 숨김 */
+}
+
+.like-button {
+    right: 10px; /* 좋아요 버튼은 오른쪽 정렬 */
+}
+
+.bookmark-button { /* 북마크 버튼 추가 */
+    left: 10px; /* 북마크 버튼은 왼쪽 정렬 */
+}
+
+.poster-container:hover .like-button,
+.poster-container:hover .bookmark-button {
+    opacity: 1; /* 포스터 호버 시 두 버튼 모두 나타남 */
+}
+
+.like-button:hover,
+.bookmark-button:hover { /* 두 버튼 모두 호버 시 효과 */
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+}
+
+/* 좋아요 아이콘 */
+.heart-icon {
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: background-image 0.3s ease;
+}
+
+.like-button.active .heart-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff0000' stroke='%23ff0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* 북마크 아이콘 (새롭게 추가) */
+.bookmark-icon {
+    width: 20px;
+    height: 20px;
+    fill: none; /* 기본적으로 채워지지 않음 */
+    stroke: white; /* 기본 윤곽선 색상 */
+    stroke-width: 2;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.bookmark-button.active .bookmark-icon {
+    fill: #673AB7; /* 클릭 시 채워짐 */
+}
+
+
 
 .movie-poster {
     width: 100%;

@@ -350,40 +350,54 @@
     color: #673AB7;
 }
 
-.credits-grid {
+.credits-scroll-wrapper {
     display: flex;
-    gap: 1.5rem; /* 아이템 간 간격 */
-    overflow-x: auto;
-    padding-bottom: 1rem;
-    scrollbar-width: thin;
-    scrollbar-color: #673AB7 #393740;
+    align-items: center;
+    position: relative;
+    margin-bottom: 1.5rem;
 }
-.credits-grid::-webkit-scrollbar { height: 8px; }
-.credits-grid::-webkit-scrollbar-track { background: #393740; border-radius: 4px; }
-.credits-grid::-webkit-scrollbar-thumb { background: #673AB7; border-radius: 4px; }
-
+.credits-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 8px;
+    flex: 1;
+}
 .credit-item {
-    flex: 0 0 130px; /* 이미지 너비에 맞게 조정, 이미지에서 정사각형에 가까움 */
-    text-align: center;
+    flex: 0 0 auto;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .credit-image {
-    width: 130px; /* 정사각형 이미지 */
-    height: 130px; /* 정사각형 이미지 */
-    object-fit: cover;
-    border-radius: 8px; /* 이미지 모서리 */
-    margin-bottom: 0.75rem; /* 이름과의 간격 */
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-.credit-info { text-align: center; }
-.credit-name {
-    font-weight: 500;
-    font-size: 15px; /* 이름 폰트 크기 조정 */
-    margin-bottom: 0.25rem;
-    color: white;
+.credit-info {
+    margin-top: 10px;
+    text-align: center;
 }
-.credit-role { /* 역할은 이미지에 표시되지 않음, 필요시 스타일링 */
-    display: none;
-    /* font-size: 14px; */
-    /* color: #888; */
+.credits-scroll-more-btn {
+    flex: 0 0 auto;
+    margin-left: 12px;
+    background: #673ab7;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.7rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.credits-scroll-more-btn:hover {
+    background: #512da8;
 }
 
 /* 미디어 섹션 */
@@ -511,12 +525,13 @@
     gap: 1.5rem;
     overflow-x: auto;
     padding-bottom: 1rem;
-    scrollbar-width: thin;
-    scrollbar-color: #673AB7 #393740;
+    scrollbar-width: none;           /* Firefox에서 스크롤바 숨김 */
+    -ms-overflow-style: none;   
 }
-.recommended-movies .movie-grid::-webkit-scrollbar { height: 8px; }
-.recommended-movies .movie-grid::-webkit-scrollbar-track { background: #393740; border-radius: 4px; }
-.recommended-movies .movie-grid::-webkit-scrollbar-thumb { background: #673AB7; border-radius: 4px; }
+
+.recommended-movies .movie-grid::-webkit-scrollbar {
+    display: none;                   /* Chrome, Safari, Opera에서 스크롤바 숨김 */
+}
 
 .recommended-movies .movie-item {
     flex: 0 0 150px; /* 이미지에서 보이는 아이템 너비 */
