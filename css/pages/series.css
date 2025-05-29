@@ -1,0 +1,276 @@
+/* frontend/css/pages/series.css */
+
+/* 공통 스타일은 common.css에 있다고 가정하고 import 합니다. */
+/* 필요에 따라 common/header.css, common/footer.css 등도 추가 import 가능 */
+@import url(../common/common.css);
+@import url(../common/footer.css); /* 푸터 스타일 */
+
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9); /* Semi-transparent background for fixed header */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%; /* 5% padding on left/right */
+    z-index: 1000;
+    box-sizing: border-box; /* Include padding in width/height */
+}
+
+.logo {
+    color: #673AB7; /* 보라색 */
+    font-size: 36px;
+    font-weight: 700;
+    /* '뒤로 가기' 아이콘 대신 'CineX' 텍스트 로고로 통일 */
+}
+
+.nav {
+    display: flex;
+    gap: 30px; /* now-playing.css와 동일한 간격 */
+    margin-right: 0; /* 우측 정렬을 위해 margin-right 제거 */
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 18px; /* now-playing.css와 동일한 폰트 사이즈 */
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(103, 58, 183, 0.2); /* now-playing.css와 동일한 호버 효과 */
+}
+
+
+
+
+/* Main Content Wrapper (원래 1440x1024 고정 div) */
+.series-main-content {
+    width: 100%;
+    max-width: 1440px; /* 원본 너비 유지 */
+    /* height: 1024px; */ /* 컨텐츠 길이에 따라 auto로 변경하는 것이 좋습니다. */
+    position: relative; /* 내부 absolute 요소의 기준점 (현재는 자식들이 static이므로 크게 중요하지 않음) */
+    background: black; /* 전체 페이지 배경이 검정이므로 여기서는 필요 없을 수 있음 */
+    margin: 0 auto; /* 중앙 정렬 */
+    padding: 100px 46px 40px; /* 헤더 높이(80px) + 상단 여백, 좌우 여백 */
+    box-sizing: border-box;
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 허용 */
+}
+
+/* 메인 타이틀 */
+.main-title {
+    color: #673AB7;
+    font-size: 40px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-bottom: 30px; /* 카테고리 정보와의 간격 */
+}
+
+/* 시리즈 카테고리 정보 (5편) */
+.series-category-info {
+    margin-bottom: 40px; /* 각 시리즈 아이템과의 간격 */
+}
+
+.series-count {
+    color: white;
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+
+/* 각 시리즈 아이템 래퍼 */
+.series-item-wrapper {
+    display: flex;
+    gap: 30px; /* 포스터와 상세 정보 사이 간격 */
+    margin-bottom: 40px; /* 다음 시리즈 아이템과의 간격 */
+    align-items: flex-start; /* 상단 정렬 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 항목 구분선 */
+    padding-bottom: 40px; /* 구분선 아래 패딩 */
+}
+
+.series-item-wrapper:last-child {
+    border-bottom: none; /* 마지막 항목은 구분선 제거 */
+}
+
+/* 시리즈 포스터 컨테이너 */
+.series-poster-container {
+    flex-shrink: 0; /* 줄어들지 않음 */
+    width: 210px;
+    height: 259px;
+    /* 원본 HTML의 고정 위치 이미지를 Flex item으로 변경 */
+}
+
+.series-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block; /* 이미지 하단 공백 제거 */
+}
+
+/* 시리즈 상세 정보 컨테이너 */
+.series-detail-container {
+    flex-grow: 1; /* 남은 공간을 채움 */
+    background: white; /* 원본에서 흰색 배경이었던 부분 */
+    padding: 15px 19px; /* 원본 내부 텍스트의 left/top 값 고려하여 패딩 조정 */
+    box-sizing: border-box;
+    overflow: hidden; /* 텍스트가 넘칠 경우 숨김 */
+}
+
+.series-detail-title {
+    color: black;
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-bottom: 10px; /* 제목과 날짜 사이 간격 */
+}
+
+.series-release-date {
+    color: black;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+    margin-bottom: 20px; /* 날짜와 시놉시스 사이 간격 */
+}
+
+.series-synopsis {
+    color: black;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+    line-height: 1.5; /* 가독성을 위한 줄 간격 */
+    /* height: 193px; */ /* 고정 높이 대신 최대 줄 수 제한 고려 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 넘치는 텍스트 ... 처리 */
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* 5줄까지 표시하고 넘치면 ... */
+    -webkit-box-orient: vertical;
+}
+
+/* Footer Styles (공통 footer.css에서 import) */
+.footer {
+    background-color: black;
+    color: #888;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem; /* 메인 컨텐츠와의 간격 */
+}
+.footer-text {
+    color: #673AB7;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
+    .header, .series-main-content {
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .series-item-wrapper {
+        flex-direction: column; /* 세로로 쌓이도록 변경 */
+        align-items: center; /* 가운데 정렬 */
+        text-align: center;
+    }
+    .series-poster-container {
+        margin-bottom: 20px;
+    }
+    .series-detail-container {
+        width: 100%;
+        max-width: 600px; /* 너무 넓어지지 않도록 제한 */
+        padding: 20px;
+    }
+    .series-detail-title {
+        font-size: 28px;
+    }
+    .series-release-date, .series-synopsis {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 2%;
+        height: 70px;
+    }
+    .logo-back-arrow, .logo {
+        font-size: 30px;
+    }
+    .nav {
+        gap: 15px;
+    }
+    .nav-item {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
+    .series-main-content {
+        padding: 90px 20px 30px; /* 헤더 높이 반영 */
+    }
+    .main-title {
+        font-size: 32px;
+    }
+    .series-count {
+        font-size: 28px;
+    }
+    .series-poster-container {
+        width: 180px;
+        height: 220px; /* 비율 유지하며 조정 */
+    }
+    .series-detail-title {
+        font-size: 24px;
+    }
+    .series-release-date, .series-synopsis {
+        font-size: 16px;
+    }
+    .series-synopsis {
+        -webkit-line-clamp: 4; /* 줄 수 감소 */
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 60px;
+    }
+    .logo-back-arrow, .logo {
+        font-size: 24px;
+    }
+    .nav {
+        display: none; /* 모바일에서 네비게이션 숨김 */
+    }
+    .series-main-content {
+        padding: 80px 15px 20px;
+    }
+    .main-title {
+        font-size: 28px;
+    }
+    .series-count {
+        font-size: 24px;
+    }
+    .series-poster-container {
+        width: 150px;
+        height: 185px; /* 비율 유지하며 조정 */
+    }
+    .series-detail-title {
+        font-size: 20px;
+    }
+    .series-release-date, .series-synopsis {
+        font-size: 14px;
+    }
+    .series-synopsis {
+        -webkit-line-clamp: 3; /* 줄 수 감소 */
+    }
+}
