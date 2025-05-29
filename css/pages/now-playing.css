@@ -1,3 +1,5 @@
+@import url(../common/footer.css);
+
 * {
     margin: 0;
     padding: 0;
@@ -53,22 +55,7 @@ body {
     background: #673AB7;
 }
 
-/* Footer */
-.footer {
-    width: 100%;
-    height: 74px;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: auto;
-}
 
-.footer-text {
-    color: #673AB7;
-    font-size: 16px;
-    font-weight: 500;
-}
 
 /* Filter Section Styles */
 .filter-section {

@@ -1,4 +1,6 @@
 @import url(../common/common.css);
+@import url(../common/footer.css);
+
 
 .header {
     position: fixed;
@@ -120,12 +122,3 @@
     background-color: #673AB7;
 }
 
-.footer {
-    background-color: #000000;
-    padding: 1rem;
-    text-align: center;
-}
-
-.footer-text {
-    color: #666666;
-}

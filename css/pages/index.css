@@ -1,3 +1,5 @@
+@import url(../common/footer.css);
+
 * {
     margin: 0;
     padding: 0;
@@ -229,26 +231,7 @@ body {
     max-width: 150px;
 }
 
-/* Footer */
-.footer {
-    width: 100%;
-    max-width: 1440px; /* Use max-width to match body max-width for consistent layout */
-    margin: 0 auto; /* Center the footer */
-    height: 74px;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    padding-left: 5%; /* Use percentage for consistent padding */
-    padding-right: 5%;
-}
 
-.footer-text {
-    color: #673AB7;
-    font-size: 16px;
-    font-weight: 500;
-}
 
 html, body {
     height: 100%;

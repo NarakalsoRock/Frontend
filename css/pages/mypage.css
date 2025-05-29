@@ -1,4 +1,5 @@
 @import url(../common/common.css);
+@import url(../common/footer.css);
 
 .page-wrapper {
     width: 100%;
@@ -338,22 +339,7 @@
     font-size: 14px;
 }
 
-/* Footer */
-.footer {
-    width: 100%;
-    height: 74px;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: auto;
-}
 
-.footer-text {
-    color: #673AB7;
-    font-size: 16px;
-    font-weight: 500;
-}
 
 /* Responsive Design */
 @media (max-width: 1200px) {

@@ -1,6 +1,7 @@
 /* frontend/css/media.css */
 
 @import url(../common/common.css);
+@import url(../common/footer.css);
 
 
 /* 헤더 스타일 */
@@ -44,23 +45,6 @@
 }
 
 
-
-/* Footer */
-.footer {
-    width: 100%;
-    height: 74px;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: auto;
-}
-
-.footer-text {
-    color: #673AB7;
-    font-size: 16px;
-    font-weight: 500;
-}
 
 /* 메인 컨테이너 */
 .media-page-container {

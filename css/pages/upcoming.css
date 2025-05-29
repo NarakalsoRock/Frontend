@@ -1,4 +1,6 @@
 @import url(../common/common.css);
+@import url(../common/footer.css);
+
 
 /* Header (from index.css / now-playing.css) */
 .header {
@@ -348,27 +350,7 @@
     stroke: #673AB7; /* 채워질 때 윤곽선 색상 (좋아요와 다르게) */
 }
 
-/* Footer */
-.footer {
-    width: 100%;
-    max-width: 1440px;
-    margin: 0 auto;
-    height: 74px;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    padding-left: 5%;
-    padding-right: 5%;
-    flex-shrink: 0;
-}
 
-.footer-text {
-    color: #673AB7;
-    font-size: 16px;
-    font-weight: 500;
-}
 
 /* Responsive Design */
 @media (max-width: 1200px) {
