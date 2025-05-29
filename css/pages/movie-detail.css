@@ -463,9 +463,6 @@ body {
     font-size: 20px; /* 아이콘 크기 약간 줄임 */
     cursor: pointer;
     transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 .play-button:hover {
     background: #673AB7;
@@ -682,4 +679,51 @@ body {
     .related-series-banner-title { font-size: 16px; }
     .related-series-list { font-size: 13px; }
     .btn-view-collection { padding: 0.5rem 1rem; font-size: 14px; }
+}
+
+/* 미디어 스틸즈 섹션 */
+.media-stills-scroll-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+.media-stills-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 8px;
+    flex: 1;
+}
+.media-item.image {
+    flex: 0 0 auto;
+    width: 180px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #222;
+}
+.media-image {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+}
+.media-scroll-more-btn {
+    flex: 0 0 auto;
+    margin-left: 12px;
+    background: #673ab7;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.7rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.media-scroll-more-btn:hover {
+    background: #512da8;
 }

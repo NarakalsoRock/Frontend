@@ -1,0 +1,274 @@
+/* frontend/css/media.css */
+
+/* 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    min-height: 100vh; /* 뷰포트 높이 최소 */
+    display: flex;
+    flex-direction: column; /* 푸터를 하단에 고정하기 위함 */
+}
+
+
+/* 헤더 스타일 */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.logo {
+    color: #673AB7;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(103, 58, 183, 0.2);
+}
+
+
+
+/* Footer */
+.footer {
+    width: 100%;
+    height: 74px;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.footer-text {
+    color: #673AB7;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* 메인 컨테이너 */
+.media-page-container {
+    width: 1440px; /* 원본에 명시된 너비 */
+    height: 1024px; /* 원본에 명시된 높이, 내용이 많아지면 min-height 또는 auto로 변경 고려 */
+    position: relative; /* 내부 absolute 요소의 기준점 */
+    background: black;
+    margin: 0 auto; /* 중앙 정렬 */
+    overflow: hidden; /* 내부에서 넘치는 요소는 보이지 않도록 */
+}
+
+
+/* 미디어 섹션 제목 */
+.section-title.media-main-title {
+    width: 144px;
+    height: 57px;
+    left: 46px;
+    top: 90px;
+    position: absolute;
+    color: #673AB7;
+    font-size: 40px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+
+/* 미디어 카테고리 타이틀 (동영상/트레일러, 포스터/스틸컷) */
+.media-category-title {
+    position: absolute;
+    color: white;
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+.category-video { left: 50px; top: 174px; width: 254px; height: 46px; }
+.category-stills { left: 50px; top: 466px; width: 254px; height: 46px; }
+
+
+/* 동영상/트레일러 그리드 아이템 */
+.video-grid {
+    position: absolute; /* 동영상 그리드 전체 컨테이너 위치 */
+    left: 50px;
+    top: 247px;
+    display: flex; /* 가로 배치 */
+    gap: 27px; /* 아이템 간 간격 (377-50-278) */
+    /* overflow-x: auto; /* 가로 스크롤 필요시 */
+}
+.video-item {
+    width: 278px;
+    height: 179px;
+    background: #D9D9D9; /* 플레이스홀더 배경 */
+    flex-shrink: 0; /* 줄어들지 않음 */
+}
+/* 개별 동영상 아이템 위치 (video-grid 내에서 상대 위치) */
+.video-item-1 { /* left: 50px, top: 247px -> video-grid 기준 0,0 */ }
+.video-item-2 { /* left: 377px, top: 247px -> video-grid 기준 327px,0 */ }
+
+
+/* 포스터/스틸컷 그리드 아이템 */
+.poster-grid {
+    position: absolute; /* 포스터 그리드 전체 컨테이너 위치 */
+    left: 50px;
+    top: 539px;
+    display: flex; /* 가로 배치 */
+    gap: 28px; /* 아이템 간 간격 (328-50-210) */
+    /* overflow-x: auto; /* 가로 스크롤 필요시 */
+}
+.poster-item {
+    width: 210px;
+    height: 259px;
+    background: #D9D9D9; /* 플레이스홀더 배경 */
+    flex-shrink: 0;
+}
+/* 첫 번째 줄 포스터 아이템 위치 (poster-grid 내에서 상대 위치) */
+.poster-item-1 { /* left: 50px, top: 539px -> poster-grid 기준 0,0 */ }
+.poster-item-2 { /* left: 328px, top: 539px -> poster-grid 기준 278px,0 */ }
+.poster-item-3 { /* left: 626px, top: 539px -> poster-grid 기준 576px,0 */ }
+.poster-item-4 { /* left: 914px, top: 539px -> poster-grid 기준 864px,0 */ }
+.poster-item-5 { /* left: 1192px, top: 539px -> poster-grid 기준 1142px,0 */ }
+
+/* 두 번째 줄 포스터 아이템 (원본에서 top만 다름) */
+.poster-grid.second-row {
+    top: 851px; /* 원본의 top 851px에 맞춤 */
+}
+.poster-item-6 { /* left: 55px, top: 851px -> second-row 기준 5px,0 */ }
+.poster-item-7 { /* left: 333px, top: 851px -> second-row 기준 283px,0 */ }
+.poster-item-8 { /* left: 631px, top: 851px -> second-row 기준 581px,0 */ }
+.poster-item-9 { /* left: 919px, top: 851px -> second-row 기준 869px,0 */ }
+.poster-item-10 { /* left: 1197px, top: 851px -> second-row 기준 1147px,0 */ }
+
+/* 반응형 스타일 */
+@media (max-width: 1440px) {
+    /* 기본적으로 1440px에 맞춰진 absolute position이므로,
+       반응형을 고려하면 이 부분을 전면 수정해야 합니다.
+       여기서는 원본의 absolute position을 최대한 유지한 채,
+       뷰포트 너비에 따라 전체 컨테이너와 내부 요소의 크기를 조정하는
+       간단한 반응형 룰만 적용합니다. */
+    .media-page-container {
+        width: 100%; /* 화면 너비에 맞춤 */
+        height: auto; /* 내용에 따라 높이 조절 */
+        min-height: 1024px; /* 최소 높이 보장 */
+        overflow-y: auto; /* 세로 스크롤 허용 */
+        overflow-x: hidden; /* 가로 스크롤 기본 방지 */
+        position: relative; /* 자식 absolute 기준 */
+    }
+
+    /* 헤더도 100% 너비에 맞게 조정 */
+    .page-header-bar {
+        width: 100%;
+    }
+
+    /* 모든 absolute 요소를 상대적인 위치와 크기로 조정하거나,
+       vw, vh 단위를 사용하여 반응형으로 만듭니다. */
+    .media-main-title,
+    .media-category-title,
+    .video-grid,
+    .poster-grid,
+    .video-item,
+    .poster-item {
+        position: static; /* 문서 흐름에 따라 배치 */
+        left: unset;
+        top: unset;
+        width: auto; /* 내용에 맞게 자동 조절 */
+        height: auto;
+        margin: 0;
+        padding: 0;
+        transform: none; /* 트랜스폼 제거 */
+        display: block; /* 기본 블록 요소로 */
+        box-sizing: border-box;
+    }
+
+    /* 이제 각 섹션을 흐름에 따라 배치 */
+    .media-main-title {
+        margin-top: 100px; /* 헤더 높이 + 마진 */
+        padding-left: 5%;
+        margin-bottom: 20px;
+    }
+    .media-category-title {
+        padding-left: 5%;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+    .video-grid, .poster-grid {
+        padding: 0 5%; /* 좌우 패딩 */
+        display: grid; /* 그리드 레이아웃으로 변경 */
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 반응형 그리드 */
+        gap: 20px; /* 그리드 간격 */
+        overflow-x: hidden; /* 기본적으로 가로 스크롤 숨김 */
+        justify-content: center; /* 아이템 중앙 정렬 */
+    }
+    .video-item {
+        width: 100%; /* 그리드 셀에 맞춰 */
+        aspect-ratio: 278 / 179; /* 원본 비율 유지 */
+    }
+    .poster-item {
+        width: 100%; /* 그리드 셀에 맞춰 */
+        aspect-ratio: 210 / 259; /* 원본 비율 유지 */
+    }
+    .poster-grid.second-row {
+        position: static; /* 더 이상 absolute 아님 */
+        margin-top: 20px; /* 첫 줄과의 간격 */
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header-bar .header-nav-item {
+        font-size: 18px;
+        top: 28px;
+    }
+    .page-header-bar .nav-home { left: auto; right: calc(149px * 3 + 30px * 3 + 5%); } /* 대략적인 위치 재조정 */
+    .page-header-bar .nav-now-playing { left: auto; right: calc(149px * 2 + 30px * 2 + 5%); }
+    .page-header-bar .nav-upcoming { left: auto; right: calc(149px * 1 + 30px * 1 + 5%); }
+    .page-header-bar .nav-my-page { left: auto; right: 5%; }
+
+    .media-main-title { font-size: 32px; }
+    .media-category-title { font-size: 24px; }
+    .video-grid, .poster-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-header-bar { height: 60px; }
+    .page-header-bar .header-back-arrow { font-size: 30px; top: 10px; left: 15px; }
+    .page-header-bar .header-nav-item { display: none; } /* 모바일에서 네비 숨김 */
+
+    .media-main-title { font-size: 28px; margin-top: 70px; padding-left: 3%; }
+    .media-category-title { font-size: 20px; padding-left: 3%; margin-top: 20px;}
+    .video-grid, .poster-grid {
+        padding: 0 3%;
+        grid-template-columns: 1fr; /* 한 줄에 하나씩 */
+        gap: 10px;
+    }
+}

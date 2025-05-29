@@ -1,0 +1,203 @@
+/* frontend/css/film-crew.css */
+
+/* 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    min-height: 100vh; /* 뷰포트 높이 최소 */
+    display: flex;
+    flex-direction: column; /* 푸터를 하단에 고정하기 위함 */
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9); /* Semi-transparent background for fixed header */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%; /* 5% padding on left/right */
+    z-index: 1000;
+    box-sizing: border-box; /* Include padding in width/height */
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #673AB7;
+}
+
+
+.logo {
+    color: #673AB7; /* 보라색 */
+    font-size: 36px;
+    font-weight: 700;
+    /* '뒤로 가기' 아이콘 대신 'CineX' 텍스트 로고로 통일 */
+}
+
+.nav {
+    display: flex;
+    gap: 30px; /* now-playing.css와 동일한 간격 */
+    margin-right: 0; /* 우측 정렬을 위해 margin-right 제거 */
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 18px; /* now-playing.css와 동일한 폰트 사이즈 */
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    color: #673AB7;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    height: 74px;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.footer-text {
+    color: #673AB7;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* 메인 컨테이너 */
+.film-crew-page-container {
+    width: 1440px; /* 원본에 명시된 너비 */
+    height: 1024px; /* 원본에 명시된 높이, 내용이 많아지면 min-height 또는 auto로 변경 고려 */
+    position: relative; /* 내부 absolute 요소의 기준점 */
+    background: black;
+    margin: 0 auto; /* 중앙 정렬 */
+    overflow: hidden; /* 내부에서 넘치는 요소는 보이지 않도록 */
+}
+
+
+/* 제작진 및 출연진 섹션 공통 스타일 */
+.crew-main-title, .cast-main-title {
+    position: absolute;
+    color: #673AB7;
+    font-size: 40px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+.crew-main-title { left: 47px; top: 104px; }
+.cast-main-title { left: 47px; top: 548px; }
+
+/* 제작진 카테고리 타이틀 */
+.crew-category-title {
+    position: absolute;
+    color: white;
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+.category-script { left: 47px; top: 170px; width: 68px; height: 46px; }
+.category-director { left: 320px; top: 170px; width: 68px; height: 46px; }
+.category-direction { left: 597px; top: 170px; width: 139px; height: 46px; }
+.category-sound { left: 1157px; top: 170px; width: 131px; height: 46px; }
+
+
+/* 인물 목록 (제작진 및 출연진 공통) */
+.person-list {
+    position: absolute; /* 이 예시에서는 absolute를 유지 */
+}
+.crew-list { /* 제작진 목록 전체 */
+    /* 현재 HTML 구조상 각 인물 아이템이 절대 위치하므로, 이 컨테이너는 필요 없을 수 있음 */
+    /* 아니면 각 인물 아이템의 top/left 값을 재정의해야 함 */
+}
+.cast-list { /* 출연진 목록 전체 */
+    /* 현재 HTML 구조상 각 인물 아이템이 절대 위치하므로, 이 컨테이너는 필요 없을 수 있음 */
+}
+
+
+/* 개별 인물 아이템 공통 */
+.person-item {
+    position: absolute; /* 모든 인물 아이템은 absolute */
+}
+.person-image-placeholder {
+    width: 210px;
+    height: 259px;
+    background: #D9D9D9;
+}
+.person-name {
+    width: 143px; /* 이름 영역 너비 */
+    height: 38px;
+    color: white;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+    text-align: center; /* 이름 중앙 정렬 */
+}
+.person-role-title { /* 출연진의 역할 (예: 에렌 예거) */
+    width: 167px; /* 역할명 영역 너비 */
+    height: 46px;
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    text-align: center; /* 역할 중앙 정렬 */
+}
+
+/* 제작진 인물 아이템 개별 위치 */
+.person-item-crew-1 { left: 47px; top: 216px; }
+.person-item-crew-1 .person-name { left: 47px; top: 492px; }
+
+.person-item-crew-2 { left: 320px; top: 216px; }
+.person-item-crew-2 .person-name { left: 320px; top: 492px; }
+
+.person-item-crew-3 { left: 593px; top: 216px; }
+.person-item-crew-3 .person-name { left: 593px; top: 492px; }
+
+.person-item-crew-4 { left: 878px; top: 216px; }
+.person-item-crew-4 .person-name { left: 878px; top: 492px; }
+
+.person-item-crew-5 { left: 1157px; top: 216px; }
+.person-item-crew-5 .person-name { left: 1157px; top: 492px; }
+
+
+/* 출연진 인물 아이템 개별 위치 */
+.person-item-cast-1 { left: 47px; top: 648px; }
+.person-item-cast-1 .person-role-title { left: 47px; top: 916px; width: 112px; } /* 역할명 너비 조정 */
+.person-item-cast-1 .person-name { left: 47px; top: 950px; }
+
+.person-item-cast-2 { left: 320px; top: 648px; }
+.person-item-cast-2 .person-role-title { left: 320px; top: 916px; }
+.person-item-cast-2 .person-name { left: 320px; top: 950px; }
+
+.person-item-cast-3 { left: 593px; top: 648px; }
+.person-item-cast-3 .person-role-title { left: 593px; top: 916px; }
+.person-item-cast-3 .person-name { left: 597px; top: 950px; } /* 원본 597px 유지 */
+
+.person-item-cast-4 { left: 878px; top: 648px; }
+.person-item-cast-4 .person-role-title { left: 883px; top: 916px; width: 167px; } /* 원본 883px 유지, 너비 조정 */
+.person-item-cast-4 .person-name { left: 883px; top: 950px; } /* 원본 883px 유지 */
+
+.person-item-cast-5 { left: 1157px; top: 648px; }
+.person-item-cast-5 .person-role-title { left: 1160px; top: 916px; width: 167px; }
+.person-item-cast-5 .person-name { left: 1160px; top: 950px; }

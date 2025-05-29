@@ -72,6 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    document.querySelectorAll('.scroll-more-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            window.location.href = 'media.html';
+        });
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {

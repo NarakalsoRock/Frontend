@@ -118,23 +118,42 @@
             </section>
 
             <section class="movie-media">
-                <div class="section-header"> <h2 class="section-title">미디어</h2>
+                <div class="section-header"> 
+                    <div class="section-title media-section-title">
+                        <a href="media.html" class="media-link">미디어</a>
+                    </div>
                     <div class="media-tabs">
                         <button class="media-tab active" data-tab="trailers">동영상/트레일러</button>
                         <button class="media-tab" data-tab="stills">포스터/스틸컷</button>
                     </div>
                 </div>
                 <div class="media-content" id="trailers">
-                    <div class="media-grid video-grid"> <div class="media-item video">
+                    <div class="media-grid video-grid">
+                        <div class="media-item video">
                             <img src="https://placehold.co/300x169" alt="트레일러 썸네일" class="media-thumbnail">
-                            <button class="play-button">▶</button> </div>
+                            <button class="play-button">▶</button>
                         </div>
+                    </div>
                 </div>
                 <div class="media-content hidden" id="stills">
-                    <div class="media-grid image-grid"> <div class="media-item image">
-                            <img src="https://placehold.co/300x169" alt="스틸컷" class="media-image">
+                    <div class="media-stills-scroll-wrapper">
+                        <div class="media-stills-scroll">
+                            <div class="media-item image">
+                                <img src="https://placehold.co/300x169" alt="스틸컷1" class="media-image">
+                            </div>
+                            <div class="media-item image">
+                                <img src="https://placehold.co/300x169" alt="스틸컷2" class="media-image">
+                            </div>
+                            <div class="media-item image">
+                                <img src="https://placehold.co/300x169" alt="스틸컷3" class="media-image">
+                            </div>
+                            <div class="media-item image">
+                                <img src="https://placehold.co/300x169" alt="스틸컷4" class="media-image">
+                            </div>
+                            <!-- 필요시 더 추가 -->
                         </div>
-                        </div>
+                        <button class="media-scroll-more-btn" onclick="location.href='media.html'" aria-label="미디어 페이지로 이동">&gt;</button>
+                    </div>
                 </div>
             </section>
 
