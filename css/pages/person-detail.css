@@ -1,0 +1,211 @@
+/* frontend/css/pages/person-detail.css */
+
+/* index.css의 body 스타일을 참고하여 적용 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    min-width: 320px; /* 최소 너비 */
+    max-width: 1440px; /* 최대 너비 */
+    margin: 0 auto; /* 중앙 정렬 */
+    overflow-y: auto; /* 세로 스크롤 허용 */
+    overflow-x: hidden; /* 가로 스크롤 방지 (필요시) */
+    color: white; /* 기본 글자 색상 */
+    height: 100%; /* html, body { height: 100%; } 역할 */
+}
+
+/* Header - index.css와 동일한 스타일 적용 */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.logo {
+    color: #673AB7;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+    margin-right: 0;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgba(103, 58, 183, 0.2);
+}
+
+.nav-item.active {
+    background: #673AB7;
+}
+
+/* 메인 컨테이너 */
+.person-detail-page-container {
+    width: 1440px;
+    height: 1024px; /* 원본에 명시된 높이, 내용이 많아지면 min-height 또는 auto로 변경 고려 */
+    position: relative; /* 내부 absolute 요소의 기준점 */
+    background: black; /* body background와 동일하지만 명시 */
+    margin: 0 auto; /* body max-width 내에서 중앙 정렬 */
+    padding-top: 80px; /* 고정 헤더 높이만큼 패딩 추가 */
+    overflow: hidden; /* 내부에서 넘치는 요소는 보이지 않도록 */
+}
+
+/* 인물 프로필 이미지 */
+.person-profile-image {
+    width: 307px;
+    height: 460px;
+    left: 106px;
+    top: 153px; /* top 값은 padding-top을 고려하여 조정 필요 */
+    position: absolute;
+    border-radius: 15px;
+}
+
+/* 인물 이름 */
+.person-name {
+    width: 325px;
+    height: 80px;
+    left: 482px;
+    top: 155px; /* top 값은 padding-top을 고려하여 조정 필요 */
+    position: absolute;
+    color: #673AB7;
+    font-size: 64px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+
+/* 섹션 제목 공통 스타일 */
+.section-title {
+    position: absolute;
+    color: #673AB7;
+    font-size: 28px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+.section-title-person-info { left: 106px; top: 643px; width: 208px; height: 41px; }
+.section-title-official-site { left: 100px; top: 869px; width: 208px; height: 41px; }
+.section-title-biography { left: 497px; top: 255px; width: 208px; height: 41px; }
+.section-title-awards { left: 497px; top: 524px; width: 208px; height: 41px; }
+.section-title-main-works { left: 493px; top: 712px; width: 208px; height: 41px; }
+
+
+/* 인물 정보 내용 */
+.person-info-content {
+    width: 306px;
+    height: 155px;
+    left: 107px;
+    top: 699px;
+    position: absolute;
+    color: white;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+/* 약력 내용 */
+.person-biography-content {
+    width: 888px;
+    height: 205px;
+    left: 497px;
+    top: 306px;
+    position: absolute;
+    color: white;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+/* 수상 내용 */
+.person-awards-content {
+    width: 888px;
+    height: 109px;
+    left: 493px;
+    top: 590px;
+    position: absolute;
+    color: white;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+/* 주요 작품 포스터 이미지 */
+.main-work-poster {
+    position: absolute;
+}
+.main-work-poster.poster-1 { width: 163px; height: 245px; left: 493px; top: 764px; }
+.main-work-poster.poster-2 { width: 167px; height: 251px; left: 716px; top: 764px; }
+.main-work-poster.poster-3 { width: 167px; height: 251px; left: 944px; top: 764px; }
+.main-work-poster.poster-4 { width: 168px; height: 252px; left: 1172px; top: 764px; }
+
+/* 주요 작품 제목 */
+.main-work-title {
+    position: absolute;
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 500;
+    word-wrap: break-word;
+    text-align: center;
+    line-height: 1.2;
+}
+.main-work-title.title-1 { width: 160px; height: 22px; left: 493px; top: 1026px; }
+.main-work-title.title-2 { width: 160px; height: 22px; left: 1172px; top: 1024px; }
+.main-work-title.title-3 { width: 160px; height: 22px; left: 974px; top: 1025px; }
+.main-work-title.title-4 { width: 160px; height: 22px; left: 723px; top: 1026px; }
+
+
+/* 공식 사이트 아이콘 */
+.official-site-icon {
+    position: absolute;
+    overflow: hidden;
+}
+.official-site-icon.icon-1 { width: 48px; height: 48px; left: 107px; top: 910px; }
+.icon-inner-1 { width: 44px; height: 20px; left: 2px; top: 14px; position: absolute; outline: 4px #FEF7FF solid; outline-offset: -2px; }
+
+.official-site-icon.icon-2 { width: 40px; height: 39px; left: 197px; top: 917px; }
+.icon-inner-2 { width: 36.67px; height: 29.16px; left: 1.67px; top: 4.86px; position: absolute; outline: 4px #FEF7FF solid; outline-offset: -2px; }
+
+.official-site-separator {
+    width: 14px;
+    height: 41px;
+    left: 167px;
+    top: 917px;
+    position: absolute;
+    color: white;
+    font-size: 28px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
