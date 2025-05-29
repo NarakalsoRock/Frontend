@@ -1,5 +1,6 @@
 @import url(../common/common.css);
 @import url(../common/footer.css);
+@import url(../common/header.css);
 
 .page-wrapper {
     width: 100%;
@@ -8,58 +9,6 @@
     position: relative;
     background: black;
     /* overflow: hidden; (컨텐츠가 넘칠 경우를 대비하여 제거하거나 필요에 따라 추가) */
-}
-
-/* Header */
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    z-index: 1000;
-}
-
-.logo-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* <와 CineX 사이 간격 */
-}
-
-.logo-back-arrow {
-    color: #673AB7; /* 보라색 */
-    font-size: 36px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.logo {
-    color: #673AB7;
-    font-size: 36px;
-    font-weight: 700;
-}
-
-.nav {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.nav-item:hover {
-    background: rgba(103, 58, 183, 0.2);
 }
 
 .nav-item.active {

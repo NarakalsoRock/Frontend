@@ -1,45 +1,6 @@
 @import url(../common/common.css);
 @import url(../common/footer.css);
-
-
-/* Header (from index.css / now-playing.css) */
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    z-index: 1000;
-}
-
-.logo {
-    color: #673AB7;
-    font-size: 36px;
-    font-weight: 700;
-}
-
-.nav {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.nav-item:hover {
-    background: rgba(103, 58, 183, 0.2);
-}
+@import url(../common/header.css);
 
 .nav-item.active {
     background: #673AB7;
@@ -131,7 +92,7 @@
 
 /* Movies Section (Monthly upcoming) */
 .movies-section {
-    padding: 40px 0;
+    padding: 40px 5%;
 }
 
 .month-section {
@@ -151,26 +112,13 @@
     width: 100%;
     overflow-x: auto;
     padding: 20px 0;
-    scrollbar-width: thin;
-    scrollbar-color: #673AB7 #19181C;
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
 }
-
 .movie-list-container::-webkit-scrollbar {
-    height: 8px;
+    display: none;
 }
 
-.movie-list-container::-webkit-scrollbar-track {
-    background: #19181C;
-}
-
-.movie-list-container::-webkit-scrollbar-thumb {
-    background: #673AB7;
-    border-radius: 4px;
-}
-
-.movie-list-container::-webkit-scrollbar-thumb:hover {
-    background: #7b4fc9;
-}
 
 .movie-grid {
     display: flex;

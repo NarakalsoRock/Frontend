@@ -1,44 +1,6 @@
 @import url(../common/common.css);
-
-/* 헤더 스타일 */
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    z-index: 1000;
-    box-sizing: border-box;
-}
-
-.logo {
-    color: #673AB7;
-    font-size: 36px;
-    font-weight: 700;
-}
-
-.nav {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.nav-item:hover {
-    background: rgba(103, 58, 183, 0.2);
-}
+@import url(../common/footer.css);
+@import url(../common/header.css);
 
 /* 메인 컨텐츠 */
 .main-content {
@@ -525,12 +487,12 @@
     gap: 1.5rem;
     overflow-x: auto;
     padding-bottom: 1rem;
-    scrollbar-width: none;           /* Firefox에서 스크롤바 숨김 */
+    scrollbar-width: none;          
     -ms-overflow-style: none;   
 }
 
 .recommended-movies .movie-grid::-webkit-scrollbar {
-    display: none;                   /* Chrome, Safari, Opera에서 스크롤바 숨김 */
+    display: none;                  
 }
 
 .recommended-movies .movie-item {

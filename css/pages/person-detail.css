@@ -1,77 +1,9 @@
 /* frontend/css/pages/person-detail.css */
+@import url(../common/common.css);
 @import url(../common/footer.css);
-
-/* index.css의 body 스타일을 참고하여 적용 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background: black;
-    min-width: 320px; /* 최소 너비 */
-    max-width: 1440px; /* 최대 너비 */
-    margin: 0 auto; /* 중앙 정렬 */
-    overflow-y: auto; /* 세로 스크롤 허용 */
-    overflow-x: hidden; /* 가로 스크롤 방지 */
-    color: white; /* 기본 글자 색상 */
-    min-height: 100vh; /* 뷰포트 최소 높이, 푸터 하단 고정 위함 */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Header - index.css와 동일한 스타일 적용 */
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    z-index: 1000;
-    box-sizing: border-box;
-}
-
-.logo {
-    color: #673AB7;
-    font-size: 36px;
-    font-weight: 700;
-}
-
-.nav {
-    display: flex;
-    gap: 30px;
-    margin-right: 0;
-}
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.nav-item:hover {
-    background: rgba(103, 58, 183, 0.2);
-}
-
-.nav-item.active {
-    background: #673AB7;
-}
+@import url(../common/header.css);
 
 
-
-/* ========================================================================= */
-/* 인물 상세 페이지 메인 컨텐츠 영역 스타일 (플렉스박스 레이아웃) */
-/* ========================================================================= */
 .main-content {
     flex-grow: 1; /* body의 min-height:100vh에서 남은 공간을 채움 */
     padding: 100px 5% 40px; /* 헤더 높이(80px) + 상단 여백, 좌우 여백, 하단 여백 */
@@ -202,23 +134,14 @@ body {
     gap: 20px;
     overflow-x: auto;
     padding-bottom: 15px;
-    scrollbar-width: thin;
-    scrollbar-color: #673AB7 #19181C;
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
 }
 
 .main-works-grid::-webkit-scrollbar {
-    height: 8px;
+    display: none;
 }
 
-.main-works-grid::-webkit-scrollbar-track {
-    background: #19181C;
-    border-radius: 4px;
-}
-
-.main-works-grid::-webkit-scrollbar-thumb {
-    background: #673AB7;
-    border-radius: 4px;
-}
 
 .movie-item {
     flex-shrink: 0;
