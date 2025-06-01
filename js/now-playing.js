@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response && response.movies) {
             currentMovies = response.movies;
             displayMovies(currentMovies);
+            // 저장된 상태 복원
+            restoreButtonStates();
         }
     } catch (error) {
         console.error('데이터 로딩 중 오류 발생:', error);
@@ -58,6 +60,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// 버튼 상태 저장 함수
+function saveButtonState(movieId, type, isActive) {
+    const key = `${type}_${movieId}`;
+    localStorage.setItem(key, isActive);
+}
+
+// 버튼 상태 복원 함수
+function restoreButtonStates() {
+    document.querySelectorAll('.movie-item').forEach(item => {
+        const movieId = item.dataset.movieId;
+        
+        // 좋아요 버튼 상태 복원
+        const likeButton = item.querySelector('.like-button');
+        const likeState = localStorage.getItem(`like_${movieId}`);
+        if (likeState === 'true') {
+            likeButton.classList.add('active');
+        }
+        
+        // 북마크 버튼 상태 복원
+        const bookmarkButton = item.querySelector('.bookmark-button');
+        const bookmarkState = localStorage.getItem(`bookmark_${movieId}`);
+        if (bookmarkState === 'true') {
+            bookmarkButton.classList.add('active');
+        }
+    });
+}
+
 // 영화 목록 표시 함수
 function displayMovies(movies) {
     const container = document.querySelector('.movie-grid');
@@ -67,14 +96,16 @@ function displayMovies(movies) {
         <div class="movie-item" data-movie-id="${movie.id}">
             <div class="rank">${index + 1}</div>
             <div class="poster-container">
-                <img src="${movie.poster_path || 'https://placehold.co/180x260/2a2a2a/2a2a2a'}" 
-                     alt="${movie.title}" 
-                     class="movie-poster"
-                     onerror="this.onerror=null; this.src='https://placehold.co/180x260/2a2a2a/2a2a2a';">
-                <button class="like-button">
+                <a href="../html/movie-detail.html?id=${movie.id}">
+                    <img src="${movie.poster_path || 'https://placehold.co/180x260/2a2a2a/2a2a2a'}" 
+                         alt="${movie.title}" 
+                         class="movie-poster"
+                         onerror="this.onerror=null; this.src='https://placehold.co/180x260/2a2a2a/2a2a2a';">
+                </a>
+                <button class="like-button" aria-label="좋아요">
                     <i class="heart-icon"></i>
                 </button>
-                <button class="bookmark-button">
+                <button class="bookmark-button" aria-label="북마크">
                     <svg class="bookmark-icon" viewBox="0 0 24 24">
                         <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
                     </svg>
@@ -98,11 +129,13 @@ function displayMovies(movies) {
     likeButtons.forEach(button => {
         button.addEventListener('click', async function(e) {
             e.preventDefault();
+            e.stopPropagation();
             const movieItem = this.closest('.movie-item');
             const movieId = movieItem.dataset.movieId;
             try {
                 await toggleMovieLike(movieId);
                 this.classList.toggle('active');
+                saveButtonState(movieId, 'like', this.classList.contains('active'));
             } catch (error) {
                 console.error('좋아요 토글 실패:', error);
             }
@@ -114,14 +147,19 @@ function displayMovies(movies) {
     bookmarkButtons.forEach(button => {
         button.addEventListener('click', async function(e) {
             e.preventDefault();
+            e.stopPropagation();
             const movieItem = this.closest('.movie-item');
             const movieId = movieItem.dataset.movieId;
             try {
                 await toggleMovieBookmark(movieId);
                 this.classList.toggle('active');
+                saveButtonState(movieId, 'bookmark', this.classList.contains('active'));
             } catch (error) {
                 console.error('북마크 토글 실패:', error);
             }
         });
     });
+
+    // 저장된 상태 복원
+    restoreButtonStates();
 } 

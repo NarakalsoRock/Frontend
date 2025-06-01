@@ -57,12 +57,56 @@ function displayMainMovie(movie) {
         directorContainer.textContent = `감독: ${movie.director.name}`;
     }
 
-    // 상세보기 버튼 이벤트 리스너
+    // 상세보기 버튼 href 설정
     const detailButton = document.querySelector('.btn-detail');
-    detailButton.addEventListener('click', () => {
-        window.location.href = `movie-detail.html?id=${movie.id}`;
-    });
+    detailButton.href = `../html/movie-detail.html?id=${movie.id}`;
+
+    // 예고편 버튼 이벤트 리스너
+    const trailerButton = document.querySelector('.btn-trailer');
+    trailerButton.onclick = () => openTrailerModal(movie.video_url);
 }
+
+// 예고편 모달 열기 함수
+function openTrailerModal(videoUrl) {
+    if (!videoUrl) {
+        alert('예고편 영상이 준비되지 않았습니다.');
+        return;
+    }
+
+    const modal = document.getElementById('trailerModal');
+    const iframe = modal.querySelector('iframe');
+    
+    // YouTube URL을 임베드 URL로 변환
+    const embedUrl = videoUrl.replace('watch?v=', 'embed/');
+    iframe.src = embedUrl;
+    
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+}
+
+// 예고편 모달 닫기 함수
+function closeTrailerModal() {
+    const modal = document.getElementById('trailerModal');
+    const iframe = modal.querySelector('iframe');
+    
+    iframe.src = ''; // iframe 소스 초기화
+    modal.style.display = 'none';
+    document.body.style.overflow = ''; // 배경 스크롤 복구
+}
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeTrailerModal();
+    }
+});
+
+// 모달 외부 클릭으로 닫기
+document.getElementById('trailerModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+        closeTrailerModal();
+    }
+});
 
 // 날짜 포맷 함수
 function formatDate(dateString) {
@@ -78,13 +122,13 @@ function displayNowPlaying(movies) {
     container.innerHTML = movies.map(movie => {
         console.log('영화 포스터 URL:', movie.poster_path); // 디버깅용
         return `
-            <div class="movie-item" data-movie-id="${movie.id}">
+            <a href="../html/movie-detail.html?id=${movie.id}" class="movie-item">
                 <img src="${movie.poster_path || 'https://placehold.co/150x220'}" 
                      alt="${movie.title}" 
                      class="movie-poster"
                      onerror="this.onerror=null; this.src='https://placehold.co/150x220';">
                 <div class="movie-title">${movie.title}</div>
-            </div>
+            </a>
         `;
     }).join('');
 }
@@ -97,13 +141,13 @@ function displayUpcoming(movies) {
     container.innerHTML = movies.map(movie => {
         console.log('영화 포스터 URL:', movie.poster_path); // 디버깅용
         return `
-            <div class="movie-item" data-movie-id="${movie.id}">
+            <a href="../html/movie-detail.html?id=${movie.id}" class="movie-item">
                 <img src="${movie.poster_path || 'https://placehold.co/150x220'}" 
                      alt="${movie.title}" 
                      class="movie-poster"
                      onerror="this.onerror=null; this.src='https://placehold.co/150x220';">
                 <div class="movie-title">${movie.title}</div>
-            </div>
+            </a>
         `;
     }).join('');
 }

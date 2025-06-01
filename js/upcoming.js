@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response && response.movies) {
             upcomingMovies = response.movies;
             displayMoviesByMonth(upcomingMovies);
+            // 저장된 상태 복원
+            restoreButtonStates();
         }
     } catch (error) {
         console.error('데이터 로딩 중 오류 발생:', error);
@@ -58,6 +60,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// 버튼 상태 저장 함수
+function saveButtonState(movieId, type, isActive) {
+    const key = `${type}_${movieId}`;
+    localStorage.setItem(key, isActive);
+}
+
+// 버튼 상태 복원 함수
+function restoreButtonStates() {
+    document.querySelectorAll('.movie-item').forEach(item => {
+        const movieId = item.dataset.movieId;
+        
+        // 좋아요 버튼 상태 복원
+        const likeButton = item.querySelector('.like-button');
+        const likeState = localStorage.getItem(`like_${movieId}`);
+        if (likeState === 'true') {
+            likeButton.classList.add('active');
+        }
+        
+        // 북마크 버튼 상태 복원
+        const bookmarkButton = item.querySelector('.bookmark-button');
+        const bookmarkState = localStorage.getItem(`bookmark_${movieId}`);
+        if (bookmarkState === 'true') {
+            bookmarkButton.classList.add('active');
+        }
+    });
+}
+
 // 월별로 영화 그룹화 함수
 function groupMoviesByMonth(movies) {
     const groups = {};
@@ -103,10 +132,12 @@ function displayMoviesByMonth(movies) {
                     ${monthMovies.map(movie => `
                         <div class="movie-item" data-movie-id="${movie.id}">
                             <div class="poster-container">
-                                <img src="${movie.poster_path || 'https://placehold.co/180x260/2a2a2a/2a2a2a'}" 
-                                     alt="${movie.title}" 
-                                     class="movie-poster"
-                                     onerror="this.onerror=null; this.src='https://placehold.co/180x260/2a2a2a/2a2a2a';">
+                                <a href="../html/movie-detail.html?id=${movie.id}">
+                                    <img src="${movie.poster_path || 'https://placehold.co/180x260/2a2a2a/2a2a2a'}" 
+                                         alt="${movie.title}" 
+                                         class="movie-poster"
+                                         onerror="this.onerror=null; this.src='https://placehold.co/180x260/2a2a2a/2a2a2a';">
+                                </a>
                                 <button class="like-button">
                                     <i class="heart-icon"></i>
                                 </button>
@@ -141,6 +172,8 @@ function displayMoviesByMonth(movies) {
             try {
                 await toggleMovieLike(movieId);
                 this.classList.toggle('active');
+                // 상태 저장
+                saveButtonState(movieId, 'like', this.classList.contains('active'));
             } catch (error) {
                 console.error('좋아요 토글 실패:', error);
             }
@@ -157,6 +190,8 @@ function displayMoviesByMonth(movies) {
             try {
                 await toggleMovieBookmark(movieId);
                 this.classList.toggle('active');
+                // 상태 저장
+                saveButtonState(movieId, 'bookmark', this.classList.contains('active'));
             } catch (error) {
                 console.error('북마크 토글 실패:', error);
             }
