@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - 게시판</title>
+    <link rel="stylesheet" href="../css/pages/board.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">CineX</div>
+        <nav class="nav">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item active">Community</a>
+            <a href="mypage.html" class="nav-item">My page</a>
+        </nav>
+    </header>
+
+    <main class="board-main-content">
+        <div class="board-header">
+            <div class="board-title-row">
+                <h1 class="board-title">게시판</h1>
+                <div class="board-buttons">
+                    <a href="write-post.html" class="write-button" id="writeButton">
+                        <svg class="button-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                        </svg>
+                        글쓰기
+                    </a>
+                    <button class="search-button">
+                        <svg class="button-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                        검색
+                    </button>
+                </div>
+            </div>
+            <p class="board-description">영화에 대한 다양한 이야기를 나누는 공간입니다.</p>
+        </div>
+
+        <div class="post-list">
+            <a href="post-detail.html?type=info&id=1" class="post-card">
+                <div class="post-header">
+                    <h2 class="post-title">영화 '듄: 파트2' 관람 후기</h2>
+                    <span class="post-date">2024.03.15</span>
+                </div>
+                <p class="post-preview">드니 빌뇌브 감독의 '듄: 파트2'를 관람했습니다. 첫 번째 파트에 이어 놀라운 비주얼과 웅장한 스케일로...</p>
+                <div class="post-footer">
+                    <div class="post-meta">
+                        <span>조회 156</span>
+                    </div>
+                    <div class="post-meta">
+                        <span>좋아요 23</span>
+                    </div>
+                    <div class="post-meta">
+                        <span>댓글 8</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="post-detail.html?type=info&id=2" class="post-card">
+                <div class="post-header">
+                    <h2 class="post-title">이번 달 개봉 예정작 추천</h2>
+                    <span class="post-date">2024.03.14</span>
+                </div>
+                <p class="post-preview">3월에 개봉하는 기대작들을 정리해보았습니다. 특히 주목할 만한 작품은...</p>
+                <div class="post-footer">
+                    <div class="post-meta">
+                        <span>조회 98</span>
+                    </div>
+                    <div class="post-meta">
+                        <span>좋아요 15</span>
+                    </div>
+                    <div class="post-meta">
+                        <span>댓글 4</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
+
+    <script>
+        // URL 파라미터에서 게시판 타입을 가져와서 제목과 설명을 업데이트
+        window.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const boardType = urlParams.get('type');
+            const boardTitle = document.querySelector('.board-title');
+            const boardDescription = document.querySelector('.board-description');
+            const writeButton = document.getElementById('writeButton');
+
+            // 글쓰기 버튼 href 업데이트
+            if (boardType) {
+                writeButton.href = `write-post.html?type=${boardType}`;
+            }
+
+            if (boardType === 'info') {
+                document.title = 'CineX - 정보 게시판';
+                boardTitle.textContent = '정보 게시판';
+                boardDescription.textContent = '영화 관련 최신 소식, 흥미로운 사실, 개봉 예정작 정보, 이벤트 소식 등 다양한 정보성 콘텐츠를 공유하고 얻을 수 있는 커뮤니티 공간입니다.';
+            } else if (boardType === 'review') {
+                document.title = 'CineX - 리뷰 게시판';
+                boardTitle.textContent = '리뷰 게시판';
+                boardDescription.textContent = '영화에 대한 개인적인 감상, 평가, 비평 등을 자유롭게 작성하고 공유하며, 다른 사용자들의 다양한 의견을 탐색하고 소통할 수 있도록 설계된 커뮤니티 공간입니다.';
+            } else if (boardType === 'discussion') {
+                document.title = 'CineX - 토론 게시판';
+                boardTitle.textContent = '토론 게시판';
+                boardDescription.textContent = '특정 영화나 영화 관련 주제에 대해 사용자들이 자유롭게 의견을 교환하고, 심층적인 논의를 펼칠 수 있도록 설계된 커뮤니티 공간입니다.';
+            }
+        });
+    </script>
+</body>
+</html>

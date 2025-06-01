@@ -1,0 +1,240 @@
+/* frontend/css/pages/curation-detail.css */
+
+/* 공통 스타일 import */
+@import url(../common/common.css);
+@import url(../common/footer.css);
+@import url(../common/header.css);
+
+/* 기본 스타일 */
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 320px;
+}
+
+/* 메인 컨텐츠 */
+.curation-detail-main {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 80px 49px 40px;
+}
+
+/* 큐레이션 헤더 */
+.curation-header {
+    margin-bottom: 30px;
+}
+
+.curation-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #673AB7;
+    margin: 0 0 20px 0;
+}
+
+.curation-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.author-info {
+    display: flex;
+    gap: 20px;
+    color: #999;
+    font-size: 16px;
+}
+
+.like-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    transition: all 0.2s;
+}
+
+.like-icon {
+    color: #999;
+    font-size: 24px;
+    transition: all 0.2s;
+}
+
+.like-button.active .like-icon {
+    color: #FF4081;
+    transform: scale(1.2);
+}
+
+.like-count {
+    color: white;
+    font-size: 20px;
+}
+
+/* 구분선 */
+.divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 30px 0;
+}
+
+/* 큐레이션 설명 */
+.curation-description {
+    margin-bottom: 40px;
+    color: white;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* 영화 그리드 */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 30px;
+}
+
+.movie-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-poster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #D9D9D9;
+}
+
+.movie-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.movie-info {
+    padding: 0 5px;
+}
+
+.movie-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.movie-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    background: #673AB7;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 0 4px;
+}
+
+.movie-title {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-meta {
+    color: #999;
+    font-size: 14px;
+}
+
+.meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.booking-rate {
+    color: #999;
+}
+
+.release-date {
+    color: #999;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .curation-detail-main {
+        padding: 60px 30px 30px;
+    }
+    .curation-title {
+        font-size: 40px;
+    }
+    .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .curation-detail-main {
+        padding: 40px 20px 20px;
+    }
+    .curation-title {
+        font-size: 32px;
+    }
+    .curation-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .author-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .movie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+    }
+    .movie-title {
+        font-size: 16px;
+    }
+    .movie-meta {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .curation-detail-main {
+        padding: 30px 15px 15px;
+    }
+    .curation-title {
+        font-size: 28px;
+    }
+    .movie-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    .movie-title {
+        font-size: 14px;
+    }
+    .movie-meta {
+        font-size: 11px;
+    }
+    .meta-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+}
