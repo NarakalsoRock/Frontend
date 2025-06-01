@@ -133,7 +133,7 @@ body {
     gap: 16px;
 }
 
-.write-button, .search-button {
+.write-button, .board-search-button {
     background: #673AB7;
     color: white;
     border: none;
@@ -148,15 +148,15 @@ body {
     gap: 8px;
 }
 
-.write-button:hover, .search-button:hover {
+.write-button:hover, .board-search-button:hover {
     background: #7B52C7;
 }
 
-.search-button {
+.board-search-button {
     background: #2196F3;
 }
 
-.search-button:hover {
+.board-search-button:hover {
     background: #1976D2;
 }
 
@@ -356,7 +356,7 @@ body {
     .board-buttons {
         width: 100%;
     }
-    .write-button, .search-button {
+    .write-button, .board-search-button {
         flex: 1;
         justify-content: center;
         font-size: 14px;
@@ -403,7 +403,7 @@ body {
     .board-description {
         font-size: 14px;
     }
-    .write-button, .search-button {
+    .write-button, .board-search-button {
         padding: 8px 16px;
         font-size: 14px;
     }

@@ -5,7 +5,7 @@
 @import url(../common/footer.css); /* 푸터 스타일 */
 @import url(../common/header.css); /* 헤더 스타일 */
 
-/* 기본적인 body 스타일 (common.css에 있을 법한 내용) */
+/* 기본적인 body 스타일 */
 body {
     font-family: 'Inter', sans-serif;
     background: black;
@@ -14,24 +14,19 @@ body {
     padding: 0;
     box-sizing: border-box;
     min-width: 320px;
-    max-width: 1440px; /* 원본 HTML의 너비에 맞춰 페이지 최대 너비 설정 */
-    margin: 0 auto; /* 중앙 정렬 */
-    overflow-x: hidden; /* 가로 스크롤 방지 */
+    max-width: 1440px;
+    margin: 0 auto;
+    overflow-x: hidden;
 }
-
-/* Header Styles (common/header.css로 분리되었다고 가정) */
-/* .header, .header-content, .logo-wrapper, .logo-back-arrow, .logo, .nav, .nav-item 스타일은
-   common/header.css에 정의되어 있고 이 파일에서는 import해서 사용한다고 가정합니다. */
-/* 만약 header.css에 정의되지 않았다면, 현재 헤더 스타일을 이 파일에 직접 포함해야 합니다. */
 
 /* Main Content Wrapper */
 .community-main-content {
     width: 100%;
-    max-width: 1440px; /* 원본 너비 유지 */
-    padding: 80px 49px 40px; /* 헤더 높이(80px) + 상단 여백, 좌우 여백 */
-    margin: 0 auto; /* 중앙 정렬 */
+    max-width: 1440px;
+    padding: 80px 49px 40px;
+    margin: 0 auto;
     box-sizing: border-box;
-    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 허용 */
+    overflow-y: auto;
 }
 
 /* 메인 타이틀 (커뮤니티) */
@@ -350,33 +345,42 @@ body {
     background: #454450;
 }
 
-/* 큐레이션 컨텐츠 스타일 */
+/* 큐레이션 검색창 스타일 */
 .curation-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
-.search-wrapper {
+.curation-header .search-wrapper {
     position: relative;
-    width: 300px;
+    min-width: 200px;
 }
 
-.search-input {
+.curation-header .search-input {
     width: 100%;
     height: 40px;
-    background: #FFFFFF;
+    background-color: #1A1A1A;
     border: none;
-    border-radius: 20px;
-    padding: 0 40px 0 20px;
-    font-size: 16px;
-    color: #000000;
+    border-radius: 4px;
+    padding: 0 40px 0 16px;
+    color: white;
+    font-size: 14px;
 }
 
-.search-close-btn {
+.curation-header .search-input::placeholder {
+    color: #666;
+}
+
+.curation-header .search-input:focus {
+    outline: none;
+    background-color: #2A2A2A;
+}
+
+.curation-header .search-close-btn {
     position: absolute;
-    right: 15px;
+    right: 8px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
@@ -384,7 +388,15 @@ body {
     color: #666;
     font-size: 20px;
     cursor: pointer;
-    padding: 0;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.curation-header .search-close-btn:hover {
+    color: white;
 }
 
 .curation-grid {
