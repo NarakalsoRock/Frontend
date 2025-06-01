@@ -1,0 +1,205 @@
+/* frontend/css/pages/curation-list.css */
+
+/* 공통 스타일 import */
+@import url(../common/common.css);
+@import url(../common/footer.css);
+@import url(../common/header.css);
+
+/* 기본 스타일 */
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 320px;
+}
+
+/* 메인 컨텐츠 */
+.curation-list-main {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 80px 49px 40px;
+}
+
+/* 섹션 헤더 */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #673AB7;
+    margin: 0;
+}
+
+.more-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #666;
+}
+
+/* 큐레이션 그리드 */
+.curation-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 70px;
+    padding: 10px;
+}
+
+/* 큐레이션 아이템 */
+.curation-item {
+    background: #393740;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.curation-item:hover {
+    transform: translateY(-5px);
+}
+
+/* 포스터 */
+.poster-wrapper {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    margin-bottom: 20px;
+    background: #2A2A2A;
+}
+
+.poster {
+    position: absolute;
+    width: 70%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.poster:nth-child(1) {
+    left: 0;
+    z-index: 3;
+}
+
+.poster:nth-child(2) {
+    left: 15%;
+    z-index: 2;
+}
+
+.poster:nth-child(3) {
+    left: 30%;
+    z-index: 1;
+}
+
+/* 큐레이션 정보 */
+.curation-info {
+    padding: 0;
+}
+
+.curation-title {
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 12px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.curation-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.author {
+    color: #999;
+    font-size: 16px;
+}
+
+.likes {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.like-count {
+    color: white;
+    font-size: 16px;
+}
+
+.like-count::before {
+    content: "♥";
+    color: white;
+    margin-right: 4px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
+    .curation-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 50px;
+    }
+    .poster-wrapper {
+        height: 220px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .curation-list-main {
+        padding: 60px 30px 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .curation-list-main {
+        padding: 40px 20px 20px;
+    }
+    .section-title {
+        font-size: 28px;
+    }
+    .curation-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+    .poster-wrapper {
+        height: 200px;
+    }
+    .curation-title {
+        font-size: 16px;
+    }
+    .author, .like-count {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .curation-list-main {
+        padding: 30px 15px 15px;
+    }
+    .section-title {
+        font-size: 24px;
+    }
+    .curation-grid {
+        gap: 30px;
+        padding: 5px;
+    }
+    .poster-wrapper {
+        height: 180px;
+    }
+    .curation-title {
+        font-size: 14px;
+    }
+    .author, .like-count {
+        font-size: 12px;
+    }
+}

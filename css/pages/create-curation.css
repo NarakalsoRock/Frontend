@@ -1,0 +1,281 @@
+/* frontend/css/pages/create-curation.css */
+
+/* 공통 스타일은 common.css에 있다고 가정하고 import 합니다. */
+@import url(../common/common.css);
+@import url(../common/footer.css); /* 푸터 스타일 (HTML에 푸터가 있다면 필요) */
+@import url(../common/header.css); /* 헤더 스타일 */
+
+/* 기본적인 body 스타일 (common.css에 있을 법한 내용) */
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 320px;
+    max-width: 1440px; /* 원본 HTML의 너비에 맞춰 페이지 최대 너비 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+}
+
+/* Header Styles (common/header.css로 분리되었다고 가정) */
+/* .header, .header-content, .logo-wrapper, .logo-back-arrow, .logo, .nav, .nav-item 스타일은
+   common/header.css에 정의되어 있고 이 파일에서는 import해서 사용한다고 가정합니다. */
+
+/* Main Content Wrapper */
+.create-curation-main-content {
+    width: 100%;
+    max-width: 1440px; /* 원본 너비 유지 */
+    padding: 80px 49px 40px; /* 헤더 높이(80px) + 상단 여백, 좌우 여백 */
+    margin: 0 auto; /* 중앙 정렬 */
+    box-sizing: border-box;
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 허용 */
+}
+
+/* 구분선 */
+.divider {
+    width: 100%; /* 원본 1337.01px */
+    height: 1px;
+    background: white;
+    margin-bottom: 25px; /* 섹션 간 간격 */
+}
+
+/* 입력 그룹 공통 */
+.input-group {
+    margin-bottom: 30px; /* 다음 입력 그룹과의 간격 */
+}
+
+.input-label {
+    color: white;
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-bottom: 15px; /* 레이블과 입력 필드 사이 간격 */
+}
+
+/* 텍스트 입력 필드 공통 (제목, 설명) */
+.text-input {
+    width: 100%; /* 부모 컨테이너에 맞춰 너비 설정 */
+    background: transparent;
+    border: none;
+    outline: none; /* 클릭 시 아웃라인 제거 */
+    color: white;
+    font-family: Inter;
+    word-wrap: break-word;
+    padding: 0; /* 기본 패딩 제거 */
+    box-sizing: border-box;
+}
+
+.text-input::placeholder {
+    color: white; /* 플레이스홀더 색상 */
+    opacity: 0.7; /* 플레이스홀더 투명도 */
+}
+
+/* 제목 입력 필드 */
+.title-input {
+    height: 48px; /* 원본 높이 */
+    font-size: 32px;
+    font-weight: 700;
+}
+
+/* 영화 선택 영역 */
+.movie-select-area {
+    display: flex;
+    background: #393740; /* 원본 배경색 */
+    height: 237px; /* 원본 높이 */
+    align-items: center;
+    padding: 9px 25px; /* 원본 이미지의 left/top 값 고려 */
+    gap: 20px; /* 포스터 간 간격 */
+    overflow-x: auto; /* 가로 스크롤 */
+    scrollbar-width: thin;
+    scrollbar-color: #673AB7 #393740;
+    border-radius: 10px;
+}
+.movie-select-area::-webkit-scrollbar { height: 8px; }
+.movie-select-area::-webkit-scrollbar-track { background: #393740; border-radius: 4px; }
+.movie-select-area::-webkit-scrollbar-thumb { background: #673AB7; border-radius: 4px; }
+
+.selected-movies-carousel {
+    display: flex;
+    gap: 20px; /* 선택된 영화 포스터 간 간격 */
+    flex-shrink: 0; /* 캐러셀이 줄어들지 않도록 */
+}
+
+.selected-movie-poster {
+    height: 220px; /* 원본 이미지 높이와 맞춤 */
+    width: auto; /* 비율 유지 */
+    object-fit: cover;
+    border-radius: 4px; /* 약간의 둥근 모서리 */
+}
+
+.select-movie-button {
+    flex-shrink: 0; /* 버튼이 줄어들지 않도록 */
+    width: 51px; /* 원본 224px 너비의 검색 바에서 아이콘만 분리 */
+    height: 51px; /* 원본 51px 높이 */
+    background: white;
+    border-radius: 50%; /* 원형 버튼 */
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.select-movie-button:hover {
+    background: #f0f0f0;
+}
+
+.search-icon {
+    width: 24px;
+    height: 24px;
+    position: relative;
+}
+
+.search-icon::before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #1E1E1E;
+    border-radius: 50%;
+    left: 2px;
+    top: 2px;
+}
+
+.search-icon::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 8px;
+    background: #1E1E1E;
+    transform: rotate(-45deg);
+    right: 6px;
+    bottom: 4px;
+}
+
+/* 설명 입력 필드 */
+.description-textarea {
+    height: 228px; /* 원본 높이 */
+    font-size: 32px;
+    font-weight: 500;
+    padding: 15px 16px; /* 원본의 left 16px, top 15px 고려 */
+    resize: vertical; /* 세로로만 크기 조절 가능 */
+}
+
+/* 완료 버튼 컨테이너 */
+.complete-button-container {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    margin-top: 20px; /* 상단 입력 필드와의 간격 */
+}
+
+.complete-button {
+    width: 145px;
+    height: 52px;
+    background: #673AB7;
+    border-radius: 10px;
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.complete-button:hover {
+    background: #7B52C7;
+}
+
+/* Footer Styles (common/footer.css로 분리되었다고 가정) */
+/* .footer, .footer-text 스타일은 common/footer.css에 정의되어 있고
+   이 파일에서는 import해서 사용한다고 가정합니다. */
+
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .create-curation-main-content {
+        padding: 60px 30px 30px;
+    }
+    .input-label {
+        font-size: 28px;
+    }
+    .text-input {
+        font-size: 28px;
+    }
+    .selected-movie-poster {
+        height: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 3%;
+        height: 70px;
+    }
+    .logo-back-arrow {
+        font-size: 30px;
+    }
+    .nav {
+        gap: 15px;
+    }
+    .nav-item {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
+    .create-curation-main-content {
+        padding: 40px 20px 20px;
+    }
+    .input-label {
+        font-size: 24px;
+    }
+    .text-input {
+        font-size: 24px;
+    }
+    .selected-movie-poster {
+        height: 150px;
+    }
+    .complete-button {
+        width: 120px;
+        height: 45px;
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 60px;
+    }
+    .logo-back-arrow {
+        font-size: 24px;
+    }
+    .nav {
+        display: none; /* 모바일에서 네비게이션 숨김 */
+    }
+    .create-curation-main-content {
+        padding: 30px 15px 15px;
+    }
+    .input-label {
+        font-size: 20px;
+    }
+    .text-input {
+        font-size: 20px;
+    }
+    .selected-movies-carousel {
+        gap: 10px;
+    }
+    .selected-movie-poster {
+        height: 120px;
+    }
+    .complete-button {
+        width: 100%;
+        font-size: 18px;
+    }
+}

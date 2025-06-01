@@ -5,14 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineX</title>
     <link rel="stylesheet" href="../css/pages/index.css">
+    <script src="../js/index.js" defer></script>
 </head>
 <body>
     <header class="header">
-        <div class="logo">CineX</div>
+        <a href="index.html" class="logo">CineX</a>
+        <div class="header-search-container">
+            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
+            <button type="button" class="header-search-button" aria-label="검색">
+                <svg class="header-search-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
         <nav class="nav">
-            <a href="index.html" class="nav-item active">Home</a> 
+            <a href="index.html" class="nav-item">Home</a>
             <a href="now-playing.html" class="nav-item">Now playing</a>
             <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item">Community</a>
             <a href="mypage.html" class="nav-item">My page</a>
         </nav>
     </header>
@@ -30,8 +40,8 @@
             <p class="main-movie-description"></p>
             <div class="movie-director"></div>
             <div class="main-movie-buttons">
-                <button class="btn-detail">상세보기</button>
-                <button class="btn-trailer">예고편 보기</button>
+                <a href="movie-detail.html" class="btn-detail">상세보기</a>
+                <button class="btn-trailer" onclick="openTrailerModal()">예고편 보기</button>
             </div>
         </div>
     </section>
@@ -59,6 +69,15 @@
             <!-- 개봉 예정작 목록이 여기에 동적으로 로드됩니다 -->
         </div>
     </section>
+
+    <div class="trailer-modal" id="trailerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeTrailerModal()">&times;</button>
+            <div class="video-container">
+                <iframe src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer">
         <div class="footer-text">© 2025 CineX. All rights reserved.</div>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - 커뮤니티</title>
+    <link rel="stylesheet" href="../css/pages/community.css">
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">CineX</a>
+        <div class="header-search-container">
+            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
+            <button type="button" class="header-search-button" aria-label="검색">
+                <svg class="header-search-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="nav">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item">Community</a>
+            <a href="mypage.html" class="nav-item">My page</a>
+        </nav>
+    </header>
+
+    <main class="community-main-content">
+        <h1 class="main-title">커뮤니티</h1>
+
+        <div class="category-tabs">
+            <button class="category-tab active" data-tab="board">게시판</button>
+            <button class="category-tab" data-tab="curation">큐레이션</button>
+            <div class="tab-underline"></div>
+        </div>
+
+        <div class="tab-content" id="boardContent">
+            <section class="hot-posts-section">
+                <h2 class="section-title">가장 핫한 게시물</h2>
+                <a href="post-detail.html" class="post-card-link">
+                    <div class="post-card">
+                        <div class="user-info">
+                            <div class="user-profile-icon">
+                                <div class="user-profile-icon-inner"></div>
+                            </div>
+                            <span class="user-nickname">조윤정</span>
+                            <span class="post-datetime">5/29 15:00</span>
+                        </div>
+                        <h3 class="post-title">나 방금 50cm 똥 싸고 옴 ㅋㅋㅋ</h3>
+                        <p class="post-content">
+                            <span class="content-text">미안하다 이거 보여주려고 어그로끌었다.. 나루토 사스케 싸움수준 </span>
+                            <span class="content-text underline">ㄹㅇ</span>
+                            <span class="content-text underline">실화냐?</span>
+                            <span class="content-text"> 진짜 </span>
+                            <span class="content-text underline">세계관최강자</span>
+                            <span class="content-text">들의 싸움이다.. 그</span>
+                            <span class="content-text underline">찐따</span>
+                            <span class="content-text">같던 나루토가 맞나? 진짜 나루토는 전설이다..</span>
+                        </p>
+                        <div class="post-actions">
+                            <div class="action-item">
+                                <button class="like-button">
+                                    <div class="action-icon">♥</div>
+                                </button>
+                                <span class="action-count">126</span>
+                            </div>
+                            <div class="action-item">
+                                <button class="comment-button">
+                                    <div class="action-icon">💬</div>
+                                </button>
+                                <span class="action-count">7</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </section>
+
+            <section class="board-sections">
+                <h2 class="section-title">게시판</h2>
+                <div class="board-grid">
+                    <a href="board.html?type=info" class="board-card">
+                        <h3 class="board-title">정보 게시판</h3>
+                        <p class="board-description">영화 관련 최신 소식, 흥미로운 사실, 개봉 예정작 정보, 이벤트 소식 등 다양한 정보성 콘텐츠를 공유하고 얻을 수 있는 커뮤니티 공간입니다.</p>
+                    </a>
+                    <a href="board.html?type=review" class="board-card">
+                        <h3 class="board-title">리뷰 게시판</h3>
+                        <p class="board-description">영화에 대한 개인적인 감상, 평가, 비평 등을 자유롭게 작성하고 공유하며, 다른 사용자들의 다양한 의견을 탐색하고 소통할 수 있도록 설계된 커뮤니티 공간입니다.</p>
+                    </a>
+                    <a href="board.html?type=discussion" class="board-card">
+                        <h3 class="board-title">토론 게시판</h3>
+                        <p class="board-description">특정 영화나 영화 관련 주제에 대해 사용자들이 자유롭게 의견을 교환하고, 심층적인 논의를 펼칠 수 있도록 설계된 커뮤니티 공간입니다.</p>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <div class="tab-content" id="curationContent" style="display: none;">
+            <div class="curation-header">
+                <h2 class="section-title">내 큐레이션</h2>
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" placeholder="검색">
+                    <button class="search-close-btn">×</button>
+                </div>
+            </div>
+
+            <div class="curation-grid">
+                <a href="create-curation.html" class="curation-item create-item">
+                    <div class="create-icon">+</div>
+                </a>
+                <a href="curation-detail.html" class="curation-item">
+                    <div class="poster-stack">
+                        <img src="https://placehold.co/240x360" alt="영화 포스터 1" class="poster">
+                        <img src="https://placehold.co/240x360" alt="영화 포스터 2" class="poster">
+                        <img src="https://placehold.co/240x360" alt="영화 포스터 3" class="poster">
+                    </div>
+                    <div class="curation-info">
+                        <h3 class="curation-title">들어와라 이것이 애니다</h3>
+                        <div class="curation-meta">
+                            <span class="author">조윤정</span>
+                            <div class="likes">
+                                <span class="like-icon">♥</span>
+                                <span class="like-count">50</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div class="recently-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recently</h2>
+                    <a href="curation-list.html" class="more-link">
+                        <!-- <span class="more-text">Top rated는 상위 3개만</span> -->
+                        <span class="arrow">›</span>
+                    </a>
+                </div>
+                <div class="curation-grid">
+                    <a href="curation-detail.html" class="curation-item">
+                        <div class="poster-stack">
+                            <img src="https://placehold.co/240x360" alt="영화 포스터 1" class="poster">
+                            <img src="https://placehold.co/240x360" alt="영화 포스터 2" class="poster">
+                            <img src="https://placehold.co/240x360" alt="영화 포스터 3" class="poster">
+                        </div>
+                        <div class="curation-info">
+                            <h3 class="curation-title">들어와라 이것이 애니다</h3>
+                            <div class="curation-meta">
+                                <span class="author">조윤정</span>
+                                <div class="likes">
+                                    <span class="like-icon">♥</span>
+                                    <span class="like-count">50</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 탭 전환 기능
+            const tabs = document.querySelectorAll('.category-tab');
+            const boardContent = document.getElementById('boardContent');
+            const curationContent = document.getElementById('curationContent');
+            const tabUnderline = document.querySelector('.tab-underline');
+
+            function updateTabUnderline(activeTab) {
+                const tabRect = activeTab.getBoundingClientRect();
+                tabUnderline.style.width = `${tabRect.width}px`;
+                tabUnderline.style.left = `${activeTab.offsetLeft}px`;
+            }
+
+            function switchTab(tabName) {
+                const targetTab = document.querySelector(`.category-tab[data-tab="${tabName}"]`);
+                if (targetTab) {
+                    // 모든 탭 비활성화
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // 클릭된 탭 활성화
+                    targetTab.classList.add('active');
+                    // 탭 밑줄 업데이트
+                    updateTabUnderline(targetTab);
+
+                    // 컨텐츠 전환
+                    if (tabName === 'board') {
+                        boardContent.style.display = 'block';
+                        curationContent.style.display = 'none';
+                    } else {
+                        boardContent.style.display = 'none';
+                        curationContent.style.display = 'block';
+                    }
+                }
+            }
+
+            // URL 쿼리 파라미터 확인
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            if (tabParam) {
+                switchTab(tabParam);
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // 초기 탭 밑줄 위치 설정 (쿼리 파라미터가 없을 경우)
+            if (!tabParam) {
+                updateTabUnderline(document.querySelector('.category-tab.active'));
+            }
+
+            // 검색 닫기 버튼 기능
+            const searchInput = document.querySelector('.search-input');
+            const searchCloseBtn = document.querySelector('.search-close-btn');
+            
+            searchCloseBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                searchInput.focus();
+            });
+
+            // 좋아요 버튼 토글 기능
+            const likeButtons = document.querySelectorAll('.like-button, .like-icon');
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.classList.toggle('active');
+                    const likesContainer = this.closest('.likes, .action-item');
+                    const likeCount = likesContainer.querySelector('.like-count, .action-count');
+                    const currentCount = parseInt(likeCount.textContent);
+                    likeCount.textContent = this.classList.contains('active') ? currentCount + 1 : currentCount - 1;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

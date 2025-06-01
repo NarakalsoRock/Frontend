@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - 큐레이션</title>
+    <link rel="stylesheet" href="../css/pages/curation.css">
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">CineX</a>
+        <div class="header-search-container">
+            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
+            <button type="button" class="header-search-button" aria-label="검색">
+                <svg class="header-search-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="nav">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item">Community</a>
+            <a href="mypage.html" class="nav-item">My page</a>
+        </nav>
+    </header>
+
+    <main class="curation-main-content">
+        <div class="curation-header">
+            <h2 class="section-title">내 큐레이션</h2>
+            <div class="search-wrapper">
+                <input type="text" class="search-input" placeholder="검색">
+                <button class="search-close-btn">×</button>
+            </div>
+        </div>
+
+        <div class="curation-grid">
+            <a href="create-curation.html" class="curation-item create-item">
+                <div class="create-icon">+</div>
+            </a>
+            <a href="curation-detail.html" class="curation-item">
+                <div class="poster-stack">
+                    <img src="../assets/images/akira.jpg" alt="AKIRA" class="poster">
+                    <img src="../assets/images/dead-pool.jpg" alt="데드풀" class="poster">
+                    <img src="../assets/images/ghost.jpg" alt="공각기동대" class="poster">
+                </div>
+                <div class="curation-info">
+                    <h3 class="curation-title">들어와라 이것이 애니다</h3>
+                    <div class="curation-meta">
+                        <span class="author">조윤정</span>
+                        <div class="likes">
+                            <span class="like-icon">♥</span>
+                            <span class="like-count">50</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="recently-section">
+            <div class="section-header">
+                <h2 class="section-title">Recently</h2>
+                <a href="#" class="more-link">
+                    <!-- <span class="more-text">Top rated는 상위 3개만</span> -->
+                    <span class="arrow">›</span>
+                </a>
+            </div>
+            <div class="curation-grid">
+                <a href="curation-detail.html" class="curation-item">
+                    <div class="poster-stack">
+                        <img src="../assets/images/akira.jpg" alt="AKIRA" class="poster">
+                        <img src="../assets/images/dead-pool.jpg" alt="데드풀" class="poster">
+                        <img src="../assets/images/ghost.jpg" alt="공각기동대" class="poster">
+                    </div>
+                    <div class="curation-info">
+                        <h3 class="curation-title">들어와라 이것이 애니다</h3>
+                        <div class="curation-meta">
+                            <span class="author">조윤정</span>
+                            <div class="likes">
+                                <span class="like-icon">♥</span>
+                                <span class="like-count">50</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 검색 닫기 버튼 기능
+            const searchInput = document.querySelector('.search-input');
+            const searchCloseBtn = document.querySelector('.search-close-btn');
+            
+            searchCloseBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                searchInput.focus();
+            });
+
+            // 좋아요 버튼 토글 기능
+            const likeIcons = document.querySelectorAll('.like-icon');
+            likeIcons.forEach(icon => {
+                icon.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.classList.toggle('active');
+                    const likesContainer = this.closest('.likes');
+                    const likeCount = likesContainer.querySelector('.like-count');
+                    const currentCount = parseInt(likeCount.textContent);
+                    likeCount.textContent = this.classList.contains('active') ? currentCount + 1 : currentCount - 1;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

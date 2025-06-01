@@ -118,43 +118,39 @@ body {
 
 .main-movie-buttons {
     display: flex;
-    gap: clamp(20px, 3vw, 48px);
+    gap: 1rem;
+    margin-top: 2rem;
 }
 
-.btn-detail, .btn-trailer {
-    width: clamp(140px, 15vw, 175px);
-    height: clamp(45px, 5vh, 56px);
-    border-radius: 10px;
-    border: none;
-    color: white;
-    font-size: clamp(16px, 2vw, 18px);
+.btn-detail,
+.btn-trailer {
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .btn-detail {
-    background: #673AB7;
-}
-
-.btn-trailer {
-    background: rgba(103, 58, 183, 0.3);
-    border: 1px solid #673AB7;
-}
-
-.btn-detail:hover, .btn-trailer:hover {
-    transform: scale(1.05);
+    background-color: #673AB7;
+    color: white;
+    border: none;
+    text-decoration: none;
 }
 
 .btn-detail:hover {
-    background: #7B52CC;
+    background-color: #7b4fc9;
+}
+
+.btn-trailer {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
 }
 
 .btn-trailer:hover {
-    background: rgba(103, 58, 183, 0.5);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Movie Sections */
@@ -254,4 +250,96 @@ body {
 
 html, body {
     height: 100%;
+}
+
+/* 트레일러 모달 */
+.trailer-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.trailer-modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #181818;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    position: relative;
+    max-width: 900px;
+    width: 90vw;
+    max-height: 85vh;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 2.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+    color: white;
+}
+
+.video-container {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-color: black;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 1rem;
+        width: 95vw;
+    }
+
+    .modal-close {
+        font-size: 2rem;
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+
+    .btn-detail,
+    .btn-trailer {
+        padding: 0.6rem 1.2rem;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-movie-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-detail,
+    .btn-trailer {
+        text-align: center;
+    }
 }

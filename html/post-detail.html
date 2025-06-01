@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - 게시글</title>
+    <link rel="stylesheet" href="../css/pages/post-detail.css">
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">CineX</a>
+        <div class="header-search-container">
+            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
+            <button type="button" class="header-search-button" aria-label="검색">
+                <svg class="header-search-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="nav">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item">Community</a>
+            <a href="mypage.html" class="nav-item">My page</a>
+        </nav>
+    </header>
+
+    <main class="post-detail-content">
+        <h2 class="board-title">게시판</h2>
+        
+        <article class="post-header">
+            <h1 class="post-title">게시글 제목</h1>
+            <div class="post-info">
+                <div class="post-author">
+                    <div class="author-avatar">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <span class="author-name">작성자</span>
+                </div>
+                <time class="post-date" datetime="2024-03-15">2024.03.15 15:00</time>
+            </div>
+        </article>
+
+        <div class="post-content">
+            게시글 내용이 여기에 표시됩니다.
+        </div>
+
+        <div class="post-actions">
+            <button class="action-button" id="likeButton">
+                <svg class="button-icon" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                좋아요 <span id="likeCount">0</span>
+            </button>
+            <button class="action-button" id="commentButton">
+                <svg class="button-icon" viewBox="0 0 24 24">
+                    <path d="M21 15a2 2 0 0 1-2 2h-2v3l-4-3H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8z"/>
+                </svg>
+                댓글 <span id="commentCount">0</span>
+            </button>
+        </div>
+
+        <section class="comments-section">
+            <h3 class="comments-title">댓글</h3>
+            <form class="comment-form" id="commentForm">
+                <textarea class="comment-input" placeholder="댓글을 입력하세요" required></textarea>
+                <button type="submit" class="submit-comment">댓글 작성</button>
+            </form>
+
+            <div class="comment-list" id="commentList">
+                <!-- 댓글 예시 -->
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="author-avatar">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
+                            </svg>
+                        </div>
+                        <span class="comment-author">사용자</span>
+                        <time class="comment-date" datetime="2024-03-15T15:00">방금 전</time>
+                    </div>
+                    <p class="comment-text">정말 좋은 글이네요!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const boardType = urlParams.get('type');
+            const postId = urlParams.get('id');
+            const boardTitle = document.querySelector('.board-title');
+            
+            // 게시판 타입에 따라 제목 업데이트
+            if (boardType === 'info') {
+                document.title = 'CineX - 정보 게시판';
+                boardTitle.textContent = '정보 게시판';
+            } else if (boardType === 'review') {
+                document.title = 'CineX - 리뷰 게시판';
+                boardTitle.textContent = '리뷰 게시판';
+            } else if (boardType === 'discussion') {
+                document.title = 'CineX - 토론 게시판';
+                boardTitle.textContent = '토론 게시판';
+            }
+
+            // 좋아요 버튼 기능
+            const likeButton = document.getElementById('likeButton');
+            const likeCount = document.getElementById('likeCount');
+            let isLiked = false;
+            let likes = 0;
+
+            likeButton.addEventListener('click', function() {
+                isLiked = !isLiked;
+                likes = isLiked ? likes + 1 : likes - 1;
+                likeCount.textContent = likes;
+                this.classList.toggle('active');
+            });
+
+            // 댓글 폼 제출 처리
+            const commentForm = document.getElementById('commentForm');
+            const commentList = document.getElementById('commentList');
+            const commentCount = document.getElementById('commentCount');
+            let comments = 1; // 예시 댓글 1개 포함
+
+            // 초기 댓글 수 업데이트
+            commentCount.textContent = comments;
+
+            commentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const textarea = this.querySelector('textarea');
+                const commentText = textarea.value.trim();
+
+                if (commentText) {
+                    const now = new Date();
+                    const comment = document.createElement('div');
+                    comment.className = 'comment';
+                    comment.innerHTML = `
+                        <div class="comment-header">
+                            <div class="author-avatar">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
+                                </svg>
+                            </div>
+                            <span class="comment-author">사용자</span>
+                            <time class="comment-date" datetime="${now.toISOString()}">방금 전</time>
+                        </div>
+                        <p class="comment-text">${commentText}</p>
+                    `;
+                    commentList.insertBefore(comment, commentList.firstChild);
+                    textarea.value = '';
+                    comments++;
+                    commentCount.textContent = comments;
+                }
+            });
+
+            // 댓글 버튼 클릭 시 댓글 입력창으로 스크롤
+            const commentButton = document.getElementById('commentButton');
+            const commentInput = document.querySelector('.comment-input');
+            
+            commentButton.addEventListener('click', function() {
+                commentInput.scrollIntoView({ behavior: 'smooth' });
+                commentInput.focus();
+            });
+        });
+    </script>
+</body>
+</html>

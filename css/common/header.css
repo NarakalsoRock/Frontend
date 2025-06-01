@@ -3,39 +3,135 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    right: 0;
     height: 80px;
-    background: rgba(0, 0, 0, 0.9); /* Semi-transparent background for fixed header */
+    background-color: black;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 5%; /* 5% padding on left/right */
+    padding: 0 2rem;
     z-index: 1000;
-    box-sizing: border-box; /* Include padding in width/height */
 }
 
 .logo {
-    color: #673AB7; /* 보라색 */
-    font-size: 36px;
-    font-weight: 700;
-    /* '뒤로 가기' 아이콘 대신 'CineX' 텍스트 로고로 통일 */
+    color: #673AB7;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 2rem;
+}
+
+.header-search-container {
+    position: relative;
+    min-width: 240px;
+    margin-right: 2rem;
+}
+
+.header-search-input {
+    width: 100%;
+    height: 40px;
+    background-color: #1A1A1A;
+    border: none;
+    border-radius: 4px;
+    padding: 0 40px 0 16px;
+    color: white;
+    font-size: 14px;
+}
+
+.header-search-input::placeholder {
+    color: #666;
+}
+
+.header-search-input:focus {
+    outline: none;
+    background-color: #2A2A2A;
+}
+
+.header-search-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.header-search-button:hover {
+    color: white;
+}
+
+.header-search-icon {
+    width: 20px;
+    height: 20px;
 }
 
 .nav {
     display: flex;
-    gap: 30px; /* now-playing.css와 동일한 간격 */
-    margin-right: 0; /* 우측 정렬을 위해 margin-right 제거 */
+    align-items: center;
+    gap: 2rem;
+    margin-left: auto;
 }
 
 .nav-item {
-    color: white;
+    color: #888;
     text-decoration: none;
-    font-size: 18px; /* now-playing.css와 동일한 폰트 사이즈 */
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    white-space: nowrap;
 }
 
-.nav-item:hover {
-    background: rgba(103, 58, 183, 0.2); /* now-playing.css와 동일한 호버 효과 */
+.nav-item:hover,
+.nav-item.active {
+    color: white;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1024px) {
+    .header-search-container {
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 1rem;
+    }
+
+    .logo {
+        margin-right: 1rem;
+    }
+
+    .header-search-container {
+        min-width: 180px;
+        margin-right: 1rem;
+    }
+
+    .nav {
+        gap: 1rem;
+    }
+
+    .nav-item {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 20px;
+    }
+
+    .header-search-container {
+        min-width: 140px;
+    }
+
+    .nav-item {
+        font-size: 13px;
+    }
 }
