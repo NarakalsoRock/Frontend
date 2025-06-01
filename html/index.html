@@ -18,11 +18,21 @@
     </header>
 
     <section class="main-movie">
-        <h1 class="main-movie-title">Main Movie</h1>
-        <p class="main-movie-description">This section is description of main movie.</p>
-        <div class="main-movie-buttons">
-            <button class="btn-detail">상세보기</button>
-            <button class="btn-trailer">예고편 보기</button>
+        <div class="main-movie-content">
+            <h1 class="main-movie-title"></h1>
+            <div class="main-movie-info">
+                <span class="movie-rating"></span>
+                <span class="movie-runtime"></span>
+                <span class="movie-release"></span>
+                <span class="movie-vote"></span>
+            </div>
+            <div class="movie-genres"></div>
+            <p class="main-movie-description"></p>
+            <div class="movie-director"></div>
+            <div class="main-movie-buttons">
+                <button class="btn-detail">상세보기</button>
+                <button class="btn-trailer">예고편 보기</button>
+            </div>
         </div>
     </section>
 
@@ -134,6 +144,7 @@
     
     <!-- API 및 페이지 스크립트 -->
     <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
     <script src="../js/index.js"></script>
 </body>
 </html>

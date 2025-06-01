@@ -91,7 +91,7 @@
 }
 
 /* Movies Section (Monthly upcoming) */
-.movies-section {
+.movies-container {
     padding: 40px 5%;
 }
 
@@ -103,34 +103,42 @@
     color: white;
     font-size: 24px;
     font-weight: 600;
-    margin: 0 5% 20px;
-    padding-left: 10px;
-    border-left: 4px solid #673AB7;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    position: relative;
 }
 
-.movie-list-container {
-    width: 100%;
-    overflow-x: auto;
-    padding: 20px 0;
-    scrollbar-width: none; 
-    -ms-overflow-style: none;
+.month-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background: #673AB7;
 }
-.movie-list-container::-webkit-scrollbar {
-    display: none;
-}
-
 
 .movie-grid {
     display: flex;
     gap: 30px;
-    padding: 0 5%;
-    min-width: min-content;
+    overflow-x: auto;
+    padding: 20px;
+    margin: 0 -20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-padding: 20px;
+}
+
+.movie-grid::-webkit-scrollbar {
+    display: none;
 }
 
 .movie-item {
-    position: relative;
     flex: 0 0 auto;
     width: 180px;
+    position: relative;
+    padding-bottom: 20px;
 }
 
 .poster-container {
@@ -139,16 +147,14 @@
     margin-bottom: 15px;
     overflow: hidden;
     border-radius: 8px;
+    background: #2a2a2a;
+    aspect-ratio: 180/260;
 }
 
 .movie-poster {
-    width: 180px;
-    height: 260px;
-    transition: transform 0.3s ease;
-}
-
-.movie-item:hover .movie-poster {
-    transform: scale(1.05);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .movie-info {
@@ -169,6 +175,7 @@
     border-radius: 4px;
     font-size: 14px;
     font-weight: 500;
+    flex-shrink: 0;
 }
 
 .title {
@@ -190,6 +197,45 @@
 .release-date {
     color: #888;
     font-size: 14px;
+}
+
+/* 좋아요 & 북마크 버튼 */
+.like-button, .bookmark-button {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    z-index: 1;
+}
+
+.movie-item:hover .like-button,
+.movie-item:hover .bookmark-button {
+    opacity: 1;
+}
+
+.like-button {
+    top: 10px;
+    /* right: 56px; */
+    right: 10px;
+}
+
+.bookmark-button {
+    top: 10px;
+    left: 10px;
+}
+
+.like-button:hover, .bookmark-button:hover {
+    background: rgba(103, 58, 183, 0.8);
+    transform: scale(1.1);
 }
 
 /* Movie Actions (Buttons) */
@@ -232,42 +278,6 @@
     background-color: #555;
 }
 
-/* 좋아요 버튼 (기존 스타일) */
-.like-button, .bookmark-button { /* 북마크 버튼도 함께 스타일링 */
-    position: absolute;
-    top: 10px;
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    opacity: 0; /* 기본적으로 숨김 */
-}
-
-.like-button {
-    right: 10px; /* 좋아요 버튼은 오른쪽 정렬 */
-}
-
-.bookmark-button { /* 북마크 버튼 추가 */
-    left: 10px; /* 북마크 버튼은 왼쪽 정렬 */
-}
-
-.poster-container:hover .like-button,
-.poster-container:hover .bookmark-button {
-    opacity: 1; /* 포스터 호버 시 두 버튼 모두 나타남 */
-}
-
-.like-button:hover,
-.bookmark-button:hover { /* 두 버튼 모두 호버 시 효과 */
-    background: rgba(0, 0, 0, 0.7);
-    transform: scale(1.1);
-}
-
 /* 좋아요 아이콘 */
 .heart-icon {
     width: 20px;
@@ -296,8 +306,6 @@
 .bookmark-button.active .bookmark-icon {
     fill: #673AB7; /* 클릭 시 채워짐 */
 }
-
-
 
 /* Responsive Design */
 @media (max-width: 1200px) {
