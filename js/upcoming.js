@@ -132,12 +132,11 @@ function displayMoviesByMonth(movies) {
                     ${monthMovies.map(movie => `
                         <div class="movie-item" data-movie-id="${movie.id}">
                             <div class="poster-container">
-                                <a href="../html/movie-detail.html?id=${movie.id}">
-                                    <img src="${movie.poster_path || 'https://placehold.co/180x260/2a2a2a/2a2a2a'}" 
-                                         alt="${movie.title}" 
-                                         class="movie-poster"
-                                         onerror="this.onerror=null; this.src='https://placehold.co/180x260/2a2a2a/2a2a2a';">
-                                </a>
+                                <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" 
+                                     data-src="${movie.poster_path || 'https://placehold.co/180x260/2a2a2a/2a2a2a'}" 
+                                     alt="${movie.title}" 
+                                     class="movie-poster lazy"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/180x260/2a2a2a/2a2a2a';">
                                 <button class="like-button">
                                     <i class="heart-icon"></i>
                                 </button>
@@ -161,6 +160,21 @@ function displayMoviesByMonth(movies) {
                 </div>
             </div>
         `).join('');
+
+    // Lazy loading 구현
+    const lazyImages = document.querySelectorAll('img.lazy');
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.remove('lazy');
+                observer.unobserve(img);
+            }
+        });
+    });
+
+    lazyImages.forEach(img => imageObserver.observe(img));
 
     // 좋아요 버튼 이벤트 리스너
     const likeButtons = document.querySelectorAll('.like-button');

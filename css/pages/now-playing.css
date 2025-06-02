@@ -218,9 +218,18 @@
 
 .movie-poster {
     width: 100%;
-    height: auto;
-    aspect-ratio: 180/260;
-    transition: transform 0.3s ease;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.movie-poster.lazy {
+    opacity: 0;
+}
+
+.movie-poster:not(.lazy) {
+    opacity: 1;
 }
 
 .movie-item:hover .movie-poster {
