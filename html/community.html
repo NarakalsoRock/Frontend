@@ -39,7 +39,7 @@
             <section class="hot-posts-section">
                 <h2 class="section-title">가장 핫한 게시물</h2>
                 <a href="post-detail.html" class="post-card-link">
-                    <div class="post-card">
+                    <div class="post-card" data-post-id="1">
                         <div class="user-info">
                             <div class="user-profile-icon">
                                 <div class="user-profile-icon-inner"></div>
@@ -47,7 +47,7 @@
                             <span class="user-nickname">조윤정</span>
                             <span class="post-datetime">5/29 15:00</span>
                         </div>
-                        <h3 class="post-title">나 방금 50cm 똥 싸고 옴 ㅋㅋㅋ</h3>
+                        <h3 class="post-title">미안하다..이거 보여주려고 어그로끌었다..</h3>
                         <p class="post-content">
                             <span class="content-text">미안하다 이거 보여주려고 어그로끌었다.. 나루토 사스케 싸움수준 </span>
                             <span class="content-text underline">ㄹㅇ</span>
@@ -61,13 +61,13 @@
                         <div class="post-actions">
                             <div class="action-item">
                                 <button class="like-button">
-                                    <div class="action-icon">♥</div>
+                                    <i class="heart-icon"></i>
                                 </button>
                                 <span class="action-count">126</span>
                             </div>
                             <div class="action-item">
                                 <button class="comment-button">
-                                    <div class="action-icon">💬</div>
+                                    <i class="comment-icon"></i>
                                 </button>
                                 <span class="action-count">7</span>
                             </div>
@@ -164,6 +164,7 @@
         <div class="footer-text">© 2025 CineX. All rights reserved.</div>
     </footer>
 
+    <script src="../js/community.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 탭 전환 기능
