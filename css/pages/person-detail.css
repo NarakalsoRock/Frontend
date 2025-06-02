@@ -82,48 +82,46 @@
     line-height: 1.6;
 }
 
-/* 공식 사이트 아이콘 */
+/* 공식 사이트 아이콘 스타일 */
 .official-site-icons {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
 }
 
 .official-site-icon {
-    width: 48px;
-    height: 48px;
-    background: #2a2a2a;
-    border-radius: 50%;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.8;
 }
 
 .official-site-icon:hover {
-    background: #673AB7;
+    transform: scale(1.2);
+    opacity: 1;
 }
 
-.official-site-icon .icon-inner-1 { /* 특정 아이콘 모양 */
-    width: 24px;
-    height: 24px;
-    background: transparent;
-    border: 4px solid #FEF7FF;
-    box-sizing: border-box;
-    display: block; /* 인라인 요소의 여백 제거 */
-}
-.official-site-icon .icon-inner-2 { /* 특정 아이콘 모양 */
-    width: 24px;
-    height: 24px;
-    background: #FEF7FF;
-    display: block; /* 인라인 요소의 여백 제거 */
+.official-site-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: #fff;
 }
 
 .official-site-separator {
-    color: white;
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 1; /* 아이콘과 수직 정렬 */
+    color: #666;
+    font-size: 1.2rem;
+    margin: 0 0.5rem;
+}
+
+.no-links {
+    color: #666;
+    font-style: italic;
+    margin: 0;
 }
 
 /* ========================================================================= */
@@ -264,16 +262,37 @@
         font-size: 14px;
     }
     .official-site-icon {
-        width: 40px;
-        height: 40px;
+        width: 28px;
+        height: 28px;
     }
-    .official-site-icon .icon-inner-1,
-    .official-site-icon .icon-inner-2 {
+    .official-site-icon svg {
         width: 20px;
         height: 20px;
     }
     .official-site-separator {
         font-size: 24px;
+    }
+    .career-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .career-year {
+        width: 100%;
+        text-align: left;
+        padding-top: 0;
+    }
+
+    .career-title {
+        font-size: 16px;
+    }
+
+    .career-role {
+        font-size: 14px;
+    }
+
+    .career-rating {
+        font-size: 12px;
     }
 }
 
@@ -305,4 +324,73 @@
     .movie-title {
         font-size: 12px;
     }
+    .official-site-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* 연기 경력 스타일 */
+.career-item {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: rgba(103, 58, 183, 0.1);
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.career-item:hover {
+    transform: translateX(5px);
+    background: rgba(103, 58, 183, 0.2);
+    box-shadow: 0 2px 8px rgba(103, 58, 183, 0.2);
+}
+
+.career-item:active {
+    transform: translateX(5px) scale(0.98);
+}
+
+.career-year {
+    flex-shrink: 0;
+    width: 60px;
+    color: #673AB7;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    padding-top: 5px;
+}
+
+.career-info {
+    flex-grow: 1;
+}
+
+.career-title {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.career-role {
+    color: #9575CD;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.career-rating {
+    color: #FFD700;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.no-career {
+    color: #666;
+    font-style: italic;
+    padding: 15px;
+    text-align: center;
+    background: rgba(103, 58, 183, 0.1);
+    border-radius: 8px;
 }

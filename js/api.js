@@ -322,4 +322,142 @@ async function getRecommendedMovies(movieId) {
         console.error('추천 영화를 가져오는데 실패했습니다:', error);
         return [];
     }
+}
+
+// 인물 상세 정보 가져오기
+async function getPersonDetails(personId) {
+    try {
+        // 한국어 데이터, 외부 링크 데이터, 출연작 정보를 동시에 가져오기
+        const [korResponse, externalResponse, creditsResponse] = await Promise.all([
+            fetch(`${TMDB_BASE_URL}/person/${personId}?api_key=${TMDB_API_KEY}&language=ko-KR`),
+            fetch(`${TMDB_BASE_URL}/person/${personId}/external_ids?api_key=${TMDB_API_KEY}`),
+            fetch(`${TMDB_BASE_URL}/person/${personId}/movie_credits?api_key=${TMDB_API_KEY}&language=ko-KR`)
+        ]);
+        
+        if (!korResponse.ok) {
+            throw new Error(`HTTP error! status: ${korResponse.status}`);
+        }
+
+        const korData = await korResponse.json();
+        const externalData = externalResponse.ok ? await externalResponse.json() : {};
+        const creditsData = creditsResponse.ok ? await creditsResponse.json() : { cast: [], crew: [] };
+
+        // 한국어 약력이 없는 경우에만 영어 데이터 가져오기
+        if (!korData.biography) {
+            const engResponse = await fetch(
+                `${TMDB_BASE_URL}/person/${personId}?api_key=${TMDB_API_KEY}&language=en-US`
+            );
+            
+            if (engResponse.ok) {
+                const engData = await engResponse.json();
+                korData.biography = engData.biography;
+            }
+        }
+
+        // 외부 링크 데이터 추가
+        const externalLinks = {
+            instagram_id: externalData.instagram_id ? `https://www.instagram.com/${externalData.instagram_id}` : null,
+            twitter_id: externalData.twitter_id ? `https://twitter.com/${externalData.twitter_id}` : null,
+            facebook_id: externalData.facebook_id ? `https://www.facebook.com/${externalData.facebook_id}` : null,
+            imdb_id: externalData.imdb_id ? `https://www.imdb.com/name/${externalData.imdb_id}` : null,
+            homepage: korData.homepage || null
+        };
+
+        // 연기 경력 정보 생성 (개봉연도 순으로 정렬)
+        const actingCareer = creditsData.cast
+            .filter(movie => movie.release_date) // 개봉일이 있는 작품만 선택
+            .sort((a, b) => new Date(b.release_date) - new Date(a.release_date)) // 최신순 정렬
+            .slice(0, 5) // 최근 5개 작품만 선택
+            .map(movie => ({
+                id: movie.id, // 영화 ID 추가
+                title: movie.title,
+                character: movie.character || '정보 없음',
+                release_date: movie.release_date,
+                popularity: movie.popularity,
+                vote_average: movie.vote_average
+            }));
+
+        return {
+            ...korData,
+            name: korData.name,
+            place_of_birth: korData.place_of_birth,
+            biography: korData.biography || '약력 정보가 없습니다.',
+            external_links: externalLinks,
+            acting_career: actingCareer
+        };
+    } catch (error) {
+        console.error('인물 상세 정보를 가져오는데 실패했습니다:', error);
+        throw error;
+    }
+}
+
+// 인물의 출연작 정보 가져오기
+async function getPersonMovieCredits(personId) {
+    try {
+        const response = await fetch(
+            `${TMDB_BASE_URL}/person/${personId}/movie_credits?api_key=${TMDB_API_KEY}&language=ko-KR`
+        );
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('인물의 출연작 정보를 가져오는데 실패했습니다:', error);
+        throw error;
+    }
+}
+
+// 영화의 관련 시리즈 정보 가져오기
+async function getMovieSeries(movieId) {
+    try {
+        // TMDB API에서 컬렉션 정보 가져오기
+        const response = await fetch(
+            `${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=ko-KR&append_to_response=belongs_to_collection`
+        );
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (!data.belongs_to_collection) {
+            return null;
+        }
+
+        // 컬렉션의 상세 정보 가져오기
+        const collectionResponse = await fetch(
+            `${TMDB_BASE_URL}/collection/${data.belongs_to_collection.id}?api_key=${TMDB_API_KEY}&language=ko-KR`
+        );
+
+        if (!collectionResponse.ok) {
+            throw new Error(`HTTP error! status: ${collectionResponse.status}`);
+        }
+
+        const collectionData = await collectionResponse.json();
+        
+        // 영화들을 개봉일 순으로 정렬
+        const sortedMovies = collectionData.parts.sort((a, b) => {
+            return new Date(a.release_date) - new Date(b.release_date);
+        });
+
+        return {
+            id: collectionData.id,
+            name: collectionData.name,
+            overview: collectionData.overview,
+            poster_path: collectionData.poster_path,
+            movies: sortedMovies.map(movie => ({
+                id: movie.id,
+                title: movie.title,
+                poster_path: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : null,
+                release_date: movie.release_date,
+                overview: movie.overview
+            }))
+        };
+    } catch (error) {
+        console.error('시리즈 정보를 가져오는데 실패했습니다:', error);
+        return null;
+    }
 } 

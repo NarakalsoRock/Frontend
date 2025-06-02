@@ -145,8 +145,17 @@
                 <div class="media-content" id="trailers">
                     <div class="media-grid video-grid">
                         <div class="media-item video">
+                            <div class="video-error-state hidden">
+                                <svg class="video-error-icon" viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                </svg>
+                                <p class="video-error-message">트레일러를 불러올 수 없습니다</p>
+                                <p class="video-error-submessage">잠시 후 다시 시도해 주세요</p>
+                            </div>
+                            <div class="video-content">
                             <img src="https://placehold.co/300x169" alt="트레일러 썸네일" class="media-thumbnail">
                             <button class="play-button">▶</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -193,14 +202,14 @@
             </section>
 
             <!-- 예고편 모달 -->
-            <div class="trailer-modal" id="trailerModal">
-                <div class="modal-content">
-                    <button class="modal-close">&times;</button>
-                    <div class="video-container">
+    <div class="trailer-modal" id="trailerModal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="video-container">
                         <iframe src="" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                </div>
             </div>
+        </div>
+    </div>
         </section>
     </main>
 
