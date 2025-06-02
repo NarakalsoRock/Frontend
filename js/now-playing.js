@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // 정렬 로직 적용
                 switch(sortType) {
                     case '예매율순':
+                        currentMovies.sort((a, b) => b.booking_rate - a.booking_rate);
+                        break;
+                    case '평점순':
                         currentMovies.sort((a, b) => b.vote_average - a.vote_average);
                         break;
                     case '개봉일순':
@@ -71,6 +74,7 @@ function displayMovies(movies) {
                      data-src="${movie.poster_path || 'https://placehold.co/180x260/2a2a2a/2a2a2a'}" 
                      alt="${movie.title}" 
                      class="movie-poster lazy"
+                     style="cursor: pointer;"
                      onerror="this.onerror=null; this.src='https://placehold.co/180x260/2a2a2a/2a2a2a';">
                 <button class="like-button">
                     <i class="heart-icon"></i>
@@ -108,6 +112,16 @@ function displayMovies(movies) {
     });
 
     lazyImages.forEach(img => imageObserver.observe(img));
+
+    // 영화 포스터 클릭 이벤트 리스너
+    const moviePosters = document.querySelectorAll('.movie-poster');
+    moviePosters.forEach(poster => {
+        poster.addEventListener('click', function() {
+            const movieItem = this.closest('.movie-item');
+            const movieId = movieItem.dataset.movieId;
+            window.location.href = `../html/movie-detail.html?id=${movieId}`;
+        });
+    });
 
     // 좋아요 버튼 이벤트 리스너
     const likeButtons = document.querySelectorAll('.like-button');

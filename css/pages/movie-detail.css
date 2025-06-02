@@ -493,46 +493,69 @@
 /* 추천 영화 */
 .recommended-movies {
     margin-top: 3rem;
+    padding: 0 2rem;
 }
-/* .movie-grid, .movie-item 등은 다른 섹션의 스타일을 공유할 수 있도록 CSS 우선순위 및 클래스 명명에 유의 */
-/* 여기서는 .recommended-movies 내부의 .movie-grid, .movie-item 에만 적용되는 스타일 */
+
 .recommended-movies .movie-grid {
     display: flex;
-    gap: 1.5rem;
+    gap: 2rem;
     overflow-x: auto;
-    padding-bottom: 1rem;
-    scrollbar-width: none;          
-    -ms-overflow-style: none;   
+    padding: 1rem 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
 }
 
 .recommended-movies .movie-grid::-webkit-scrollbar {
-    display: none;                  
+    display: none;
 }
 
 .recommended-movies .movie-item {
-    flex: 0 0 150px; /* 이미지에서 보이는 아이템 너비 */
-    transition: transform 0.3s;
-}
-.recommended-movies .movie-item:hover {
-    transform: scale(1.05);
-}
-.recommended-movies .movie-poster { /* 포스터 크기 */
-    width: 150px;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
-    background-color: #333; /* Placeholder 배경 */
-}
-.recommended-movies .movie-title {
-    font-size: 14px;
-    text-align: center;
-    color: white;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    flex: 0 0 180px;
+    scroll-snap-align: start;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
 }
 
+.recommended-movies .movie-item:hover {
+    transform: translateY(-8px);
+}
+
+.recommended-movies .movie-poster {
+    width: 180px;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.recommended-movies .movie-info {
+    padding: 0 0.5rem;
+    width: 100%;
+}
+
+.recommended-movies .movie-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    line-height: 1.3;
+    height: 2.6em;
+}
+
+.recommended-movies .release-date {
+    font-size: 0.9rem;
+    color: #888;
+}
 
 /* === 예고편 모달 창 스타일 === */
 .trailer-modal {
@@ -631,6 +654,22 @@
     .related-series-banner-title { font-size: 18px; }
     .related-series-list { font-size: 14px; }
     .btn-view-collection { padding: 0.6rem 1.2rem; font-size: 15px; }
+    .recommended-movies {
+        padding: 0 1.5rem;
+    }
+    
+    .recommended-movies .movie-grid {
+        gap: 1.5rem;
+    }
+    
+    .recommended-movies .movie-item {
+        flex: 0 0 150px;
+    }
+    
+    .recommended-movies .movie-poster {
+        width: 150px;
+        height: 220px;
+    }
 }
 @media (max-width: 480px) {
     .poster-container {
@@ -663,6 +702,30 @@
     .related-series-banner-title { font-size: 16px; }
     .related-series-list { font-size: 13px; }
     .btn-view-collection { padding: 0.5rem 1rem; font-size: 14px; }
+    .recommended-movies {
+        padding: 0 1rem;
+    }
+    
+    .recommended-movies .movie-grid {
+        gap: 1rem;
+    }
+    
+    .recommended-movies .movie-item {
+        flex: 0 0 120px;
+    }
+    
+    .recommended-movies .movie-poster {
+        width: 120px;
+        height: 180px;
+    }
+    
+    .recommended-movies .movie-title {
+        font-size: 0.9rem;
+    }
+    
+    .recommended-movies .release-date {
+        font-size: 0.8rem;
+    }
 }
 
 /* 미디어 스틸즈 섹션 */

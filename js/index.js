@@ -20,6 +20,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (upcomingResponse && upcomingResponse.movies) {
             displayUpcoming(upcomingResponse.movies);
         }
+
+        // 모달 닫기 버튼 이벤트 리스너
+        const closeButton = document.querySelector('.modal-close');
+        if (closeButton) {
+            closeButton.addEventListener('click', closeTrailerModal);
+        }
+
+        // 모달 외부 클릭 시 닫기
+        const modal = document.querySelector('.trailer-modal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeTrailerModal();
+                }
+            });
+        }
     } catch (error) {
         console.error('데이터 로딩 중 오류 발생:', error);
     }
@@ -59,9 +75,36 @@ function displayMainMovie(movie) {
 
     // 상세보기 버튼 이벤트 리스너
     const detailButton = document.querySelector('.btn-detail');
-    detailButton.addEventListener('click', () => {
-        window.location.href = `movie-detail.html?id=${movie.id}`;
-    });
+    if (detailButton) {
+        detailButton.href = `movie-detail.html?id=${movie.id}`;
+    }
+
+    // 예고편 버튼 이벤트 리스너
+    const trailerButton = document.querySelector('.btn-trailer');
+    if (trailerButton) {
+        trailerButton.addEventListener('click', () => {
+            openTrailerModal(movie.video_id);
+        });
+    }
+}
+
+// 예고편 모달 관련 함수들
+function openTrailerModal(videoId) {
+    const modal = document.querySelector('.trailer-modal');
+    const iframe = modal.querySelector('iframe');
+    if (modal && iframe && videoId) {
+        modal.style.display = 'block';
+        iframe.src = `https://www.youtube.com/embed/${videoId}`;
+    }
+}
+
+function closeTrailerModal() {
+    const modal = document.querySelector('.trailer-modal');
+    const iframe = modal.querySelector('iframe');
+    if (modal && iframe) {
+        modal.style.display = 'none';
+        iframe.src = '';
+    }
 }
 
 // 날짜 포맷 함수
@@ -113,12 +156,6 @@ document.addEventListener('click', async (e) => {
     const movieItem = e.target.closest('.movie-item');
     if (movieItem) {
         const movieId = movieItem.dataset.movieId;
-        try {
-            const movieDetails = await getMovieDetails(movieId);
-            console.log('영화 상세 정보:', movieDetails);
-            // TODO: 영화 상세 정보 모달 표시
-        } catch (error) {
-            console.error('영화 상세 정보 로딩 실패:', error);
-        }
+        window.location.href = `movie-detail.html?id=${movieId}`;
     }
 }); 

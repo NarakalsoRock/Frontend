@@ -2,6 +2,16 @@
 @import url(../common/footer.css);
 @import url(../common/header.css);
 
+/* 스크롤바 숨기기 */
+body {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Chrome, Safari, Opera에서 스크롤바 숨기기 */
+body::-webkit-scrollbar {
+    display: none;
+}
 
 .nav-item.active {
     background: #673AB7;
