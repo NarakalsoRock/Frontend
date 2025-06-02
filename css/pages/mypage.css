@@ -83,7 +83,7 @@
     margin-top: 20px;
 }
 
-.profile-image-placeholder {
+.profile-image {
     width: 260px;
     height: 260px;
     background: #D9D9D9;
@@ -302,7 +302,7 @@
         flex-direction: column;
     }
     
-    .profile-image-placeholder {
+    .profile-image {
         width: 200px;
         height: 200px;
         margin: 0 auto;
@@ -326,7 +326,7 @@
         font-size: 30px;
     }
     
-    .profile-image-placeholder {
+    .profile-image {
         width: 150px;
         height: 150px;
     }
@@ -377,7 +377,7 @@
         font-size: 24px;
     }
     
-    .profile-image-placeholder {
+    .profile-image {
         width: 120px;
         height: 120px;
     }
