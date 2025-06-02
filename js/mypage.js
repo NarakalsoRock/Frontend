@@ -1,126 +1,129 @@
+// mypage.js
 document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('로그인이 필요합니다.');
+        window.location.href = 'login.html'; // 실제 로그인 페이지 경로로 수정하세요.
+        return;
+    }
+
+    // api.js에 BASE_URL 및 AUTH_URL이 정의되어 있다고 가정합니다.
+    // 예: window.BASE_URL = 'http://localhost:5000/api';
+    // 예: window.AUTH_URL = `${window.BASE_URL}/auth`;
+    if (!window.AUTH_URL) {
+        console.error('AUTH_URL is not defined. Make sure api.js is loaded and defines window.AUTH_URL.');
+        alert('API endpoint configuration error. Please contact support.');
+        return;
+    }
+
     try {
-        // 토큰 확인
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = 'login.html';
+        const response = await fetch(`${window.AUTH_URL}/me`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 401) { // Unauthorized
+                localStorage.removeItem('token');
+                alert('세션이 만료되었거나 유효하지 않습니다. 다시 로그인해주세요.');
+                window.location.href = 'login.html'; // 실제 로그인 페이지 경로로 수정하세요.
+            } else {
+                const errorData = await response.json().catch(() => ({ error: '알 수 없는 오류' }));
+                throw new Error(`사용자 정보를 가져오는데 실패했습니다. 상태: ${response.status}, 메시지: ${errorData.error}`);
+            }
             return;
         }
 
-        // 사용자 정보 로드
-        const userResponse = await fetch(`${window.AUTH_URL}/me`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        const result = await response.json();
 
-        if (!userResponse.ok) {
-            throw new Error('사용자 정보를 가져올 수 없습니다.');
-        }
-
-        const userData = await userResponse.json();
-        if (userData.success && userData.data) {
-            displayUserProfile(userData.data);
+        if (result.success && result.data) {
+            displayUserProfile(result.data);
+            displayUserStats(result.data);
+            displayLikedMovies(result.data.likedMovies || []);
+            displayBookmarkedMovies(result.data.bookmarkedMovies || []);
         } else {
-            throw new Error('사용자 데이터가 올바르지 않습니다.');
+            throw new Error(result.error || '사용자 데이터를 가져오는데 실패했습니다.');
         }
 
-        // 좋아요한 영화 목록 로드
-        const likedResponse = await fetch(`${window.BASE_URL}/liked`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (likedResponse.ok) {
-            const likedData = await likedResponse.json();
-            if (likedData.movies) {
-                displayLikedMovies(likedData.movies);
-            }
-        }
-
-        // 북마크한 영화 목록 로드
-        const bookmarkedResponse = await fetch(`${window.BASE_URL}/bookmarked`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (bookmarkedResponse.ok) {
-            const bookmarkedData = await bookmarkedResponse.json();
-            if (bookmarkedData.movies) {
-                displayBookmarkedMovies(bookmarkedData.movies);
-            }
-        }
     } catch (error) {
-        console.error('데이터 로딩 중 오류 발생:', error);
-        localStorage.removeItem('token');
-        window.location.href = 'login.html';
+        console.error('마이페이지 데이터 로딩 중 오류 발생:', error);
+        alert(`오류가 발생했습니다: ${error.message}`);
+        // 필요에 따라 추가 오류 처리
     }
 });
 
-// 사용자 프로필 정보 표시
-function displayUserProfile(user) {
-    document.getElementById('profileUsername').textContent = user.username || '사용자';
-    document.getElementById('profileEmail').textContent = user.email || '';
-    
-    if (user.createdAt) {
-        const createdAt = new Date(user.createdAt);
-        const formattedDate = `${createdAt.getFullYear()}.${String(createdAt.getMonth() + 1).padStart(2, '0')}.${String(createdAt.getDate()).padStart(2, '0')}`;
-        document.getElementById('profileCreatedAt').textContent = formattedDate;
+function displayUserProfile(userData) {
+    document.getElementById('profileNickname').textContent = userData.nickname || 'N/A';
+    document.getElementById('profileEmail').textContent = userData.email || 'N/A';
+    if (userData.createdAt) {
+        const createdAtDate = new Date(userData.createdAt);
+        document.getElementById('profileCreatedAt').textContent = createdAtDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
     } else {
-        document.getElementById('profileCreatedAt').textContent = '정보 없음';
+        document.getElementById('profileCreatedAt').textContent = 'N/A';
     }
 }
 
-// 좋아요한 영화 목록 표시
-function displayLikedMovies(movies) {
-    const container = document.querySelector('.liked-movies .movie-grid');
-    if (!container) return;
+function displayUserStats(userData) {
+    const likedMoviesCountText = document.getElementById('likedMoviesCountText');
+    const bookmarkedMoviesCountText = document.getElementById('bookmarkedMoviesCountText');
 
-    container.innerHTML = movies.map(movie => `
-        <div class="movie-item" data-movie-id="${movie.id}">
-            <div class="poster-container">
-                <img src="${movie.poster_path || 'https://placehold.co/180x260'}" 
-                     alt="${movie.title}" 
-                     class="movie-poster"
-                     onerror="this.onerror=null; this.src='https://placehold.co/180x260';">
-            </div>
-            <div class="movie-info">
-                <div class="movie-header">
-                    <span class="title">${movie.title}</span>
-                </div>
-                <div class="movie-details">
-                    <span class="rating">평점 ${movie.vote_average.toFixed(1)}</span>
-                    <span class="release-date">${movie.release_date}</span>
-                </div>
-            </div>
-        </div>
-    `).join('') || '<div class="no-movies">좋아요한 영화가 없습니다.</div>';
+    if (likedMoviesCountText) {
+        likedMoviesCountText.textContent = userData.likedMoviesCount !== undefined ? userData.likedMoviesCount : 0;
+    }
+    if (bookmarkedMoviesCountText) {
+        bookmarkedMoviesCountText.textContent = userData.bookmarkedMoviesCount !== undefined ? userData.bookmarkedMoviesCount : 0;
+    }
 }
 
-// 북마크한 영화 목록 표시
-function displayBookmarkedMovies(movies) {
-    const container = document.querySelector('.bookmarked-movies .movie-grid');
-    if (!container) return;
+function displayLikedMovies(movies) {
+    const container = document.getElementById('likedMoviesGrid');
+    if (!container) {
+        console.error('컨테이너 "likedMoviesGrid"를 찾을 수 없습니다.');
+        return;
+    }
+    renderMovieList(container, movies, "좋아요한 영화가 없습니다.");
+}
 
-    container.innerHTML = movies.map(movie => `
-        <div class="movie-item" data-movie-id="${movie.id}">
-            <div class="poster-container">
-                <img src="${movie.poster_path || 'https://placehold.co/180x260'}" 
-                     alt="${movie.title}" 
-                     class="movie-poster"
-                     onerror="this.onerror=null; this.src='https://placehold.co/180x260';">
-            </div>
-            <div class="movie-info">
-                <div class="movie-header">
-                    <span class="title">${movie.title}</span>
+function displayBookmarkedMovies(movies) {
+    const container = document.getElementById('bookmarkedMoviesGrid');
+    if (!container) {
+        console.error('컨테이너 "bookmarkedMoviesGrid"를 찾을 수 없습니다.');
+        return;
+    }
+    renderMovieList(container, movies, "북마크한 영화가 없습니다.");
+}
+
+function renderMovieList(container, movies, emptyMessage) {
+    container.innerHTML = ''; // Clear previous items
+
+    if (!movies || movies.length === 0) {
+        container.innerHTML = `<div class="no-movies">${emptyMessage}</div>`;
+        return;
+    }
+
+    const posterBaseUrl = 'https://image.tmdb.org/t/p/w185'; // 포스터 이미지 크기 (w185, w342, w500 등)
+
+    movies.forEach(movie => {
+        const posterSrc = movie.posterPath ? `${posterBaseUrl}${movie.posterPath}` : 'https://placehold.co/180x260';
+        // movie-detail.html?id=${movie.movieId} 부분은 실제 상세 페이지 URL 구조에 맞게 조정해야 할 수 있습니다.
+        const movieItemHTML = `
+            <div class="movie-item" data-movie-id="${movie.movieId}">
+                <div class="poster-container">
+                    <a href="movie-detail.html?id=${movie.movieId}">
+                        <img src="${posterSrc}" alt="${movie.title}" class="movie-poster" onerror="this.onerror=null;this.src='https://placehold.co/180x260';">
+                    </a>
                 </div>
-                <div class="movie-details">
-                    <span class="rating">평점 ${movie.vote_average.toFixed(1)}</span>
-                    <span class="release-date">${movie.release_date}</span>
+                <div class="movie-info">
+                    <div class="movie-header">
+                        <span class="title">${movie.title}</span>
+                    </div>
+                    ${movie.addedAt ? `<div class="movie-details"><span class="added-date">추가일: ${new Date(movie.addedAt).toLocaleDateString('ko-KR')}</span></div>` : ''}
                 </div>
             </div>
-        </div>
-    `).join('') || '<div class="no-movies">북마크한 영화가 없습니다.</div>';
+        `;
+        container.insertAdjacentHTML('beforeend', movieItemHTML);
+    });
 }

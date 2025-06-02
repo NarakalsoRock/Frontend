@@ -128,58 +128,76 @@ function groupMoviesByMonth(movies) {
 }
 
 // 월별로 영화 표시 함수
+// 월별로 영화 표시 함수
 function displayMoviesByMonth(movies) {
-    const container = document.querySelector('.movies-container .movie-grid'); // movies-container 안의 movie-grid를 선택
-    if (!container) {
-        console.error('.movies-container .movie-grid 요소를 찾을 수 없습니다.');
+    const moviesContainerParent = document.querySelector('.movies-container'); // movies-container를 직접 조작
+    if (!moviesContainerParent) {
+        console.error('.movies-container 요소를 찾을 수 없습니다.');
         return;
     }
 
-
-    const groupedMovies = groupMoviesByMonth(movies);
+    const groupedMovies = groupMoviesByMonth(movies); // 이 함수는 이미 정의되어 있다고 가정
     
-    // movies-container 자체의 내용을 변경 (월별 섹션 포함)
-    const moviesContainerParent = document.querySelector('.movies-container');
-    if (!moviesContainerParent) return;
+    const posterBaseUrl = 'https://image.tmdb.org/t/p/w185'; // 또는 w342 등 원하는 크기
+    const placeholderPoster = 'https://placehold.co/180x260/2a2a2a/2a2a2a';
 
     moviesContainerParent.innerHTML = groupedMovies
-        .map(([month, monthMovies]) => `
-            <div class="month-section">
-                <h2 class="month-title">${month}</h2>
-                <div class="movie-grid">
-                    ${monthMovies.map(movie => `
-                        <div class="movie-item" data-movie-id="${movie.id}">
-                            <div class="poster-container">
-                                <a href="movie-detail.html?id=${movie.id}">
-                                    <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" 
-                                         data-src="${movie.poster_path || 'https://placehold.co/180x260/2a2a2a/2a2a2a'}" 
-                                         alt="${movie.title}" 
-                                         class="movie-poster lazy"
-                                         onerror="this.onerror=null; this.src='https://placehold.co/180x260/2a2a2a/2a2a2a';">
-                                </a>
-                                <button class="like-button">
-                                    <i class="heart-icon"></i>
-                                </button>
-                                <button class="bookmark-button">
-                                    <svg class="bookmark-icon" viewBox="0 0 24 24">
-                                        <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
-                                    </svg>
-                                </button>
+        .map(([month, monthMovies]) => {
+            const moviesHTML = monthMovies.map(movie => {
+                const imageUrl = movie.poster_path ? `${posterBaseUrl}${movie.poster_path}` : placeholderPoster;
+                const rawPosterPath = movie.poster_path || ''; // data-poster-path에 저장할 순수 경로
+                
+                let ratingDisplay = 'ALL';
+                if (movie.adult === true) {
+                    ratingDisplay = '18+';
+                } else if (movie.certification) {
+                    ratingDisplay = movie.certification;
+                }
+                // D-Day 계산 함수는 이미 있다고 가정
+                const dDay = calculateDDay(movie.release_date);
+
+                return `
+                    <div class="movie-item" data-movie-id="${movie.id}">
+                        <div class="poster-container">
+                            <a href="movie-detail.html?id=${movie.id}">
+                                <img src="${placeholderPoster}" 
+                                     data-src="${imageUrl}" 
+                                     alt="${movie.title || '영화 제목 없음'}" 
+                                     class="movie-poster lazy"
+                                     data-poster-path="${rawPosterPath}"  {# 여기에 data-poster-path 추가 #}
+                                     onerror="this.onerror=null; this.src='${placeholderPoster}';">
+                            </a>
+                            <button class="like-button" aria-label="좋아요">
+                                <i class="heart-icon"></i>
+                            </button>
+                            <button class="bookmark-button" aria-label="북마크">
+                                <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="movie-info">
+                            <div class="movie-header">
+                                <span class="rating">${ratingDisplay}</span>
+                                <span class="title">${movie.title || '제목 정보 없음'}</span>
                             </div>
-                            <div class="movie-info">
-                                <div class="movie-header">
-                                    <span class="rating">${movie.certification || 'ALL'}</span>
-                                    <span class="title">${movie.title}</span>
-                                </div>
-                                <div class="movie-details">
-                                    <span class="release-date">${movie.release_date} (D-${calculateDDay(movie.release_date)})</span>
-                                </div>
+                            <div class="movie-details">
+                                <span class="release-date">${movie.release_date || '개봉일 정보 없음'} (D-${dDay})</span>
                             </div>
                         </div>
-                    `).join('')}
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="month-section">
+                    <h2 class="month-title">${month}</h2>
+                    <div class="movie-grid">
+                        ${moviesHTML}
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
     // Lazy loading 구현
     const lazyImages = document.querySelectorAll('img.lazy');
@@ -187,7 +205,7 @@ function displayMoviesByMonth(movies) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
-                img.src = img.dataset.src;
+                img.src = img.dataset.src; // data-src의 값을 실제 src로 설정
                 img.classList.remove('lazy');
                 observer.unobserve(img);
             }
@@ -196,11 +214,11 @@ function displayMoviesByMonth(movies) {
 
     lazyImages.forEach(img => imageObserver.observe(img));
     
-    // 이벤트 리스너 재설정
-    attachButtonListeners();
+    // 이벤트 리스너 재설정 (중요: displayMoviesByMonth 호출 후 매번 실행)
+    attachButtonListeners(); // 이 함수는 해당 JS 파일 내에 정의되어 있어야 함
     
-    // 저장된 상태 복원
-    restoreButtonStates();
+    // 저장된 버튼 상태 복원 (선택사항, 필요시 구현)
+    // restoreButtonStates(); // 이 함수는 해당 JS 파일 내에 정의되어 있어야 함
 }
 
 // 버튼 이벤트 리스너 첨부 함수

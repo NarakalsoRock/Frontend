@@ -106,22 +106,47 @@ function restoreButtonStates() {
     });
 }
 
-// 영화 목록 표시 함수
 function displayMovies(movies) {
     const container = document.querySelector('.movie-grid');
-    if (!container) return;
+    if (!container) {
+        console.error("'.movie-grid' 요소를 찾을 수 없습니다.");
+        return;
+    }
 
-    container.innerHTML = movies.map((movie, index) => `
+    const posterBaseUrl = 'https://image.tmdb.org/t/p/w185'; // 또는 w342 등 원하는 크기
+    const placeholderPoster = 'https://placehold.co/180x260/2a2a2a/2a2a2a';
+
+    container.innerHTML = movies.map((movie, index) => {
+        // movie.poster_path가 TMDB에서 제공하는 /xxxx.jpg 형태의 경로라고 가정합니다.
+        const imageUrl = movie.poster_path ? `${posterBaseUrl}${movie.poster_path}` : placeholderPoster;
+        const rawPosterPath = movie.poster_path || ''; // data-poster-path에 저장할 순수 경로
+
+        // 영화 등급 처리 (TMDB API 응답에 따라 'certification' 필드가 없을 수 있음)
+        // TMDB의 경우 'adult' 필드로 성인 영화 여부 판단 가능. 
+        // 또는, 상세 정보 API 호출을 통해 각 국가별 등급 정보를 가져와야 할 수 있습니다.
+        // 여기서는 간단히 'adult' 필드를 확인하거나, 기본값 'ALL'을 사용합니다.
+        let ratingDisplay = 'ALL';
+        if (movie.adult === true) {
+            ratingDisplay = '18+';
+        } else if (movie.certification) { // 백엔드에서 certification 정보를 추가해준다면 사용
+            ratingDisplay = movie.certification;
+        }
+        // (주의: TMDB API 'discover'나 'now_playing' 기본 응답에는 상세 국가별 등급(certification)이 없을 수 있습니다.
+        // 필요시 `movie_details` API를 추가 호출하거나 백엔드에서 이 정보를 조합해야 합니다.)
+
+        return `
         <div class="movie-item" data-movie-id="${movie.id}">
             <div class="rank">${index + 1}</div>
             <div class="poster-container">
-                <a href="movie-detail.html?id=${movie.id}"> <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" 
-                         data-src="${movie.poster_path || 'https://placehold.co/180x260/2a2a2a/2a2a2a'}" 
-                         alt="${movie.title}" 
+                <a href="movie-detail.html?id=${movie.id}">
+                    <img src="${placeholderPoster}" 
+                         data-src="${imageUrl}" 
+                         alt="${movie.title || '영화 제목 없음'}" 
                          class="movie-poster lazy"
-                         onerror="this.onerror=null; this.src='https://placehold.co/180x260/2a2a2a/2a2a2a';">
+                         data-poster-path="${rawPosterPath}"  {# 여기에 data-poster-path 추가 #}
+                         onerror="this.onerror=null; this.src='${placeholderPoster}';">
                 </a>
-                <button class="like-button">
+                <button class="like-button" aria-label="좋아요">
                     <i class="heart-icon"></i>
                 </button>
                 <button class="bookmark-button" aria-label="북마크">
@@ -132,16 +157,17 @@ function displayMovies(movies) {
             </div>
             <div class="movie-info">
                 <div class="movie-header">
-                    <span class="rating">${movie.certification || 'ALL'}</span>
-                    <span class="title">${movie.title}</span>
+                    <span class="rating">${ratingDisplay}</span>
+                    <span class="title">${movie.title || '제목 정보 없음'}</span>
                 </div>
                 <div class="movie-details">
                     <span class="booking-rate">평점 ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}</span>
-                    <span class="release-date">${movie.release_date}</span>
+                    <span class="release-date">${movie.release_date || '개봉일 정보 없음'}</span>
                 </div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 
     // Lazy loading 구현
     const lazyImages = document.querySelectorAll('img.lazy');
@@ -149,7 +175,7 @@ function displayMovies(movies) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
-                img.src = img.dataset.src;
+                img.src = img.dataset.src; // data-src의 값을 실제 src로 설정
                 img.classList.remove('lazy');
                 observer.unobserve(img);
             }
@@ -159,10 +185,10 @@ function displayMovies(movies) {
     lazyImages.forEach(img => imageObserver.observe(img));
 
     // 이벤트 리스너 재설정 (중요: displayMovies 호출 후 매번 실행)
-    attachButtonListeners();
+    attachButtonListeners(); // 이 함수는 해당 JS 파일 내에 정의되어 있어야 합니다.
     
-    // 저장된 상태 복원
-    restoreButtonStates();
+    // 저장된 버튼 상태 복원 (선택사항, 필요시 구현)
+    // restoreButtonStates(); // 이 함수는 해당 JS 파일 내에 정의되어 있어야 합니다.
 } 
 
 // 버튼 이벤트 리스너 첨부 함수
