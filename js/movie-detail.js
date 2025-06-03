@@ -356,104 +356,42 @@ document.addEventListener('DOMContentLoaded', () => {
 // 트레일러 관련 함수들
 async function loadTrailer(movieId) {
     try {
-        // 한국어 트레일러 먼저 시도
-        let response = await fetch(`${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=ko-KR`);
-        let data = await response.json();
+        const movieData = await getMovieDetails(movieId);
+        const videoId = movieData.video_id;
         
-        // 한국어 트레일러가 없으면 영어 트레일러 시도
-        if (!data.results || data.results.length === 0) {
-            response = await fetch(`${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=en-US`);
-            data = await response.json();
+        if (!videoId) {
+            showTrailerError();
+            return;
         }
 
-        if (!data.results || data.results.length === 0) {
-            throw new Error('사용 가능한 비디오가 없습니다.');
-        }
+        const trailerSection = document.querySelector('.trailer-section');
+        if (!trailerSection) return;
 
-        // 비디오 우선순위: Trailer > Teaser > Clip > Behind the Scenes
-        const videoTypes = ['Trailer', 'Teaser', 'Clip', 'Behind the Scenes'];
-        let selectedVideo = null;
-
-        for (const type of videoTypes) {
-            selectedVideo = data.results.find(video => 
-                video.type === type && 
-                video.site === 'YouTube' && 
-                video.key
-            );
-            if (selectedVideo) break;
-        }
-
-        if (!selectedVideo) {
-            throw new Error('재생 가능한 비디오를 찾을 수 없습니다.');
-        }
-
-        const videoContainer = document.querySelector('.media-item.video');
-        if (!videoContainer) {
-            throw new Error('비디오 컨테이너를 찾을 수 없습니다.');
-        }
-
-        const videoContent = videoContainer.querySelector('.video-content');
-        if (!videoContent) {
-            throw new Error('비디오 콘텐츠 요소를 찾을 수 없습니다.');
-        }
-
-        // 썸네일 이미지 로드 시도 (고품질 -> 중간 품질 -> 기본 품질)
-        const thumbnailImg = videoContent.querySelector('.media-thumbnail');
-        if (!thumbnailImg) {
-            throw new Error('썸네일 이미지를 찾을 수 없습니다.');
-        }
-
-        // 썸네일 로드 함수
-        const loadThumbnail = async () => {
-            const qualities = ['maxresdefault', 'hqdefault', 'mqdefault', 'default'];
-            
-            for (const quality of qualities) {
-                try {
-                    const thumbnailUrl = `https://img.youtube.com/vi/${selectedVideo.key}/${quality}.jpg`;
-                    const response = await fetch(thumbnailUrl);
-                    
-                    if (response.ok) {
-                        thumbnailImg.src = thumbnailUrl;
-                        return;
-                    }
-                } catch (error) {
-                    console.warn(`${quality} 썸네일 로드 실패:`, error);
-                }
-            }
-            
-            // 모든 품질의 썸네일 로드 실패 시 기본 이미지 사용
-            thumbnailImg.src = '../assets/images/video-placeholder.jpg';
-        };
-
-        await loadThumbnail();
-
-        const playButton = videoContent.querySelector('.play-button');
-        if (!playButton) {
-            throw new Error('재생 버튼을 찾을 수 없습니다.');
-        }
-
-        // 비디오 타입에 따른 아이콘 및 텍스트 설정
-        const typeText = {
-            'Trailer': '예고편',
-            'Teaser': '티저',
-            'Clip': '클립',
-            'Behind the Scenes': '비하인드'
-        };
-
-        // 비디오 정보 표시 추가
-        const videoInfo = document.createElement('div');
-        videoInfo.className = 'video-info';
-        videoInfo.innerHTML = `
-            <span class="video-type">${typeText[selectedVideo.type] || selectedVideo.type}</span>
-            <span class="video-title">${selectedVideo.name}</span>
+        // 트레일러 섹션 초기화
+        trailerSection.innerHTML = `
+            <div class="trailer-container">
+                <div class="trailer-thumbnail" data-video-id="${videoId}">
+                    <img src="https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg" 
+                         alt="트레일러 썸네일"
+                         onerror="this.src='https://i.ytimg.com/vi/${videoId}/hqdefault.jpg'">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            </div>
         `;
-        videoContent.appendChild(videoInfo);
 
-        playButton.addEventListener('click', () => openTrailerModal(selectedVideo.key));
+        // 트레일러 클릭 이벤트 설정
+        const trailerThumbnail = trailerSection.querySelector('.trailer-thumbnail');
+        if (trailerThumbnail) {
+            trailerThumbnail.addEventListener('click', () => {
+                openTrailerModal(videoId);
+            });
+        }
+
         hideTrailerError();
-
     } catch (error) {
-        console.error('트레일러 로딩 오류:', error);
+        console.error('트레일러 로딩 중 오류 발생:', error);
         showTrailerError();
     }
 }
@@ -504,64 +442,40 @@ function hideTrailerError() {
     }
 }
 
-function openTrailerModal(videoKey) {
-    try {
+function openTrailerModal(videoId) {
     const modal = document.getElementById('trailerModal');
-        if (!modal) {
-            console.error('트레일러 모달을 찾을 수 없습니다.');
-            return;
-        }
+    if (!modal) return;
 
     const iframe = modal.querySelector('iframe');
-        if (!iframe) {
-            console.error('트레일러 iframe을 찾을 수 없습니다.');
-            return;
-        }
+    if (!iframe) return;
 
-        iframe.src = `https://www.youtube.com/embed/${videoKey}?autoplay=1`;
-        modal.classList.add('active');
-        
-        // 모달 닫기 이벤트
-        const closeButton = modal.querySelector('.modal-close');
-        if (closeButton) {
-            closeButton.onclick = closeTrailerModal;
+    modal.style.display = 'block';
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+
+    // ESC 키로 모달 닫기
+    const escHandler = (e) => {
+        if (e.key === 'Escape') {
+            closeTrailerModal();
+            document.removeEventListener('keydown', escHandler);
         }
-        
-        // 모달 외부 클릭시 닫기
-        modal.onclick = (e) => {
-            if (e.target === modal) closeTrailerModal();
-        };
-        
-        // ESC 키로 닫기
-        const escHandler = (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                closeTrailerModal();
-                document.removeEventListener('keydown', escHandler);
-            }
-        };
-        document.addEventListener('keydown', escHandler);
-    } catch (error) {
-        console.error('트레일러 모달 열기 중 오류 발생:', error);
-    }
+    };
+    document.addEventListener('keydown', escHandler);
+
+    // 모달 외부 클릭으로 닫기
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeTrailerModal();
+        }
+    });
 }
 
 function closeTrailerModal() {
-    try {
-        const modal = document.getElementById('trailerModal');
-        if (!modal) {
-            console.error('트레일러 모달을 찾을 수 없습니다.');
-            return;
-        }
+    const modal = document.getElementById('trailerModal');
+    if (!modal) return;
 
-        const iframe = modal.querySelector('iframe');
-        if (!iframe) {
-            console.error('트레일러 iframe을 찾을 수 없습니다.');
-            return;
-        }
-        
+    const iframe = modal.querySelector('iframe');
+    if (iframe) {
         iframe.src = '';
-        modal.classList.remove('active');
-    } catch (error) {
-        console.error('트레일러 모달 닫기 중 오류 발생:', error);
     }
+    modal.style.display = 'none';
 }

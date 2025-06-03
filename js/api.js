@@ -1,12 +1,18 @@
 // API 엔드포인트 기본 URL
-const BASE_URL = 'http://localhost:5000/api/movies';
-const AUTH_URL = 'http://localhost:5000/api/auth';
+const APP_BASE_URL = 'http://localhost:5000';
+window.BASE_API_URL = `${APP_BASE_URL}/api`;
+
+// API 엔드포인트 설정
+window.MOVIES_API_URL = `${window.BASE_API_URL}/movies`;
+window.AUTH_URL = `${window.BASE_API_URL}/auth`;
+window.ACTIONS_URL = `${window.BASE_API_URL}/actions`;
+
 const TMDB_API_KEY = 'e79d211004d63ca22d668182dc17ebbb';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // 전역 변수 설정
-window.BASE_URL = BASE_URL;
-window.AUTH_URL = AUTH_URL;
+window.BASE_URL = `${APP_BASE_URL}/api/movies`;
+window.AUTH_URL = `${APP_BASE_URL}/api/auth`;
 
 // TMDB API 관련 함수들
 async function fetchTMDBNowPlaying() {
@@ -82,33 +88,62 @@ async function fetchTMDBMovieDetails(movieId) {
     }
 }
 
-// 로그인 상태 체크
-async function checkLoginStatus() {
+// 토큰 검증 함수
+async function validateToken() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        return false;
+    }
+
     try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            return false;
-        }
-        
-        const response = await fetch(`${AUTH_URL}/verify`, {
+        const response = await fetch(`${window.AUTH_URL}/me`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
-        return response.ok;
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                // 현재 페이지가 로그인이 필요한 페이지인 경우에만 리다이렉트
+                if (window.location.pathname.includes('mypage.html')) {
+                    localStorage.setItem('redirectAfterLogin', 'mypage.html');
+                    window.location.href = 'login.html';
+                }
+            }
+            return false;
+        }
+
+        const data = await response.json();
+        return data.success;
     } catch (error) {
-        console.error('로그인 상태 확인 실패:', error);
+        console.error('토큰 검증 실패:', error);
         return false;
     }
 }
 
+// 로그인 상태 체크 (페이지 로드 시 자동 실행)
+async function checkLoginStatus() {
+    const isValid = await validateToken();
+    if (!isValid && window.location.pathname.includes('mypage.html')) {
+        localStorage.setItem('redirectAfterLogin', 'mypage.html');
+        window.location.href = 'login.html';
+    }
+    return isValid;
+}
+
+// 페이지 로드 시 토큰 검증 실행
+document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+window.checkLoginStatus = checkLoginStatus;
+window.validateToken = validateToken;
+
 // 메인 영화 가져오기
 async function getMainMovie() {
     try {
-        const response = await fetch(`${BASE_URL}/main-movie`);
+        const response = await fetch(`${window.MOVIES_API_URL}/main-movie`);
         if (!response.ok) {
-            throw new Error('API 요청 실패');
+            throw new Error(`API 요청 실패: ${response.status}`);
         }
         const data = await response.json();
         console.log('메인 영화 데이터:', data);
@@ -118,50 +153,41 @@ async function getMainMovie() {
         throw error;
     }
 }
+window.getMainMovie = getMainMovie;
 
 // 현재 상영작 가져오기
-async function getNowPlaying() {
+async function getNowPlaying(page = 1) {
     try {
-        // 먼저 TMDB에서 현재 상영작 데이터를 가져옴
-        const tmdbData = await fetchTMDBNowPlaying();
-        
-        // 백엔드 서버에서 사용자별 좋아요/북마크 정보를 가져옴
-        const response = await fetch(`${BASE_URL}/now-playing`);
+        const response = await fetch(`${window.MOVIES_API_URL}/now-playing?page=${page}`);
         if (!response.ok) {
-            return tmdbData; // 백엔드 서버 오류시 TMDB 데이터만 반환
+            throw new Error(`API 요청 실패: ${response.status}`);
         }
-        
-        const userData = await response.json();
-        
-        // TMDB 데이터와 사용자 데이터를 합침
-        return {
-            movies: tmdbData.movies.map(movie => ({
-                ...movie,
-                isLiked: userData.likedMovies?.includes(movie.id) || false,
-                isBookmarked: userData.bookmarkedMovies?.includes(movie.id) || false
-            }))
-        };
+        const data = await response.json();
+        console.log('현재 상영작 데이터:', data);
+        return data;
     } catch (error) {
         console.error('현재 상영작을 가져오는데 실패했습니다:', error);
         throw error;
     }
 }
+window.getNowPlaying = getNowPlaying;
 
 // 개봉 예정작 가져오기
-async function getUpcoming() {
+async function getUpcoming(page = 1) {
     try {
-        const response = await fetch(`${BASE_URL}/upcoming`);
+        const response = await fetch(`${window.MOVIES_API_URL}/upcoming?page=${page}`);
         if (!response.ok) {
-            throw new Error('API 요청 실패');
+            throw new Error(`API 요청 실패: ${response.status}`);
         }
         const data = await response.json();
-        console.log('개봉 예정작 데이터:', data); // 디버깅용
+        console.log('개봉 예정작 데이터:', data);
         return data;
     } catch (error) {
         console.error('개봉 예정작을 가져오는데 실패했습니다:', error);
         throw error;
     }
 }
+window.getUpcoming = getUpcoming;
 
 // 영화 상세 정보 가져오기
 async function getMovieDetails(movieId) {
@@ -170,120 +196,171 @@ async function getMovieDetails(movieId) {
         const tmdbData = await fetchTMDBMovieDetails(movieId);
         
         // 백엔드 서버에서 사용자별 정보를 가져옴
-        const response = await fetch(`${BASE_URL}/movie/${movieId}`);
-        if (!response.ok) {
-            return tmdbData; // 백엔드 서버 오류시 TMDB 데이터만 반환
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        
+        try {
+            const response = await fetch(`${window.MOVIES_API_URL}/${movieId}`, {
+                headers: headers
+            });
+            
+            if (response.ok) {
+                const userData = await response.json();
+                return {
+                    ...tmdbData,
+                    isLiked: userData.isLiked || false,
+                    isBookmarked: userData.isBookmarked || false,
+                    userRating: userData.userRating,
+                    userReview: userData.userReview
+                };
+            }
+        } catch (error) {
+            console.warn('사용자 데이터를 가져오는데 실패했습니다:', error);
         }
         
-        const userData = await response.json();
-        
-        // TMDB 데이터와 사용자 데이터를 합침
+        // 백엔드 서버 오류시 TMDB 데이터만 반환
         return {
             ...tmdbData,
-            isLiked: userData.isLiked || false,
-            isBookmarked: userData.isBookmarked || false,
-            userRating: userData.userRating,
-            userReview: userData.userReview
+            isLiked: false,
+            isBookmarked: false
         };
     } catch (error) {
         console.error('영화 상세 정보를 가져오는데 실패했습니다:', error);
         throw error;
     }
 }
+window.getMovieDetails = getMovieDetails;
 
-// 좋아요한 영화 목록 가져오기
-async function getLikedMovies() {
+// 영화 검색
+window.searchMovies = async function(query, page = 1) {
+    console.log(`api.js: searchMovies 호출됨 - query: "${query}", page: ${page}`);
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${BASE_URL}/liked`, {
+        const response = await fetch(`${window.MOVIES_API_URL}/search?query=${encodeURIComponent(query)}&page=${page}`);
+        console.log(`api.js: search API 요청 URL: ${response.url}`);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Search API response not OK:", response.status, errorText);
+            try {
+                const errorData = JSON.parse(errorText);
+                throw new Error(errorData.message || `영화 검색 실패: ${response.status}`);
+            } catch (e) {
+                throw new Error(errorText || `영화 검색 실패: ${response.status}`);
+            }
+        }
+        const data = await response.json();
+        console.log('api.js: search API 응답 데이터:', data);
+
+        if (data.results && !data.movies) {
+            console.log('api.js: TMDB results를 movies로 변환 중');
+            return {
+                movies: data.results,
+                page: data.page,
+                total_pages: data.total_pages,
+                total_results: data.total_results
+            };
+        }
+        return data;
+    } catch (error) {
+        console.error("Error in searchMovies API call (api.js catch):", error);
+        return { movies: [], page: 1, total_pages: 1, error: error.message || "검색 중 오류 발생" };
+    }
+};
+
+// 사용자 정보 가져오기
+async function getMe() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.warn('사용자 토큰이 없습니다. 로그인이 필요합니다.');
+        return null;
+    }
+    try {
+        const response = await fetch(`${window.AUTH_URL}/me`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
         if (!response.ok) {
-            throw new Error('API 요청 실패');
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                alert('세션이 만료되었거나 유효하지 않습니다. 다시 로그인해주세요.');
+                window.location.href = 'login.html';
+            }
+            const errorData = await response.json().catch(() => ({ error: `서버 응답 오류: ${response.status}` }));
+            throw new Error(errorData.error || `API 요청 실패: ${response.status}`);
         }
-        const data = await response.json();
-        console.log('좋아요한 영화 데이터:', data);
-        return data;
+        return await response.json();
     } catch (error) {
-        console.error('좋아요한 영화 목록을 가져오는데 실패했습니다:', error);
-        throw error;
+        console.error('사용자 정보를 가져오는데 실패했습니다:', error);
+        return null;
     }
 }
+window.getMe = getMe;
 
-// 북마크한 영화 목록 가져오기
-async function getBookmarkedMovies() {
+// 영화 좋아요/북마크 토글 공통 함수
+async function toggleMovieInteraction(movieId, title, posterPath, type) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('로그인이 필요합니다.');
+        window.location.href = 'login.html';
+        return null;
+    }
+
+    const endpoint = type === 'like'
+        ? `${window.ACTIONS_URL}/movies/like`
+        : `${window.ACTIONS_URL}/movies/bookmark`;
+    const interactionTypeDisplay = type === 'like' ? '좋아요' : '북마크';
+
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${BASE_URL}/bookmarked`, {
+        const response = await fetch(endpoint, {
+            method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            body: JSON.stringify({
+                movieId: String(movieId),
+                title: title,
+                posterPath: posterPath
+            })
         });
+
+        const responseData = await response.json();
+
         if (!response.ok) {
-            throw new Error('API 요청 실패');
+            console.error(`${interactionTypeDisplay} 요청 실패:`, response.status, responseData);
+            alert(`${interactionTypeDisplay} 처리 중 오류: ${responseData.error || responseData.message || '알 수 없는 오류가 발생했습니다.'}`);
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+            }
+            return null;
         }
-        const data = await response.json();
-        console.log('북마크한 영화 데이터:', data);
-        return data;
+        
+        return responseData;
     } catch (error) {
-        console.error('북마크한 영화 목록을 가져오는데 실패했습니다:', error);
-        throw error;
+        console.error(`${interactionTypeDisplay} API 호출 중 네트워크 또는 JSON 파싱 오류:`, error);
+        alert(`${interactionTypeDisplay} 처리 중 네트워크 오류가 발생했습니다.`);
+        return null;
     }
 }
 
 // 영화 좋아요 토글
-async function toggleMovieLike(movieId) {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${BASE_URL}/like/${movieId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if (!response.ok) {
-            throw new Error('API 요청 실패');
-        }
-        const data = await response.json();
-        console.log('좋아요 토글 결과:', data);
-        return data;
-    } catch (error) {
-        console.error('영화 좋아요 토글 실패:', error);
-        throw error;
-    }
-}
+window.toggleMovieLike = async function(movieId, title, posterPath) {
+    return await toggleMovieInteraction(movieId, title, posterPath, 'like');
+};
 
 // 영화 북마크 토글
-async function toggleMovieBookmark(movieId) {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${BASE_URL}/bookmark/${movieId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if (!response.ok) {
-            throw new Error('API 요청 실패');
-        }
-        const data = await response.json();
-        console.log('북마크 토글 결과:', data);
-        return data;
-    } catch (error) {
-        console.error('영화 북마크 토글 실패:', error);
-        throw error;
-    }
-}
+window.toggleMovieBookmark = async function(movieId, title, posterPath) {
+    return await toggleMovieInteraction(movieId, title, posterPath, 'bookmark');
+};
 
-// 사용자 정보 가져오기
-async function getMe() {
+// 좋아요한 영화 목록 가져오기
+async function getLikedMovies() {
+    const token = localStorage.getItem('token');
+    if (!token) { console.warn('Token not found for getLikedMovies'); return null; }
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${AUTH_URL}/me`, {
+        const response = await fetch(`${window.MOVIES_API_URL}/liked`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -292,12 +369,37 @@ async function getMe() {
             throw new Error('API 요청 실패');
         }
         const data = await response.json();
+        console.log('좋아요한 영화 데이터 (별도호출 시):', data);
         return data;
     } catch (error) {
-        console.error('사용자 정보를 가져오는데 실패했습니다:', error);
-        throw error;
+        console.error('좋아요한 영화 목록을 가져오는데 실패했습니다 (별도호출 시):', error);
+        return { movies: [] };
     }
 }
+window.getLikedMovies = getLikedMovies;
+
+// 북마크한 영화 목록 가져오기
+async function getBookmarkedMovies() {
+    const token = localStorage.getItem('token');
+    if (!token) { console.warn('Token not found for getBookmarkedMovies'); return null; }
+    try {
+        const response = await fetch(`${window.MOVIES_API_URL}/bookmarked`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('API 요청 실패');
+        }
+        const data = await response.json();
+        console.log('북마크한 영화 데이터 (별도호출 시):', data);
+        return data;
+    } catch (error) {
+        console.error('북마크한 영화 목록을 가져오는데 실패했습니다 (별도호출 시):', error);
+        return { movies: [] };
+    }
+}
+window.getBookmarkedMovies = getBookmarkedMovies;
 
 // 추천 영화 가져오기
 async function getRecommendedMovies(movieId) {

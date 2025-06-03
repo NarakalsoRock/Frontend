@@ -83,7 +83,7 @@
     margin-top: 20px;
 }
 
-.profile-image-placeholder {
+.profile-image {
     width: 260px;
     height: 260px;
     background: #D9D9D9;
@@ -169,6 +169,38 @@
     font-size: 16px;
     font-weight: 400;
     text-align: right;
+}
+
+/* Chart Styles */
+.stats-grid .chart-card {
+    background: #19181C;
+    padding: 20px;
+    border: 1px solid rgba(103, 58, 183, 0.2);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chart-container {
+    position: relative;
+    height: 250px;
+    width: 100%;
+    margin-bottom: 10px;
+    background: rgba(25, 24, 28, 0.8);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.stat-card .stat-value {
+    font-size: 1.2em;
+    text-align: right;
+    color: white;
+}
+
+.stat-card .stat-value #totalLikedMoviesCountText {
+    font-weight: bold;
+    color: #673AB7;
 }
 
 /* Movie Sections */
@@ -288,12 +320,14 @@
     font-size: 14px;
 }
 
-
-
 /* Responsive Design */
 @media (max-width: 1200px) {
     .stats-grid {
         gap: 20px;
+    }
+    
+    .chart-container {
+        height: 220px;
     }
 }
 
@@ -302,7 +336,7 @@
         flex-direction: column;
     }
     
-    .profile-image-placeholder {
+    .profile-image {
         width: 200px;
         height: 200px;
         margin: 0 auto;
@@ -310,6 +344,10 @@
     
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .chart-container {
+        height: 300px;
     }
 }
 
@@ -326,7 +364,7 @@
         font-size: 30px;
     }
     
-    .profile-image-placeholder {
+    .profile-image {
         width: 150px;
         height: 150px;
     }
@@ -370,6 +408,10 @@
         align-items: center;
         gap: 20px;
     }
+    
+    .chart-container {
+        height: 250px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -377,7 +419,7 @@
         font-size: 24px;
     }
     
-    .profile-image-placeholder {
+    .profile-image {
         width: 120px;
         height: 120px;
     }
@@ -418,5 +460,9 @@
     .booking-rate,
     .release-date {
         font-size: 12px;
+    }
+    
+    .chart-container {
+        height: 200px;
     }
 }

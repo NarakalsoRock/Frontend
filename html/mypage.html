@@ -4,342 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineX - MyPage</title>
-    <link rel="stylesheet" href="../css/pages/mypage.css">
+    <link rel="stylesheet" href="../css/pages/mypage.css"> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
 <body>
     <header class="header">
-        <a href="index.html" class="logo">CineX</a>
-        <div class="header-search-container">
-            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
-            <button type="button" class="header-search-button" aria-label="검색">
+        <a href="index.html" class="logo">CineX</a> <div class="header-search-container">
+            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르"> <button type="button" class="header-search-button" aria-label="검색">
                 <svg class="header-search-icon" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                </svg>
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/> </svg>
             </button>
         </div>
         <nav class="nav">
-            <a href="index.html" class="nav-item">Home</a>
-            <a href="now-playing.html" class="nav-item">Now playing</a>
-            <a href="upcoming.html" class="nav-item">Upcoming</a>
-            <a href="community.html" class="nav-item">Community</a>
-            <a href="mypage.html" class="nav-item">My page</a>
-        </nav>
+            <a href="index.html" class="nav-item">Home</a> <a href="now-playing.html" class="nav-item">Now playing</a> <a href="upcoming.html" class="nav-item">Upcoming</a> <a href="community.html" class="nav-item">Community</a> <a href="mypage.html" class="nav-item">My page</a> </nav>
     </header>
 
     <section class="filter-section">
         <div class="filter-container">
             <div class="filter-tabs">
-                <button class="filter-tab active">My Page</button>
-            </div>
+                <button class="filter-tab active">My Page</button> </div>
         </div>
     </section>
 
     <main class="main-content">
         <section class="profile-section">
-            <h2 class="section-title">프로필 정보</h2>
-            <div class="profile-content">
-                <div class="profile-image-placeholder"></div>
+            <h2 class="section-title">프로필 정보</h2> <div class="profile-content">
+                <img src="../profileimage.png" alt="프로필 기본 이미지" class="profile-image">
                 <div class="profile-info-container">
                     <div class="info-group">
-                        <div class="info-label">닉네임: <span id="profileUsername"></span></div>
+                        <div class="info-label">닉네임: <span id="profileNickname"></span></div>
                     </div>
                     <div class="info-group">
-                        <div class="info-label">이메일: <span id="profileEmail"></span></div>
-                    </div>
+                        <div class="info-label">이메일: <span id="profileEmail"></span></div> </div>
                     <div class="info-group">
-                        <div class="info-label">가입 일자: <span id="profileCreatedAt"></span></div>
-                    </div>
+                        <div class="info-label">가입 일자: <span id="profileCreatedAt"></span></div> </div>
                 </div>
             </div>
         </section>
 
         <section class="statistics-section">
-            <h2 class="section-title">통계</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
+            <h2 class="section-title">통계</h2> <div class="stats-grid">
+                <div class="stat-card chart-card"> 
                     <div class="stat-label">'좋아요'한 영화 수</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 37%"></div>
+                    <div class="chart-container"> 
+                        <canvas id="likedMoviesChart"></canvas> 
                     </div>
-                    <div class="stat-value">37/100 37.00%</div>
+                    <div class="stat-value">총 <span id="totalLikedMoviesCountText">0</span>개</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">'기대돼요(투표)'한 영화 수</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 37%"></div>
-                    </div>
-                    <div class="stat-value">37/100 37.00%</div>
-                </div>
-                <div class="stat-card">
+                <div class="stat-card chart-card"> 
                     <div class="stat-label">'북마크'한 영화 수</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 37%"></div>
+                    <div class="chart-container"> 
+                        <canvas id="bookmarkedMoviesChart"></canvas> 
                     </div>
-                    <div class="stat-value">37/100 37.00%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">'별로에요(투표)'한 영화 수</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 37%"></div>
-                    </div>
-                    <div class="stat-value">37/100 37.00%</div>
+                    <div class="stat-value">총 <span id="totalBookmarkedMoviesCountText">0</span>개</div> 
                 </div>
             </div>
         </section>
 
         <section class="movie-section liked-movies">
-            <h2 class="section-title">좋아요한 영화 리스트</h2>
-            <div class="movie-grid">
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=301">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">15</span>
-                            <span class="title">듄: 파트 2</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 35.2%</span>
-                            <span class="release-date">2024.02.28</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=302">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">12</span>
-                            <span class="title">웡카</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 28.5%</span>
-                            <span class="release-date">2024.01.31</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=303">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">ALL</span>
-                            <span class="title">겨울왕국 3</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 21.0%</span>
-                            <span class="release-date">2024.03.01</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=304">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">18</span>
-                            <span class="title">메이드 인 이태리</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 18.3%</span>
-                            <span class="release-date">2024.03.05</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=305">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">15</span>
-                            <span class="title">아가일</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 12.1%</span>
-                            <span class="release-date">2024.02.10</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=306">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">12</span>
-                            <span class="title">주토피아2</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 12.1%</span>
-                            <span class="release-date">2024.02.10</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">12</span>
-                            <span class="title">주토피아2</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 12.1%</span>
-                            <span class="release-date">2024.02.10</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">12</span>
-                            <span class="title">주토피아2</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 12.1%</span>
-                            <span class="release-date">2024.02.10</span>
-                        </div>
-                    </div>
-                </div>
+            <h2 class="section-title">좋아요한 영화 리스트</h2> <div class="movie-grid" id="likedMoviesGrid">
+                {/* 영화 아이템이 여기에 동적으로 추가됩니다. */}
             </div>
         </section>
 
         <section class="movie-section bookmarked-movies">
-            <h2 class="section-title">북마크한 영화 리스트</h2>
-            <div class="movie-grid">
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=401">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">15</span>
-                            <span class="title">배트맨: 다크 나이트</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 30.2%</span>
-                            <span class="release-date">2024.04.15</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=402">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">12</span>
-                            <span class="title">인사이드 아웃 2</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 25.5%</span>
-                            <span class="release-date">2024.04.20</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=403">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">ALL</span>
-                            <span class="title">토이 스토리 5</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 20.0%</span>
-                            <span class="release-date">2024.05.01</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=404">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">18</span>
-                            <span class="title">매트릭스: 리버스</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 15.3%</span>
-                            <span class="release-date">2024.05.15</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=405">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">15</span>
-                            <span class="title">인셉션 2</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 10.1%</span>
-                            <span class="release-date">2024.06.01</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="movie-item">
-                    <div class="poster-container">
-                        <a href="movie-detail.html?id=406">
-                            <img src="https://placehold.co/180x260" alt="영화 포스터" class="movie-poster">
-                        </a>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-header">
-                            <span class="rating">15</span>
-                            <span class="title">인셉션 2</span>
-                        </div>
-                        <div class="movie-details">
-                            <span class="booking-rate">예매율 10.1%</span>
-                            <span class="release-date">2024.06.01</span>
-                        </div>
-                    </div>
-                </div>
+            <h2 class="section-title">북마크한 영화 리스트</h2> <div class="movie-grid" id="bookmarkedMoviesGrid">
+                {/* 영화 아이템이 여기에 동적으로 추가됩니다. */}
             </div>
         </section>
     </main>
 
     <footer class="footer">
-        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
-    </footer>
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div> </footer>
     
-    <!-- API 및 페이지 스크립트 -->
-    <script src="../js/api.js"></script>
-    <script src="../js/mypage.js"></script>
-</body>
+    <script src="../js/api.js"></script> 
+    <script src="../js/mypage.js"></script> </body>
+    <script src="../js/header.js"></script>
 </html>
