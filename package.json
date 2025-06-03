@@ -5,7 +5,7 @@
   "scripts": {
     "start": "http-server . --cors -p 3000 -c-1 -o /html/index.html -e html"
   },
-  "dependencies": {
+  "devDependencies": {
     "http-server": "^14.1.1"
   }
-} 
+}
