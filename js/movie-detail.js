@@ -101,10 +101,29 @@ function updateMovieDetails(movie) {
     // 좋아요 버튼 이벤트 리스너
     const likeButton = document.querySelector('.btn-like');
     if (likeButton) {
+        // 초기 상태 설정
+        if (movie.isLiked) {
+            likeButton.classList.add('active');
+            localStorage.setItem(`like_${movie.id}`, 'true');
+        }
+
         likeButton.addEventListener('click', async function() {
             try {
-                await toggleMovieLike(movie.id);
-                this.classList.toggle('active');
+                const result = await toggleMovieLike(
+                    movie.id,
+                    movie.title,
+                    movie.poster_path
+                );
+                if (result && result.success) {
+                    this.classList.toggle('active');
+                    // localStorage 업데이트
+                    const isActive = this.classList.contains('active');
+                    if (isActive) {
+                        localStorage.setItem(`like_${movie.id}`, 'true');
+                    } else {
+                        localStorage.removeItem(`like_${movie.id}`);
+                    }
+                }
             } catch (error) {
                 console.error('좋아요 토글 실패:', error);
             }
@@ -114,10 +133,29 @@ function updateMovieDetails(movie) {
     // 북마크 버튼 이벤트 리스너
     const bookmarkButton = document.querySelector('.btn-bookmark');
     if (bookmarkButton) {
+        // 초기 상태 설정
+        if (movie.isBookmarked) {
+            bookmarkButton.classList.add('active');
+            localStorage.setItem(`bookmark_${movie.id}`, 'true');
+        }
+
         bookmarkButton.addEventListener('click', async function() {
             try {
-                await toggleMovieBookmark(movie.id);
-                this.classList.toggle('active');
+                const result = await toggleMovieBookmark(
+                    movie.id,
+                    movie.title,
+                    movie.poster_path
+                );
+                if (result && result.success) {
+                    this.classList.toggle('active');
+                    // localStorage 업데이트
+                    const isActive = this.classList.contains('active');
+                    if (isActive) {
+                        localStorage.setItem(`bookmark_${movie.id}`, 'true');
+                    } else {
+                        localStorage.removeItem(`bookmark_${movie.id}`);
+                    }
+                }
             } catch (error) {
                 console.error('북마크 토글 실패:', error);
             }

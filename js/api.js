@@ -206,12 +206,13 @@ async function getMovieDetails(movieId) {
             
             if (response.ok) {
                 const userData = await response.json();
+                console.log('백엔드에서 받은 사용자 데이터:', userData);
                 return {
                     ...tmdbData,
-                    isLiked: userData.isLiked || false,
-                    isBookmarked: userData.isBookmarked || false,
-                    userRating: userData.userRating,
-                    userReview: userData.userReview
+                    isLiked: userData.data?.isLiked || false,
+                    isBookmarked: userData.data?.isBookmarked || false,
+                    userRating: userData.data?.userRating,
+                    userReview: userData.data?.userReview
                 };
             }
         } catch (error) {
