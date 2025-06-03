@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({ email, password })
                 });
-                
+
                 if (response.ok) {
                     const data = await response.json();
                     if (!data.token) {

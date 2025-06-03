@@ -4,10 +4,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // URL에서 영화 ID 가져오기
         const urlParams = new URLSearchParams(window.location.search);
-        const movieId = urlParams.get('id');
+        const rawMovieId = urlParams.get('id');
+        
+        // movieId가 없거나 유효하지 않은 경우 처리
+        if (!rawMovieId) {
+            throw new Error('영화 ID가 없습니다.');
+        }
+
+        // movieId에서 숫자만 추출
+        const movieId = rawMovieId.replace(/[^0-9]/g, '');
+        console.log('정제된 영화 ID:', movieId);
 
         if (!movieId) {
-            throw new Error('영화 ID가 없습니다.');
+            throw new Error('유효하지 않은 영화 ID입니다.');
         }
 
         // 영화 상세 정보와 시리즈 정보를 동시에 가져오기
@@ -101,10 +110,11 @@ function updateMovieDetails(movie) {
     // 좋아요 버튼 이벤트 리스너
     const likeButton = document.querySelector('.btn-like');
     if (likeButton) {
-        // 초기 상태 설정
+        // 초기 상태 설정 (서버에서 받은 상태 기준)
         if (movie.isLiked) {
             likeButton.classList.add('active');
-            localStorage.setItem(`like_${movie.id}`, 'true');
+        } else {
+            likeButton.classList.remove('active');
         }
 
         likeButton.addEventListener('click', async function() {
@@ -114,14 +124,13 @@ function updateMovieDetails(movie) {
                     movie.title,
                     movie.poster_path
                 );
+
                 if (result && result.success) {
-                    this.classList.toggle('active');
-                    // localStorage 업데이트
-                    const isActive = this.classList.contains('active');
-                    if (isActive) {
-                        localStorage.setItem(`like_${movie.id}`, 'true');
+                    const newState = !this.classList.contains('active');
+                    if (newState) {
+                        this.classList.add('active');
                     } else {
-                        localStorage.removeItem(`like_${movie.id}`);
+                        this.classList.remove('active');
                     }
                 }
             } catch (error) {
@@ -133,10 +142,11 @@ function updateMovieDetails(movie) {
     // 북마크 버튼 이벤트 리스너
     const bookmarkButton = document.querySelector('.btn-bookmark');
     if (bookmarkButton) {
-        // 초기 상태 설정
+        // 초기 상태 설정 (서버에서 받은 상태 기준)
         if (movie.isBookmarked) {
             bookmarkButton.classList.add('active');
-            localStorage.setItem(`bookmark_${movie.id}`, 'true');
+        } else {
+            bookmarkButton.classList.remove('active');
         }
 
         bookmarkButton.addEventListener('click', async function() {
@@ -146,14 +156,13 @@ function updateMovieDetails(movie) {
                     movie.title,
                     movie.poster_path
                 );
+
                 if (result && result.success) {
-                    this.classList.toggle('active');
-                    // localStorage 업데이트
-                    const isActive = this.classList.contains('active');
-                    if (isActive) {
-                        localStorage.setItem(`bookmark_${movie.id}`, 'true');
+                    const newState = !this.classList.contains('active');
+                    if (newState) {
+                        this.classList.add('active');
                     } else {
-                        localStorage.removeItem(`bookmark_${movie.id}`);
+                        this.classList.remove('active');
                     }
                 }
             } catch (error) {
@@ -175,19 +184,19 @@ function updateMovieDetails(movie) {
         trailerBtn.addEventListener('click', function() {
             modal.style.display = 'block';
             iframe.src = trailerUrl;
-        });
+    });
 
         closeBtn.addEventListener('click', function() {
             modal.style.display = 'none';
             iframe.src = '';
-        });
+    });
 
         window.addEventListener('click', function(e) {
             if (e.target === modal) {
                 modal.style.display = 'none';
                 iframe.src = '';
-            }
-        });
+        }
+    });
     }
 
     // 가로 스크롤 영역에서 마우스 휠 이벤트 처리
@@ -514,6 +523,6 @@ function closeTrailerModal() {
     const iframe = modal.querySelector('iframe');
     if (iframe) {
         iframe.src = '';
-    }
+        }
     modal.style.display = 'none';
 }

@@ -139,7 +139,8 @@
     overflow: visible; /* 수정: hidden -> visible */
 }
 
-/* 좋아요 버튼, 북마크 버튼 스타일 */
+/* 좋아요 버튼, 북마크 버튼 스타일 제거 */
+/*
 .like-button, .bookmark-button {
     position: absolute;
     top: 10px;
@@ -153,8 +154,8 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    opacity: 0; /* 기본적으로 숨김 */
-    z-index: 10; /* 수정: z-index 추가 및 값 증가 */
+    opacity: 0; 
+    z-index: 10; 
 }
 
 .like-button {
@@ -178,7 +179,7 @@
     transform: scale(1.1);
 }
 
-/* 좋아요 아이콘 */
+
 .heart-icon {
     width: 20px;
     height: 20px;
@@ -197,25 +198,26 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff0000' stroke='%23ff0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E");
 }
 
-/* 북마크 아이콘 (SVG이므로 HTML에 직접 포함된 스타일을 사용) */
+
 .bookmark-icon {
     width: 20px;
     height: 20px;
-    fill: none; /* 기본적으로 내부 채우기 없음 */
-    stroke: white; /* 테두리 색상 */
-    stroke-width: 2; /* 테두리 두께 */
+    fill: none; 
+    stroke: white; 
+    stroke-width: 2; 
     transition: all 0.3s ease;
 }
 
 .bookmark-button:hover .bookmark-icon {
-    fill: #673AB7; /* 호버 시 내부 채우기 */
-    stroke: #673AB7; /* 호버 시 테두리 색상 변경 */
+    fill: #673AB7; 
+    stroke: #673AB7; 
 }
 
 .bookmark-button.active .bookmark-icon {
-    fill: #673AB7; /* 활성 상태 시 내부 채우기 */
-    stroke: #673AB7; /* 활성 상태 시 테두리 색상 변경 */
+    fill: #673AB7; 
+    stroke: #673AB7; 
 }
+*/
 
 .movie-poster {
     width: 100%;

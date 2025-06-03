@@ -192,41 +192,43 @@ window.getUpcoming = getUpcoming;
 // 영화 상세 정보 가져오기
 async function getMovieDetails(movieId) {
     try {
-        // TMDB에서 영화 상세 정보를 가져옴
+        // TMDB에서 영화 상세 정보를 가져옴 (이 안에 vote_average 등이 포함됨)
         const tmdbData = await fetchTMDBMovieDetails(movieId);
-        
-        // 백엔드 서버에서 사용자별 정보를 가져옴
+
+        // 백엔드 서버에서 사용자별 좋아요/북마크 정보를 가져오기 시도
         const token = localStorage.getItem('token');
         const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-        
-        try {
-            const response = await fetch(`${window.MOVIES_API_URL}/${movieId}`, {
-                headers: headers
-            });
-            
-            if (response.ok) {
-                const userData = await response.json();
-                console.log('백엔드에서 받은 사용자 데이터:', userData);
-                return {
-                    ...tmdbData,
-                    isLiked: userData.data?.isLiked || false,
-                    isBookmarked: userData.data?.isBookmarked || false,
-                    userRating: userData.data?.userRating,
-                    userReview: userData.data?.userReview
-                };
+
+        let isLikedFromServer = false;
+        let isBookmarkedFromServer = false;
+
+        if (token) { // 토큰이 있을 때만 사용자 정보를 요청
+            try {
+                // movieId를 문자열로 변환하고 URL에서 특수문자 제거
+                const cleanMovieId = String(movieId).replace(/[^0-9]/g, '');
+                
+                const response = await fetch(`${window.MOVIES_API_URL}/${cleanMovieId}`, {
+                    headers: headers
+                });
+
+                if (response.ok) {
+                    const backendMovieData = await response.json();
+                    isLikedFromServer = backendMovieData.isLiked || false;
+                    isBookmarkedFromServer = backendMovieData.isBookmarked || false;
+                }
+            } catch (error) {
+                // 오류 발생 시 기본값 사용
             }
-        } catch (error) {
-            console.warn('사용자 데이터를 가져오는데 실패했습니다:', error);
         }
-        
-        // 백엔드 서버 오류시 TMDB 데이터만 반환
+
+        // 최종적으로 TMDB 데이터와 서버에서 받은 (또는 기본값) 좋아요/북마크 상태를 합쳐서 반환
         return {
             ...tmdbData,
-            isLiked: false,
-            isBookmarked: false
+            isLiked: isLikedFromServer,
+            isBookmarked: isBookmarkedFromServer
         };
+
     } catch (error) {
-        console.error('영화 상세 정보를 가져오는데 실패했습니다:', error);
         throw error;
     }
 }
