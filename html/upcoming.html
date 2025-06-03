@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineX - Upcoming Movies</title>
+    <title>CineX - Upcoming</title>
     <link rel="stylesheet" href="../css/pages/upcoming.css">
 </head>
 <body>
     <header class="header">
-        <a href="index.html" class="logo">CineX</a>
+        <a href="../html/index.html" class="logo">CineX</a>
         <div class="header-search-container">
             <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
             <button type="button" class="header-search-button" aria-label="검색">
@@ -18,11 +18,11 @@
             </button>
         </div>
         <nav class="nav">
-            <a href="index.html" class="nav-item">Home</a>
-            <a href="now-playing.html" class="nav-item">Now playing</a>
-            <a href="upcoming.html" class="nav-item">Upcoming</a>
-            <a href="community.html" class="nav-item">Community</a>
-            <a href="mypage.html" class="nav-item">My page</a>
+            <a href="../html/index.html" class="nav-item">Home</a>
+            <a href="../html/now-playing.html" class="nav-item">Now playing</a>
+            <a href="../html/upcoming.html" class="nav-item">Upcoming</a>
+            <a href="../html/community.html" class="nav-item">Community</a>
+            <a href="../html/mypage.html" class="nav-item">My page</a>
         </nav>
     </header>
 
@@ -44,7 +44,7 @@
 
     <section class="movies-section">
         <div class="movies-container">
-                <div class="movie-grid">
+            <div class="movie-grid">
                 <!-- 영화 목록이 여기에 동적으로 추가됩니다 -->
             </div>
         </div>
@@ -54,8 +54,10 @@
         <div class="footer-text">© 2025 CineX. All rights reserved.</div>
     </footer>
 
+    
     <!-- API 및 페이지 스크립트 -->
     <script src="../js/api.js"></script>
     <script src="../js/upcoming.js"></script>
+    <script src="../js/header.js"></script>
 </body>
 </html>

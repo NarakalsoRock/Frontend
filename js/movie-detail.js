@@ -1,5 +1,12 @@
 // API 기본 URL은 movieApi.js에서 가져옵니다
 
+// API 기본 URL
+const API_BASE_URL = 'http://localhost:3000/api';
+
+// 로컬 스토리지 키
+const LIKED_MOVIES_KEY = 'likedMovies';
+const BOOKMARKED_MOVIES_KEY = 'bookmarkedMovies';
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // URL에서 영화 ID 가져오기
@@ -30,6 +37,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
+        // 좋아요/북마크 상태 초기화
+        initializeLikeBookmarkState(movieId);
+
         // 추천 영화 가져오기 및 표시
         const recommendedMovies = await getRecommendedMovies(movieId);
         updateRecommendedMovies(recommendedMovies);
@@ -46,6 +56,85 @@ document.addEventListener('DOMContentLoaded', async () => {
         showTrailerError();
     }
 });
+
+// 좋아요/북마크 상태 초기화 함수
+function initializeLikeBookmarkState(movieId) {
+    const likedMovies = JSON.parse(localStorage.getItem(LIKED_MOVIES_KEY) || '[]');
+    const bookmarkedMovies = JSON.parse(localStorage.getItem(BOOKMARKED_MOVIES_KEY) || '[]');
+    
+    const likeButton = document.querySelector('.btn-like');
+    const bookmarkButton = document.querySelector('.btn-bookmark');
+
+    if (likeButton) {
+        if (likedMovies.includes(movieId)) {
+            likeButton.classList.add('active');
+        }
+        likeButton.addEventListener('click', () => toggleLike(movieId));
+    }
+
+    if (bookmarkButton) {
+        if (bookmarkedMovies.includes(movieId)) {
+            bookmarkButton.classList.add('active');
+        }
+        bookmarkButton.addEventListener('click', () => toggleBookmark(movieId));
+    }
+}
+
+// 좋아요 토글 함수
+function toggleLike(movieId) {
+    const likedMovies = JSON.parse(localStorage.getItem(LIKED_MOVIES_KEY) || '[]');
+    const index = likedMovies.indexOf(movieId);
+    const likeButton = document.querySelector('.btn-like');
+
+    if (index === -1) {
+        likedMovies.push(movieId);
+        likeButton.classList.add('active');
+    } else {
+        likedMovies.splice(index, 1);
+        likeButton.classList.remove('active');
+    }
+
+    localStorage.setItem(LIKED_MOVIES_KEY, JSON.stringify(likedMovies));
+    updateMyPageLists();
+}
+
+// 북마크 토글 함수
+function toggleBookmark(movieId) {
+    const bookmarkedMovies = JSON.parse(localStorage.getItem(BOOKMARKED_MOVIES_KEY) || '[]');
+    const index = bookmarkedMovies.indexOf(movieId);
+    const bookmarkButton = document.querySelector('.btn-bookmark');
+
+    if (index === -1) {
+        bookmarkedMovies.push(movieId);
+        bookmarkButton.classList.add('active');
+    } else {
+        bookmarkedMovies.splice(index, 1);
+        bookmarkButton.classList.remove('active');
+    }
+
+    localStorage.setItem(BOOKMARKED_MOVIES_KEY, JSON.stringify(bookmarkedMovies));
+    updateMyPageLists();
+}
+
+// 마이페이지 리스트 업데이트 함수
+function updateMyPageLists() {
+    const event = new CustomEvent('updateMyPageLists');
+    window.dispatchEvent(event);
+}
+
+// 영화 상세 정보 가져오기
+async function getMovieDetails(movieId) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/movies/${movieId}`);
+        if (!response.ok) {
+            throw new Error('영화 정보를 가져오는데 실패했습니다.');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('영화 상세 정보 요청 실패:', error);
+        throw error;
+    }
+}
 
 // 영화 상세 정보 업데이트 함수
 function updateMovieDetails(movie) {
@@ -103,7 +192,7 @@ function updateMovieDetails(movie) {
     if (likeButton) {
         likeButton.addEventListener('click', async function() {
             try {
-                await toggleMovieLike(movie.id);
+                await toggleLike(movie.id);
                 this.classList.toggle('active');
             } catch (error) {
                 console.error('좋아요 토글 실패:', error);
@@ -116,7 +205,7 @@ function updateMovieDetails(movie) {
     if (bookmarkButton) {
         bookmarkButton.addEventListener('click', async function() {
             try {
-                await toggleMovieBookmark(movie.id);
+                await toggleBookmark(movie.id);
                 this.classList.toggle('active');
             } catch (error) {
                 console.error('북마크 토글 실패:', error);
