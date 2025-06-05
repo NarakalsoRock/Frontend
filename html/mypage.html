@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineX - MyPage</title>
-    <link rel="stylesheet" href="../css/pages/mypage.css"> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../css/pages/mypage.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
 <body>
@@ -16,7 +17,14 @@
             </button>
         </div>
         <nav class="nav">
-            <a href="index.html" class="nav-item">Home</a> <a href="now-playing.html" class="nav-item">Now playing</a> <a href="upcoming.html" class="nav-item">Upcoming</a> <a href="community.html" class="nav-item">Community</a> <a href="mypage.html" class="nav-item">My page</a> </nav>
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item">Community</a>
+            <a href="mypage.html" class="nav-item" id="headerMypageLink" style="display:none;">My page</a>
+            <a href="login.html" class="nav-item" id="headerLoginLink">Login</a>
+            <a href="signup.html" class="nav-item" id="headerSignupLink">Sign Up</a>
+        </nav>
     </header>
 
     <section class="filter-section">
@@ -38,6 +46,9 @@
                         <div class="info-label">이메일: <span id="profileEmail"></span></div> </div>
                     <div class="info-group">
                         <div class="info-label">가입 일자: <span id="profileCreatedAt"></span></div> </div>
+                    <div class="info-group" style="margin-top: 20px;">
+                        <button id="logoutButton" class="logout-button">로그아웃</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -78,6 +89,8 @@
         <div class="footer-text">© 2025 CineX. All rights reserved.</div> </footer>
     
     <script src="../js/api.js"></script> 
-    <script src="../js/mypage.js"></script> </body>
-    <script src="../js/header.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/mypage.js"></script>
+    <script src="../js/main.js"></script> 
+    </body>
 </html>
