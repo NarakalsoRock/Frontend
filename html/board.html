@@ -6,6 +6,37 @@
     <title>CineX - 게시판</title>
     <link rel="stylesheet" href="../css/pages/board.css">
     <script src="../js/api.js" defer></script>
+    <style>
+        /* 아이콘 버튼 공통 스타일 */
+        .back-button, .back-to-community-button { /* 클래스명 통일 또는 개별 적용 */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .arrow-icon { /* SVG 아이콘 공통 스타일 */
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+        .board-title-row {
+            display: flex;
+            align-items: center;
+        }
+        .board-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #fff; /* board.css에서 #673AB7 로 되어있으므로, 일관성을 위해 CSS 파일에서 최종 관리 */
+            margin: 0;
+            line-height: normal;
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -30,9 +61,12 @@
     <main class="board-main-content">
         <div class="board-header">
             <div class="board-title-row">
-                <!-- <a href="community.html?tab=board" class="back-button" aria-label="커뮤니티로 돌아가기">&lt;</a> -->
-                <button class="back-btn" onclick="location.href='community.html'" aria-label="커뮤니티로 돌아가기">&lt;</button>
-                <h1 class="board-title">게시판</h1>
+                <a href="community.html?tab=board" class="back-button" aria-label="커뮤니티 홈으로 돌아가기">
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                    </svg>
+                </a>
+                <h1 class="board-title"></h1> 
                 <div class="board-buttons">
                     <a href="write-post.html" class="write-button" id="writeButton">
                         <svg class="button-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +96,6 @@
     </footer>
 
     <script>
-        // 이전 스크립트 내용과 동일하게 유지 (loadPosts, renderPagination, formatDate 등)
         let currentPage = 1;
         let boardType;
 
@@ -78,16 +111,15 @@
             paginationContainer.innerHTML = '';
 
             try {
-                const response = await window.getPosts(type, page); // api.js
+                const response = await window.getPosts(type, page);
                 if (response.success && response.data) {
-                    postListContainer.innerHTML = ''; 
+                    postListContainer.innerHTML = '';
                     if (response.data.length === 0) {
                         postListContainer.innerHTML = '<p class="no-posts-message">등록된 게시글이 없습니다.</p>';
                     } else {
                         response.data.forEach(post => {
                             const postCard = document.createElement('a');
-                            // 상세 페이지로 이동 시 type 정보도 함께 전달
-                            postCard.href = `post-detail.html?id=${post._id}&type=${type}`; 
+                            postCard.href = `post-detail.html?id=${post._id}&type=${type}`;
                             postCard.className = 'post-card';
                             postCard.innerHTML = `
                                 <div class="post-header">
@@ -144,35 +176,49 @@
         window.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             boardType = urlParams.get('type');
-            const boardTitleElement = document.querySelector('.board-title');
+            const boardTitleElement = document.querySelector('.board-title'); 
             const boardDescriptionElement = document.querySelector('.board-description');
             const writeButton = document.getElementById('writeButton');
+            const backButtonIcon = document.querySelector('.back-button .arrow-icon');
+
+            if (backButtonIcon) {
+                // 커뮤니티 홈으로 돌아가는 버튼이므로 왼쪽 화살표. SVG path d가 오른쪽을 가리키므로 반전.
+                backButtonIcon.style.transform = 'scaleX(-1)';
+            }
+
+            let boardName = '';
+            let pageDocTitle = 'CineX - 게시판';
 
             if (boardType) {
                 writeButton.href = `write-post.html?type=${boardType}`;
                  switch (boardType) {
                     case 'info':
-                        document.title = 'CineX - 정보 게시판';
-                        boardTitleElement.textContent = '정보 게시판';
+                        boardName = '정보 게시판';
+                        pageDocTitle = 'CineX - 정보 게시판';
                         boardDescriptionElement.textContent = '영화 관련 최신 소식, 흥미로운 사실, 개봉 예정작 정보, 이벤트 소식 등 다양한 정보성 콘텐츠를 공유하고 얻을 수 있는 커뮤니티 공간입니다.';
                         break;
                     case 'review':
-                        document.title = 'CineX - 리뷰 게시판';
-                        boardTitleElement.textContent = '리뷰 게시판';
+                        boardName = '리뷰 게시판';
+                        pageDocTitle = 'CineX - 리뷰 게시판';
                         boardDescriptionElement.textContent = '영화에 대한 개인적인 감상, 평가, 비평 등을 자유롭게 작성하고 공유하며, 다른 사용자들의 다양한 의견을 탐색하고 소통할 수 있도록 설계된 커뮤니티 공간입니다.';
                         break;
                     case 'discussion':
-                         document.title = 'CineX - 토론 게시판';
-                        boardTitleElement.textContent = '토론 게시판';
+                        boardName = '토론 게시판';
+                        pageDocTitle = 'CineX - 토론 게시판';
                         boardDescriptionElement.textContent = '특정 영화나 영화 관련 주제에 대해 사용자들이 자유롭게 의견을 교환하고, 심층적인 논의를 펼칠 수 있도록 설계된 커뮤니티 공간입니다.';
                         break;
                     default:
-                        document.title = 'CineX - 게시판';
-                        boardTitleElement.textContent = '알 수 없는 게시판';
+                        boardName = '알 수 없는 게시판';
+                        pageDocTitle = 'CineX - 알 수 없는 게시판';
                         boardDescriptionElement.textContent = '잘못된 접근입니다. 커뮤니티 페이지로 돌아가주세요.';
                         document.getElementById('postList').innerHTML = '<p class="error-message">유효하지 않은 게시판 타입입니다.</p>';
+                        boardTitleElement.textContent = boardName;
+                        document.title = pageDocTitle;
                         return; 
                 }
+                boardTitleElement.textContent = boardName; 
+                document.title = pageDocTitle;
+
                 const pageParam = urlParams.get('page');
                 currentPage = pageParam ? parseInt(pageParam, 10) : 1;
                 loadPosts(boardType, currentPage);
@@ -180,6 +226,7 @@
                 boardTitleElement.textContent = '게시판 타입을 찾을 수 없습니다.';
                 boardDescriptionElement.textContent = '올바른 경로로 접근해주세요.';
                 document.getElementById('postList').innerHTML = '<p class="error-message">게시판 타입을 URL에 지정해주세요. (예: ?type=info)</p>';
+                 document.title = 'CineX - 오류';
             }
         });
     </script>

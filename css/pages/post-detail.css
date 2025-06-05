@@ -252,10 +252,11 @@ body {
 }
 
 .back-button:hover {
-    color: #512da8;
+    color: #673AB7;
 }
 
 .board-title-display {
+    /* color: #673AB7; */
     font-size: 1.5rem;
     font-weight: 600;
 }
