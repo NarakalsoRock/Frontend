@@ -115,16 +115,41 @@ body {
 
 .board-title-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between; /* 좌: 뒤로가기+제목, 우: 버튼들 */
+    gap: 12px;
     margin-bottom: 20px;
 }
 
+.board-title-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    font-size: 1.5rem;
+    color: #673ab7;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: color 0.2s;
+}
+.back-btn:hover {
+    color: #512da8;
+}
+
 .board-title {
-    color: #673AB7;
     font-size: 48px;
     font-family: Inter;
     font-weight: 700;
+    color: #673AB7;
     margin: 0;
 }
 

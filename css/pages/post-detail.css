@@ -229,6 +229,37 @@ body {
     margin: 0;
 }
 
+/* 네비게이션 바 */
+.post-navigation {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* 버튼과 제목 사이 간격 */
+    margin-bottom: 2rem;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    font-size: 1.5rem;
+    color: #673ab7;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.back-button:hover {
+    color: #512da8;
+}
+
+.board-title-display {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
     .post-detail-content {
