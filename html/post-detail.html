@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineX - 게시글</title>
     <link rel="stylesheet" href="../css/pages/post-detail.css">
+    <script src="../js/api.js" defer></script>
 </head>
 <body>
     <header class="header">
@@ -27,10 +28,10 @@
     </header>
 
     <main class="post-detail-content">
-        <h2 class="board-title">게시판</h2>
-        
-        <article class="post-header">
-            <h1 class="post-title">게시글 제목</h1>
+        <h2 class="board-title-display">게시판</h2>
+
+        <article class="post-header-container">
+            <h1 class="post-title-main"></h1>
             <div class="post-info">
                 <div class="post-author">
                     <div class="author-avatar">
@@ -38,14 +39,16 @@
                             <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
                         </svg>
                     </div>
-                    <span class="author-name">작성자</span>
+                    <span class="author-name"></span>
                 </div>
-                <time class="post-date" datetime="2024-03-15">2024.03.15 15:00</time>
+                <time class="post-date" datetime=""></time>
+            </div>
+            <div class="post-stats">
+                <span>조회 <span id="viewCount">0</span></span>
             </div>
         </article>
 
-        <div class="post-content">
-            게시글 내용이 여기에 표시됩니다.
+        <div class="post-content-main">
         </div>
 
         <div class="post-actions">
@@ -55,35 +58,24 @@
                 </svg>
                 좋아요 <span id="likeCount">0</span>
             </button>
-            <button class="action-button" id="commentButton">
+            <button class="action-button" id="commentScrollButton">
                 <svg class="button-icon" viewBox="0 0 24 24">
                     <path d="M21 15a2 2 0 0 1-2 2h-2v3l-4-3H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8z"/>
                 </svg>
-                댓글 <span id="commentCount">0</span>
+                댓글 <span id="commentCountDisplay">0</span>
             </button>
         </div>
 
         <section class="comments-section">
-            <h3 class="comments-title">댓글</h3>
+            <h3 class="comments-title">댓글 <span id="totalCommentCount"></span></h3>
             <form class="comment-form" id="commentForm">
-                <textarea class="comment-input" placeholder="댓글을 입력하세요" required></textarea>
+                <textarea class="comment-input" id="commentInputContent" placeholder="댓글을 입력하세요" required></textarea>
                 <button type="submit" class="submit-comment">댓글 작성</button>
             </form>
 
             <div class="comment-list" id="commentList">
-                <!-- 댓글 예시 -->
-                <div class="comment">
-                    <div class="comment-header">
-                        <div class="author-avatar">
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
-                            </svg>
-                        </div>
-                        <span class="comment-author">사용자</span>
-                        <time class="comment-date" datetime="2024-03-15T15:00">방금 전</time>
-                    </div>
-                    <p class="comment-text">정말 좋은 글이네요!</p>
-                </div>
+            </div>
+             <div class="pagination" id="commentPagination">
             </div>
         </section>
     </main>
@@ -93,82 +85,198 @@
     </footer>
 
     <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const boardType = urlParams.get('type');
-            const postId = urlParams.get('id');
-            const boardTitle = document.querySelector('.board-title');
-            
-            // 게시판 타입에 따라 제목 업데이트
-            if (boardType === 'info') {
-                document.title = 'CineX - 정보 게시판';
-                boardTitle.textContent = '정보 게시판';
-            } else if (boardType === 'review') {
-                document.title = 'CineX - 리뷰 게시판';
-                boardTitle.textContent = '리뷰 게시판';
-            } else if (boardType === 'discussion') {
-                document.title = 'CineX - 토론 게시판';
-                boardTitle.textContent = '토론 게시판';
-            }
+        let currentPostId;
+        let currentCommentPage = 1;
+        let currentUser = null; // 현재 로그인한 사용자 정보 저장
 
-            // 좋아요 버튼 기능
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+            return new Date(dateString).toLocaleString('ko-KR', options);
+        }
+
+        function nl2br(str) {
+            return str ? str.replace(/(\r\n|\n\r|\r|\n)/g, "<br>") : "";
+        }
+
+        async function loadPostDetails(postId) {
+            const boardTitleDisplay = document.querySelector('.board-title-display');
+            const postTitleMain = document.querySelector('.post-title-main');
+            const authorName = document.querySelector('.author-name');
+            const postDate = document.querySelector('.post-date');
+            const viewCount = document.getElementById('viewCount');
+            const postContentMain = document.querySelector('.post-content-main');
+            const likeCountSpan = document.getElementById('likeCount');
             const likeButton = document.getElementById('likeButton');
-            const likeCount = document.getElementById('likeCount');
-            let isLiked = false;
-            let likes = 0;
+            const commentCountDisplay = document.getElementById('commentCountDisplay');
 
-            likeButton.addEventListener('click', function() {
-                isLiked = !isLiked;
-                likes = isLiked ? likes + 1 : likes - 1;
-                likeCount.textContent = likes;
-                this.classList.toggle('active');
-            });
+            try {
+                const response = await window.getPostDetails(postId);
+                if (response.success && response.data) {
+                    const post = response.data;
 
-            // 댓글 폼 제출 처리
-            const commentForm = document.getElementById('commentForm');
-            const commentList = document.getElementById('commentList');
-            const commentCount = document.getElementById('commentCount');
-            let comments = 1; // 예시 댓글 1개 포함
+                    document.title = `CineX - ${post.title}`;
+                    let boardName = '';
+                    switch(post.boardType) {
+                        case 'info': boardName = '정보 게시판'; break;
+                        case 'review': boardName = '리뷰 게시판'; break;
+                        case 'discussion': boardName = '토론 게시판'; break;
+                        default: boardName = '게시판';
+                    }
+                    boardTitleDisplay.textContent = boardName;
 
-            // 초기 댓글 수 업데이트
-            commentCount.textContent = comments;
+                    postTitleMain.textContent = post.title;
+                    authorName.textContent = post.username || '익명';
+                    postDate.textContent = formatDate(post.createdAt);
+                    postDate.setAttribute('datetime', post.createdAt);
+                    viewCount.textContent = post.views || 0;
+                    postContentMain.innerHTML = nl2br(post.content);
 
-            commentForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const textarea = this.querySelector('textarea');
-                const commentText = textarea.value.trim();
+                    likeCountSpan.textContent = post.likes ? post.likes.length : 0;
+                    commentCountDisplay.textContent = post.commentsCount || 0;
+                    document.getElementById('totalCommentCount').textContent = `(${(post.commentsCount || 0)})`;
 
-                if (commentText) {
-                    const now = new Date();
-                    const comment = document.createElement('div');
-                    comment.className = 'comment';
-                    comment.innerHTML = `
-                        <div class="comment-header">
-                            <div class="author-avatar">
-                                <svg viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
-                                </svg>
-                            </div>
-                            <span class="comment-author">사용자</span>
-                            <time class="comment-date" datetime="${now.toISOString()}">방금 전</time>
-                        </div>
-                        <p class="comment-text">${commentText}</p>
-                    `;
-                    commentList.insertBefore(comment, commentList.firstChild);
-                    textarea.value = '';
-                    comments++;
-                    commentCount.textContent = comments;
+                    if (currentUser && post.likes && post.likes.includes(currentUser._id)) {
+                        likeButton.classList.add('active');
+                    } else {
+                        likeButton.classList.remove('active');
+                    }
+                    loadComments(postId);
+                } else {
+                    postContentMain.innerHTML = `<p class="error-message">게시글을 불러오는데 실패했습니다: ${response.error || '알 수 없는 오류'}</p>`;
                 }
-            });
+            } catch (error) {
+                postContentMain.innerHTML = `<p class="error-message">게시글을 불러오는데 오류가 발생했습니다: ${error.message}</p>`;
+            }
+        }
 
-            // 댓글 버튼 클릭 시 댓글 입력창으로 스크롤
-            const commentButton = document.getElementById('commentButton');
-            const commentInput = document.querySelector('.comment-input');
-            
-            commentButton.addEventListener('click', function() {
-                commentInput.scrollIntoView({ behavior: 'smooth' });
-                commentInput.focus();
-            });
+
+        async function loadComments(postId, page = 1) {
+            const commentListContainer = document.getElementById('commentList');
+            const commentPaginationContainer = document.getElementById('commentPagination');
+            commentListContainer.innerHTML = '<p class="loading-message">댓글을 불러오는 중입니다...</p>';
+            commentPaginationContainer.innerHTML = '';
+
+            try {
+                const response = await window.getComments(postId, page);
+                if (response.success && response.data) {
+                    commentListContainer.innerHTML = '';
+                    if (response.data.length === 0) {
+                        commentListContainer.innerHTML = '<p class="no-comments-message">등록된 댓글이 없습니다.</p>';
+                    } else {
+                        response.data.forEach(comment => {
+                            const commentDiv = document.createElement('div');
+                            commentDiv.className = 'comment';
+                            commentDiv.innerHTML = `
+                                <div class="comment-header">
+                                    <div class="author-avatar">
+                                        <svg viewBox="0 0 24 24" fill="none"><path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="currentColor"/></svg>
+                                    </div>
+                                    <span class="comment-author">${comment.username || '익명'}</span>
+                                    <time class="comment-date" datetime="${comment.createdAt}">${formatDate(comment.createdAt)}</time>
+                                </div>
+                                <p class="comment-text">${nl2br(comment.content)}</p>
+                            `;
+                            commentListContainer.appendChild(commentDiv);
+                        });
+                    }
+                    renderCommentPagination(response.totalPages, response.currentPage, postId);
+                    const totalCommentsCount = response.totalComments || 0;
+                    document.getElementById('totalCommentCount').textContent = `(${totalCommentsCount})`;
+                    document.getElementById('commentCountDisplay').textContent = totalCommentsCount;
+                } else {
+                     commentListContainer.innerHTML = `<p class="error-message">댓글을 불러오는데 실패했습니다: ${response.error || '알 수 없는 오류'}</p>`;
+                }
+            } catch (error) {
+                 commentListContainer.innerHTML = `<p class="error-message">댓글을 불러오는데 오류가 발생했습니다: ${error.message}</p>`;
+            }
+        }
+
+        function renderCommentPagination(totalPages, currentPageNum, postId) {
+            const paginationContainer = document.getElementById('commentPagination');
+            paginationContainer.innerHTML = ''; // 페이지네이션 초기화
+            if (totalPages <= 1) return;
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.className = 'page-button';
+                if (i === currentPageNum) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.addEventListener('click', () => {
+                    currentCommentPage = i;
+                    loadComments(postId, currentCommentPage);
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+
+        document.getElementById('likeButton').addEventListener('click', async function() {
+            if (!currentUser) { // api.js의 createComment 등에서 사용하는 방식과 동일하게 처리
+                alert('좋아요를 표시하려면 로그인이 필요합니다.');
+                localStorage.setItem('redirectAfterLogin', window.location.href);
+                window.location.href = 'login.html';
+                return;
+            }
+            try {
+                const response = await window.togglePostLike(currentPostId);
+                if (response && response.success) {
+                    document.getElementById('likeCount').textContent = response.data.likesCount;
+                    this.classList.toggle('active', response.data.isLiked);
+                } else if (response === null) {
+                    // togglePostLike 내부에서 로그인 리다이렉션 처리됨
+                } else {
+                    alert(response ? response.error : '좋아요 처리에 실패했습니다.');
+                }
+            } catch (error) {
+                // togglePostLike 내부에서 alert 처리됨
+            }
+        });
+
+        document.getElementById('commentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!currentUser) {
+                alert('댓글을 작성하려면 로그인이 필요합니다.');
+                localStorage.setItem('redirectAfterLogin', window.location.href);
+                window.location.href = 'login.html';
+                return;
+            }
+            const textarea = document.getElementById('commentInputContent');
+            const commentText = textarea.value.trim();
+            if (commentText) {
+                try {
+                    const response = await window.createComment(currentPostId, commentText);
+                    if (response && response.success) {
+                        textarea.value = '';
+                        currentCommentPage = 1;
+                        loadComments(currentPostId, currentCommentPage);
+                    } else if (response === null) {
+                         // createComment 내부에서 로그인 리다이렉션 처리됨
+                    } else {
+                        alert(response ? response.error : '댓글 작성에 실패했습니다.');
+                    }
+                } catch (error) {
+                    // createComment 내부에서 alert 처리됨
+                }
+            }
+        });
+
+        document.getElementById('commentScrollButton').addEventListener('click', function() {
+            document.getElementById('commentInputContent').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('commentInputContent').focus();
+        });
+
+        window.addEventListener('DOMContentLoaded', async function() {
+            currentUser = await window.getCurrentUser(); // 현재 사용자 정보 가져오기
+
+            const urlParams = new URLSearchParams(window.location.search);
+            currentPostId = urlParams.get('id');
+
+            if (currentPostId) {
+                await loadPostDetails(currentPostId);
+            } else {
+                document.querySelector('.post-detail-content').innerHTML = '<p class="error-message">게시글 ID가 올바르지 않습니다.</p>';
+            }
         });
     </script>
 </body>

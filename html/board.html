@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineX - 게시판</title>
     <link rel="stylesheet" href="../css/pages/board.css">
-</head>
+    <script src="../js/api.js" defer></script> </head>
 <body>
     <header class="header">
         <a href="index.html" class="logo">CineX</a>
@@ -48,45 +48,10 @@
             <p class="board-description">영화에 대한 다양한 이야기를 나누는 공간입니다.</p>
         </div>
 
-        <div class="post-list">
-            <a href="post-detail.html?type=info&id=1" class="post-card">
-                <div class="post-header">
-                    <h2 class="post-title">영화 '듄: 파트2' 관람 후기</h2>
-                    <span class="post-date">2024.03.15</span>
-                </div>
-                <p class="post-preview">드니 빌뇌브 감독의 '듄: 파트2'를 관람했습니다. 첫 번째 파트에 이어 놀라운 비주얼과 웅장한 스케일로...</p>
-                <div class="post-footer">
-                    <div class="post-meta">
-                        <span>조회 156</span>
-                    </div>
-                    <div class="post-meta">
-                        <span>좋아요 23</span>
-                    </div>
-                    <div class="post-meta">
-                        <span>댓글 8</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="post-detail.html?type=info&id=2" class="post-card">
-                <div class="post-header">
-                    <h2 class="post-title">이번 달 개봉 예정작 추천</h2>
-                    <span class="post-date">2024.03.14</span>
-                </div>
-                <p class="post-preview">3월에 개봉하는 기대작들을 정리해보았습니다. 특히 주목할 만한 작품은...</p>
-                <div class="post-footer">
-                    <div class="post-meta">
-                        <span>조회 98</span>
-                    </div>
-                    <div class="post-meta">
-                        <span>좋아요 15</span>
-                    </div>
-                    <div class="post-meta">
-                        <span>댓글 4</span>
-                    </div>
-                </div>
-            </a>
-        </div>
+        <div class="post-list" id="postList">
+            </div>
+        <div class="pagination" id="pagination">
+            </div>
     </main>
 
     <footer class="footer">
@@ -94,31 +59,120 @@
     </footer>
 
     <script>
-        // URL 파라미터에서 게시판 타입을 가져와서 제목과 설명을 업데이트
+        let currentPage = 1;
+        let boardType;
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        async function loadPosts(type, page = 1) {
+            const postListContainer = document.getElementById('postList');
+            const paginationContainer = document.getElementById('pagination');
+            postListContainer.innerHTML = '<p class="loading-message">게시글을 불러오는 중입니다...</p>'; // 로딩 메시지
+            paginationContainer.innerHTML = '';
+
+            try {
+                const response = await window.getPosts(type, page); // api.js의 getPosts 사용
+                if (response.success && response.data) {
+                    postListContainer.innerHTML = ''; // 기존 내용 삭제
+                    if (response.data.length === 0) {
+                        postListContainer.innerHTML = '<p class="no-posts-message">등록된 게시글이 없습니다.</p>';
+                    } else {
+                        response.data.forEach(post => {
+                            const postCard = document.createElement('a');
+                            postCard.href = `post-detail.html?id=${post._id}&type=${type}`;
+                            postCard.className = 'post-card';
+                            postCard.innerHTML = `
+                                <div class="post-header">
+                                    <h2 class="post-title">${post.title}</h2>
+                                    <span class="post-date">${formatDate(post.createdAt)}</span>
+                                </div>
+                                <p class="post-preview">${post.content.substring(0, 100)}${post.content.length > 100 ? '...' : ''}</p>
+                                <div class="post-footer">
+                                    <div class="post-meta">
+                                        <span>조회 ${post.views || 0}</span>
+                                    </div>
+                                    <div class="post-meta">
+                                        <span>좋아요 ${post.likes ? post.likes.length : 0}</span>
+                                    </div>
+                                    <div class="post-meta">
+                                        <span>댓글 ${post.commentsCount || 0}</span>
+                                    </div>
+                                </div>
+                            `;
+                            postListContainer.appendChild(postCard);
+                        });
+                    }
+                    renderPagination(response.totalPages, response.currentPage, type);
+                } else {
+                    postListContainer.innerHTML = '<p class="error-message">게시글을 불러오는데 실패했습니다.</p>';
+                    console.error('게시글 로드 실패:', response.error);
+                }
+            } catch (error) {
+                postListContainer.innerHTML = '<p class="error-message">게시글을 불러오는데 오류가 발생했습니다.</p>';
+                console.error('게시글 로드 중 오류:', error);
+            }
+        }
+
+        function renderPagination(totalPages, currentPageNum, type) {
+            const paginationContainer = document.getElementById('pagination');
+            if (totalPages <= 1) return;
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.className = 'page-button';
+                if (i === currentPageNum) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    loadPosts(type, currentPage);
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const boardType = urlParams.get('type');
-            const boardTitle = document.querySelector('.board-title');
-            const boardDescription = document.querySelector('.board-description');
+            boardType = urlParams.get('type');
+            const boardTitleElement = document.querySelector('.board-title');
+            const boardDescriptionElement = document.querySelector('.board-description');
             const writeButton = document.getElementById('writeButton');
 
-            // 글쓰기 버튼 href 업데이트
             if (boardType) {
                 writeButton.href = `write-post.html?type=${boardType}`;
-            }
-
-            if (boardType === 'info') {
-                document.title = 'CineX - 정보 게시판';
-                boardTitle.textContent = '정보 게시판';
-                boardDescription.textContent = '영화 관련 최신 소식, 흥미로운 사실, 개봉 예정작 정보, 이벤트 소식 등 다양한 정보성 콘텐츠를 공유하고 얻을 수 있는 커뮤니티 공간입니다.';
-            } else if (boardType === 'review') {
-                document.title = 'CineX - 리뷰 게시판';
-                boardTitle.textContent = '리뷰 게시판';
-                boardDescription.textContent = '영화에 대한 개인적인 감상, 평가, 비평 등을 자유롭게 작성하고 공유하며, 다른 사용자들의 다양한 의견을 탐색하고 소통할 수 있도록 설계된 커뮤니티 공간입니다.';
-            } else if (boardType === 'discussion') {
-                document.title = 'CineX - 토론 게시판';
-                boardTitle.textContent = '토론 게시판';
-                boardDescription.textContent = '특정 영화나 영화 관련 주제에 대해 사용자들이 자유롭게 의견을 교환하고, 심층적인 논의를 펼칠 수 있도록 설계된 커뮤니티 공간입니다.';
+                 switch (boardType) {
+                    case 'info':
+                        document.title = 'CineX - 정보 게시판';
+                        boardTitleElement.textContent = '정보 게시판';
+                        boardDescriptionElement.textContent = '영화 관련 최신 소식, 흥미로운 사실, 개봉 예정작 정보, 이벤트 소식 등 다양한 정보성 콘텐츠를 공유하고 얻을 수 있는 커뮤니티 공간입니다.';
+                        break;
+                    case 'review':
+                        document.title = 'CineX - 리뷰 게시판';
+                        boardTitleElement.textContent = '리뷰 게시판';
+                        boardDescriptionElement.textContent = '영화에 대한 개인적인 감상, 평가, 비평 등을 자유롭게 작성하고 공유하며, 다른 사용자들의 다양한 의견을 탐색하고 소통할 수 있도록 설계된 커뮤니티 공간입니다.';
+                        break;
+                    case 'discussion':
+                         document.title = 'CineX - 토론 게시판';
+                        boardTitleElement.textContent = '토론 게시판';
+                        boardDescriptionElement.textContent = '특정 영화나 영화 관련 주제에 대해 사용자들이 자유롭게 의견을 교환하고, 심층적인 논의를 펼칠 수 있도록 설계된 커뮤니티 공간입니다.';
+                        break;
+                    default:
+                        document.title = 'CineX - 게시판';
+                        boardTitleElement.textContent = '게시판';
+                        boardDescriptionElement.textContent = '잘못된 접근입니다.';
+                        return; // 유효하지 않은 타입이면 게시글 로드 중단
+                }
+                const pageParam = urlParams.get('page');
+                currentPage = pageParam ? parseInt(pageParam, 10) : 1;
+                loadPosts(boardType, currentPage);
+            } else {
+                boardTitleElement.textContent = '게시판 타입을 찾을 수 없습니다.';
+                boardDescriptionElement.textContent = '올바른 경로로 접근해주세요.';
+                document.getElementById('postList').innerHTML = '<p class="error-message">게시판 타입을 URL에 지정해주세요. (예: ?type=info)</p>';
             }
         });
     </script>
