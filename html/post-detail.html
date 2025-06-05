@@ -22,13 +22,16 @@
             <a href="index.html" class="nav-item">Home</a>
             <a href="now-playing.html" class="nav-item">Now playing</a>
             <a href="upcoming.html" class="nav-item">Upcoming</a>
-            <a href="community.html" class="nav-item">Community</a>
+            <a href="community.html" class="nav-item active">Community</a>
             <a href="mypage.html" class="nav-item">My page</a>
         </nav>
     </header>
 
     <main class="post-detail-content">
-        <h2 class="board-title-display">게시판</h2>
+        <div class="post-navigation">
+            <a href="#" id="backToBoardButton" class="back-button" aria-label="게시판으로 돌아가기">&lt;</a>
+            <h2 class="board-title-display">게시판</h2>
+        </div>
 
         <article class="post-header-container">
             <h1 class="post-title-main"></h1>
@@ -85,9 +88,11 @@
     </footer>
 
     <script>
+        // 이전 스크립트 내용과 대부분 동일하게 유지 (formatDate, nl2br, loadPostDetails, loadComments, renderCommentPagination, 좋아요/댓글 이벤트 리스너)
         let currentPostId;
+        let currentBoardType; // 게시글의 boardType을 저장할 변수
         let currentCommentPage = 1;
-        let currentUser = null; // 현재 로그인한 사용자 정보 저장
+        let currentUser = null;
 
         function formatDate(dateString) {
             const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
@@ -108,11 +113,20 @@
             const likeCountSpan = document.getElementById('likeCount');
             const likeButton = document.getElementById('likeButton');
             const commentCountDisplay = document.getElementById('commentCountDisplay');
+            const backToBoardButton = document.getElementById('backToBoardButton');
+
 
             try {
-                const response = await window.getPostDetails(postId);
+                const response = await window.getPostDetails(postId); // api.js
                 if (response.success && response.data) {
                     const post = response.data;
+                    currentBoardType = post.boardType; // 현재 게시글의 boardType 저장
+
+                    // 이전 버튼 링크 설정
+                    if(backToBoardButton) {
+                        backToBoardButton.href = `board.html?type=${currentBoardType}`;
+                    }
+
 
                     document.title = `CineX - ${post.title}`;
                     let boardName = '';
@@ -135,6 +149,7 @@
                     commentCountDisplay.textContent = post.commentsCount || 0;
                     document.getElementById('totalCommentCount').textContent = `(${(post.commentsCount || 0)})`;
 
+
                     if (currentUser && post.likes && post.likes.includes(currentUser._id)) {
                         likeButton.classList.add('active');
                     } else {
@@ -149,7 +164,7 @@
             }
         }
 
-
+        // loadComments, renderCommentPagination, 좋아요/댓글 이벤트 리스너는 이전과 동일하게 유지
         async function loadComments(postId, page = 1) {
             const commentListContainer = document.getElementById('commentList');
             const commentPaginationContainer = document.getElementById('commentPagination');
@@ -182,7 +197,7 @@
                     renderCommentPagination(response.totalPages, response.currentPage, postId);
                     const totalCommentsCount = response.totalComments || 0;
                     document.getElementById('totalCommentCount').textContent = `(${totalCommentsCount})`;
-                    document.getElementById('commentCountDisplay').textContent = totalCommentsCount;
+                     document.getElementById('commentCountDisplay').textContent = totalCommentsCount;
                 } else {
                      commentListContainer.innerHTML = `<p class="error-message">댓글을 불러오는데 실패했습니다: ${response.error || '알 수 없는 오류'}</p>`;
                 }
@@ -193,7 +208,7 @@
 
         function renderCommentPagination(totalPages, currentPageNum, postId) {
             const paginationContainer = document.getElementById('commentPagination');
-            paginationContainer.innerHTML = ''; // 페이지네이션 초기화
+            paginationContainer.innerHTML = ''; 
             if (totalPages <= 1) return;
 
             for (let i = 1; i <= totalPages; i++) {
@@ -212,7 +227,7 @@
         }
 
         document.getElementById('likeButton').addEventListener('click', async function() {
-            if (!currentUser) { // api.js의 createComment 등에서 사용하는 방식과 동일하게 처리
+            if (!currentUser) { 
                 alert('좋아요를 표시하려면 로그인이 필요합니다.');
                 localStorage.setItem('redirectAfterLogin', window.location.href);
                 window.location.href = 'login.html';
@@ -224,12 +239,12 @@
                     document.getElementById('likeCount').textContent = response.data.likesCount;
                     this.classList.toggle('active', response.data.isLiked);
                 } else if (response === null) {
-                    // togglePostLike 내부에서 로그인 리다이렉션 처리됨
+                    // 로그인 리다이렉션 처리됨
                 } else {
                     alert(response ? response.error : '좋아요 처리에 실패했습니다.');
                 }
             } catch (error) {
-                // togglePostLike 내부에서 alert 처리됨
+                // 에러 처리됨
             }
         });
 
@@ -249,14 +264,14 @@
                     if (response && response.success) {
                         textarea.value = '';
                         currentCommentPage = 1;
-                        loadComments(currentPostId, currentCommentPage);
+                        loadComments(currentPostId, currentCommentPage); 
                     } else if (response === null) {
-                         // createComment 내부에서 로그인 리다이렉션 처리됨
+                        // 로그인 리다이렉션 처리됨
                     } else {
                         alert(response ? response.error : '댓글 작성에 실패했습니다.');
                     }
                 } catch (error) {
-                    // createComment 내부에서 alert 처리됨
+                    // 에러 처리됨
                 }
             }
         });
@@ -267,10 +282,11 @@
         });
 
         window.addEventListener('DOMContentLoaded', async function() {
-            currentUser = await window.getCurrentUser(); // 현재 사용자 정보 가져오기
+            currentUser = await window.getCurrentUser(); 
 
             const urlParams = new URLSearchParams(window.location.search);
             currentPostId = urlParams.get('id');
+            // type 파라미터는 게시글 상세 정보에 currentBoardType으로 저장되므로, 여기서 따로 저장할 필요는 없음
 
             if (currentPostId) {
                 await loadPostDetails(currentPostId);
