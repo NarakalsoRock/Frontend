@@ -1,37 +1,46 @@
 // js/header.js
-document.addEventListener('DOMContentLoaded', () => {
 
-    function performSearch() {
-        const query = headerSearchInput.value.trim();
+// 검색 기능
+function setupSearch() {
+    const searchInput = document.querySelector('.header-search-input');
+    const searchButton = document.querySelector('.header-search-button');
+
+    if (!searchInput || !searchButton) return;
+
+    // 검색 실행 함수
+    function executeSearch() {
+        const query = searchInput.value.trim();
         if (query) {
-            // search.html로 검색어와 함께 이동
-            // 현재 페이지가 search.html이고, 검색어가 같다면 새로고침 대신 다른 동작을 할 수도 있음 (선택적)
             window.location.href = `search.html?query=${encodeURIComponent(query)}`;
-        } else {
-            // 검색어가 없을 경우 동작 (예: 알림 표시)
-            // alert('검색어를 입력해주세요.');
         }
     }
 
-    if (headerSearchInput && headerSearchButton) {
-        headerSearchInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                performSearch();
-            }
-        });
-        headerSearchButton.addEventListener('click', performSearch);
-    }
+    // 검색 버튼 클릭 이벤트
+    searchButton.addEventListener('click', executeSearch);
 
-    // 현재 페이지의 URL을 확인하여 네비게이션 아이템에 active 클래스 추가
-    const navItems = document.querySelectorAll('.header .nav-item');
-    const currentPageUrl = window.location.pathname.split('/').pop(); // 예: "now-playing.html"
-
-    navItems.forEach(item => {
-        const itemUrl = item.getAttribute('href').split('/').pop();
-        if (itemUrl === currentPageUrl) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
+    // 엔터 키 입력 이벤트
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            executeSearch();
         }
     });
+}
+
+// 현재 페이지 네비게이션 활성화
+function setActiveNavItem() {
+    const currentPath = window.location.pathname;
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    navItems.forEach(item => {
+        const href = item.getAttribute('href');
+        if (currentPath.endsWith(href)) {
+            item.classList.add('active');
+        }
+    });
+}
+
+// 페이지 로드 시 실행
+document.addEventListener('DOMContentLoaded', () => {
+    setupSearch();
+    setActiveNavItem();
 });

@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
         }
+
+        // 검색 기능 설정
+        setupSearch();
     } catch (error) {
         console.error('데이터 로딩 중 오류 발생:', error);
     }
@@ -158,4 +161,47 @@ document.addEventListener('click', async (e) => {
         const movieId = movieItem.dataset.movieId;
         window.location.href = `movie-detail.html?id=${movieId}`;
     }
-}); 
+});
+
+// 검색 기능 설정
+function setupSearch() {
+    const searchInput = document.querySelector('.header-search-input');
+    const searchButton = document.querySelector('.header-search-button');
+
+    // 검색 실행 함수
+    async function executeSearch() {
+        const query = searchInput.value.trim();
+        if (!query) return;
+
+        try {
+            // 영화와 인물 동시 검색
+            const [movieResponse, personResponse] = await Promise.all([
+                fetch(`${API_BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ko-KR&page=1`),
+                fetch(`${API_BASE_URL}/search/person?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ko-KR&page=1`)
+            ]);
+
+            const [movieData, personData] = await Promise.all([
+                movieResponse.json(),
+                personResponse.json()
+            ]);
+
+            // 검색 결과가 있으면 검색 페이지로 이동
+            if (movieData.results.length > 0 || personData.results.length > 0) {
+                window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+            } else {
+                alert('검색 결과가 없습니다.');
+            }
+        } catch (error) {
+            console.error('검색 중 오류 발생:', error);
+            alert('검색 중 오류가 발생했습니다.');
+        }
+    }
+
+    // 이벤트 리스너 설정
+    searchButton.addEventListener('click', executeSearch);
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            executeSearch();
+        }
+    });
+} 

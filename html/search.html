@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - Search Results</title>
+    <link rel="stylesheet" href="../css/pages/search.css">
+</head>
+<body>
+    <div class="search-page-container">
+        <header class="header">
+            <a href="index.html" class="logo">CineX</a> <div class="header-search-container">
+                <input type="text" class="header-search-input" placeholder="제목, 사람, 장르"> <button type="button" class="header-search-button" aria-label="검색">
+                    <svg class="header-search-icon" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/> </svg>
+                </button>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-item">Home</a> 
+                <a href="now-playing.html" class="nav-item">Now playing</a> 
+                <a href="upcoming.html" class="nav-item">Upcoming</a> 
+                <a href="community.html" class="nav-item">Community</a> 
+                <a href="mypage.html" class="nav-item">My page</a> </nav>
+        </header>
+
+        <section class="search-bar-display-section">
+            <input type="text" id="displayedSearchQuery" readonly class="displayed-search-input">
+        </section>
+
+        <section class="search-results-title-section">
+            <h2 id="searchResultsTitle"></h2>
+        </section>
+        
+        <main class="movie-results-area" id="movieResultsGrid">
+            {/* 검색 결과 영화 목록이 여기에 동적으로 추가됩니다. */}
+        </main>
+
+        <div class="pagination-container">
+            {/* 페이지네이션 버튼이 여기에 동적으로 추가됩니다. */}
+        </div>
+
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/header.js"></script>
+</body>
+</html>

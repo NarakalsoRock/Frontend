@@ -8,14 +8,15 @@ window.AUTH_URL = `${window.BASE_API_URL}/auth`;
 window.ACTIONS_URL = `${window.BASE_API_URL}/actions`;
 window.POSTS_API_URL = `${window.BASE_API_URL}/posts`;
 
-const TMDB_API_KEY = 'e79d211004d63ca22d668182dc17ebbb';
-const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+// TMDB API 설정
+const API_BASE_URL = 'https://api.themoviedb.org/3';
+const API_KEY = 'e79d211004d63ca22d668182dc17ebbb'; // TMDB API 키
 
 // TMDB API 관련 함수들 (변경 없음, 기존 코드 유지)
 async function fetchTMDBNowPlaying() {
     try {
         const response = await fetch(
-            `${TMDB_BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&language=ko-KR&region=KR`
+            `${API_BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&region=KR`
         );
 
         if (!response.ok) {
@@ -43,9 +44,9 @@ async function fetchTMDBNowPlaying() {
 async function fetchTMDBMovieDetails(movieId) {
     try {
         const [movieResponse, creditsResponse, videosResponse] = await Promise.all([
-            fetch(`${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=ko-KR`),
-            fetch(`${TMDB_BASE_URL}/movie/${movieId}/credits?api_key=${TMDB_API_KEY}&language=ko-KR`),
-            fetch(`${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=ko-KR`)
+            fetch(`${API_BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=ko-KR`),
+            fetch(`${API_BASE_URL}/movie/${movieId}/credits?api_key=${API_KEY}&language=ko-KR`),
+            fetch(`${API_BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}&language=ko-KR`)
         ]);
 
         if (!movieResponse.ok || !creditsResponse.ok || !videosResponse.ok) {
@@ -354,7 +355,7 @@ window.getBookmarkedMovies = getBookmarkedMovies;
 async function getRecommendedMovies(movieId) {
     try {
         const response = await fetch(
-            `${TMDB_BASE_URL}/movie/${movieId}/recommendations?api_key=${TMDB_API_KEY}&language=ko-KR`
+            `${API_BASE_URL}/movie/${movieId}/recommendations?api_key=${API_KEY}&language=ko-KR`
         );
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -377,16 +378,16 @@ window.getRecommendedMovies = getRecommendedMovies;
 async function getPersonDetails(personId) {
     try {
         const [korResponse, externalResponse, creditsResponse] = await Promise.all([
-            fetch(`${TMDB_BASE_URL}/person/${personId}?api_key=${TMDB_API_KEY}&language=ko-KR`),
-            fetch(`${TMDB_BASE_URL}/person/${personId}/external_ids?api_key=${TMDB_API_KEY}`),
-            fetch(`${TMDB_BASE_URL}/person/${personId}/movie_credits?api_key=${TMDB_API_KEY}&language=ko-KR`)
+            fetch(`${API_BASE_URL}/person/${personId}?api_key=${API_KEY}&language=ko-KR`),
+            fetch(`${API_BASE_URL}/person/${personId}/external_ids?api_key=${API_KEY}`),
+            fetch(`${API_BASE_URL}/person/${personId}/movie_credits?api_key=${API_KEY}&language=ko-KR`)
         ]);
         if (!korResponse.ok) throw new Error(`HTTP error! status: ${korResponse.status}`);
         const korData = await korResponse.json();
         const externalData = externalResponse.ok ? await externalResponse.json() : {};
         const creditsData = creditsResponse.ok ? await creditsResponse.json() : { cast: [], crew: [] };
         if (!korData.biography) {
-            const engResponse = await fetch(`${TMDB_BASE_URL}/person/${personId}?api_key=${TMDB_API_KEY}&language=en-US`);
+            const engResponse = await fetch(`${API_BASE_URL}/person/${personId}?api_key=${API_KEY}&language=en-US`);
             if (engResponse.ok) korData.biography = (await engResponse.json()).biography;
         }
         const externalLinks = {
@@ -408,7 +409,7 @@ window.getPersonDetails = getPersonDetails;
 // 인물의 출연작 정보 가져오기 (변경 없음)
 async function getPersonMovieCredits(personId) {
     try {
-        const response = await fetch(`${TMDB_BASE_URL}/person/${personId}/movie_credits?api_key=${TMDB_API_KEY}&language=ko-KR`);
+        const response = await fetch(`${API_BASE_URL}/person/${personId}/movie_credits?api_key=${API_KEY}&language=ko-KR`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         return await response.json();
     } catch (error) {
@@ -421,11 +422,11 @@ window.getPersonMovieCredits = getPersonMovieCredits;
 // 영화의 관련 시리즈 정보 가져오기 (변경 없음)
 async function getMovieSeries(movieId) {
     try {
-        const response = await fetch(`${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=ko-KR&append_to_response=belongs_to_collection`);
+        const response = await fetch(`${API_BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=ko-KR&append_to_response=belongs_to_collection`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         if (!data.belongs_to_collection) return null;
-        const collectionResponse = await fetch(`${TMDB_BASE_URL}/collection/${data.belongs_to_collection.id}?api_key=${TMDB_API_KEY}&language=ko-KR`);
+        const collectionResponse = await fetch(`${API_BASE_URL}/collection/${data.belongs_to_collection.id}?api_key=${API_KEY}&language=ko-KR`);
         if (!collectionResponse.ok) throw new Error(`HTTP error! status: ${collectionResponse.status}`);
         const collectionData = await collectionResponse.json();
         const sortedMovies = collectionData.parts.sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
