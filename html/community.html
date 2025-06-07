@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineX - 커뮤니티</title>
     <link rel="stylesheet" href="../css/pages/community.css">
+    <script src="../js/api.js" defer></script>
 </head>
 <body>
     <header class="header">
@@ -21,7 +22,7 @@
             <a href="index.html" class="nav-item">Home</a>
             <a href="now-playing.html" class="nav-item">Now playing</a>
             <a href="upcoming.html" class="nav-item">Upcoming</a>
-            <a href="community.html" class="nav-item">Community</a>
+            <a href="community.html" class="nav-item active">Community</a>
             <a href="mypage.html" class="nav-item">My page</a>
         </nav>
     </header>
@@ -31,49 +32,12 @@
 
         <div class="category-tabs">
             <button class="category-tab active" data-tab="board">게시판</button>
-            <button class="category-tab" data-tab="curation">큐레이션</button>
-            <div class="tab-underline"></div>
         </div>
 
         <div class="tab-content" id="boardContent">
-            <section class="hot-posts-section">
+            <section class="hot-posts-section" id="hotPostSection">
                 <h2 class="section-title">가장 핫한 게시물</h2>
-                <a href="post-detail.html" class="post-card-link">
-                    <div class="post-card">
-                        <div class="user-info">
-                            <div class="user-profile-icon">
-                                <div class="user-profile-icon-inner"></div>
-                            </div>
-                            <span class="user-nickname">조윤정</span>
-                            <span class="post-datetime">5/29 15:00</span>
-                        </div>
-                        <h3 class="post-title">나 방금 50cm 똥 싸고 옴 ㅋㅋㅋ</h3>
-                        <p class="post-content">
-                            <span class="content-text">미안하다 이거 보여주려고 어그로끌었다.. 나루토 사스케 싸움수준 </span>
-                            <span class="content-text underline">ㄹㅇ</span>
-                            <span class="content-text underline">실화냐?</span>
-                            <span class="content-text"> 진짜 </span>
-                            <span class="content-text underline">세계관최강자</span>
-                            <span class="content-text">들의 싸움이다.. 그</span>
-                            <span class="content-text underline">찐따</span>
-                            <span class="content-text">같던 나루토가 맞나? 진짜 나루토는 전설이다..</span>
-                        </p>
-                        <div class="post-actions">
-                            <div class="action-item">
-                                <button class="like-button">
-                                    <div class="action-icon">♥</div>
-                                </button>
-                                <span class="action-count">126</span>
-                            </div>
-                            <div class="action-item">
-                                <button class="comment-button">
-                                    <div class="action-icon">💬</div>
-                                </button>
-                                <span class="action-count">7</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+                <div class="post-card-placeholder">가장 핫한 게시물을 불러오는 중입니다...</div>
             </section>
 
             <section class="board-sections">
@@ -94,70 +58,6 @@
                 </div>
             </section>
         </div>
-
-        <div class="tab-content" id="curationContent" style="display: none;">
-            <div class="curation-header">
-                <h2 class="section-title">내 큐레이션</h2>
-                <div class="search-wrapper">
-                    <input type="text" class="search-input" placeholder="검색">
-                    <button class="search-close-btn">×</button>
-                </div>
-            </div>
-
-            <div class="curation-grid">
-                <a href="create-curation.html" class="curation-item create-item">
-                    <div class="create-icon">+</div>
-                </a>
-                <a href="curation-detail.html" class="curation-item">
-                    <div class="poster-stack">
-                        <img src="https://placehold.co/240x360" alt="영화 포스터 1" class="poster">
-                        <img src="https://placehold.co/240x360" alt="영화 포스터 2" class="poster">
-                        <img src="https://placehold.co/240x360" alt="영화 포스터 3" class="poster">
-                    </div>
-                    <div class="curation-info">
-                        <h3 class="curation-title">들어와라 이것이 애니다</h3>
-                        <div class="curation-meta">
-                            <span class="author">조윤정</span>
-                            <div class="likes">
-                                <span class="like-icon">♥</span>
-                                <span class="like-count">50</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="section-divider"></div>
-
-            <div class="recently-section">
-                <div class="section-header">
-                    <h2 class="section-title">Recently</h2>
-                    <a href="curation-list.html" class="more-link">
-                        <!-- <span class="more-text">Top rated는 상위 3개만</span> -->
-                        <span class="arrow">›</span>
-                    </a>
-                </div>
-                <div class="curation-grid">
-                    <a href="curation-detail.html" class="curation-item">
-                        <div class="poster-stack">
-                            <img src="https://placehold.co/240x360" alt="영화 포스터 1" class="poster">
-                            <img src="https://placehold.co/240x360" alt="영화 포스터 2" class="poster">
-                            <img src="https://placehold.co/240x360" alt="영화 포스터 3" class="poster">
-                        </div>
-                        <div class="curation-info">
-                            <h3 class="curation-title">들어와라 이것이 애니다</h3>
-                            <div class="curation-meta">
-                                <span class="author">조윤정</span>
-                                <div class="likes">
-                                    <span class="like-icon">♥</span>
-                                    <span class="like-count">50</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
     </main>
 
     <footer class="footer">
@@ -165,80 +65,100 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 탭 전환 기능
-            const tabs = document.querySelectorAll('.category-tab');
-            const boardContent = document.getElementById('boardContent');
-            const curationContent = document.getElementById('curationContent');
-            const tabUnderline = document.querySelector('.tab-underline');
-
-            function updateTabUnderline(activeTab) {
-                const tabRect = activeTab.getBoundingClientRect();
-                tabUnderline.style.width = `${tabRect.width}px`;
-                tabUnderline.style.left = `${activeTab.offsetLeft}px`;
+        function formatDate(dateString, format = 'short') {
+            const date = new Date(dateString);
+            if (format === 'short') {
+                return `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
             }
+            return date.toLocaleDateString('ko-KR'); // 기본 포맷
+        }
 
-            function switchTab(tabName) {
-                const targetTab = document.querySelector(`.category-tab[data-tab="${tabName}"]`);
-                if (targetTab) {
-                    // 모든 탭 비활성화
-                    tabs.forEach(t => t.classList.remove('active'));
-                    // 클릭된 탭 활성화
-                    targetTab.classList.add('active');
-                    // 탭 밑줄 업데이트
-                    updateTabUnderline(targetTab);
+        function nl2br(str) {
+            return str ? str.replace(/(\r\n|\n\r|\r|\n)/g, "<br>") : "";
+        }
 
-                    // 컨텐츠 전환
-                    if (tabName === 'board') {
-                        boardContent.style.display = 'block';
-                        curationContent.style.display = 'none';
-                    } else {
-                        boardContent.style.display = 'none';
-                        curationContent.style.display = 'block';
+        async function loadHotPost() {
+            const hotPostSection = document.getElementById('hotPostSection');
+            const placeholder = hotPostSection.querySelector('.post-card-placeholder');
+
+            try {
+                const types = ['info', 'review', 'discussion'];
+                let allPosts = [];
+
+                for (const type of types) {
+                    const response = await window.getPosts(type, 1, 100); // api.js
+                    if (response.success && response.data) {
+                        allPosts = allPosts.concat(response.data);
                     }
                 }
+
+                if (allPosts.length === 0) {
+                    placeholder.textContent = '아직 게시글이 없습니다.';
+                    return;
+                }
+
+                const hotPost = allPosts.sort((a, b) => (b.views || 0) - (a.views || 0))[0];
+
+                if (hotPost) {
+                    placeholder.remove();
+                    const postCardLink = document.createElement('a');
+                    postCardLink.href = `post-detail.html?id=${hotPost._id}&type=${hotPost.boardType}`;
+                    postCardLink.className = 'post-card-link';
+
+                    const postContentHTML = nl2br(hotPost.content).substring(0, 150) + (hotPost.content.length > 150 ? '...' : '');
+
+                    postCardLink.innerHTML = `
+                        <div class="post-card">
+                            <div class="user-info">
+                                <div class="user-profile-icon">
+                                    <div class="user-profile-icon-inner"></div>
+                                </div>
+                                <span class="user-nickname">${hotPost.username || '익명'}</span>
+                                <span class="post-datetime">${formatDate(hotPost.createdAt, 'short')}</span>
+                            </div>
+                            <h3 class="post-title">${hotPost.title}</h3>
+                            <p class="post-content">
+                                ${postContentHTML}
+                            </p>
+                            <div class="post-actions">
+                                <div class="action-item">
+                                    <button class="like-button" aria-label="좋아요">
+                                        <div class="action-icon">♥</div>
+                                    </button>
+                                    <span class="action-count">${hotPost.likes ? hotPost.likes.length : 0}</span>
+                                </div>
+                                <div class="action-item">
+                                    <button class="comment-button" aria-label="댓글">
+                                        <div class="action-icon">💬</div>
+                                    </button>
+                                    <span class="action-count">${hotPost.commentsCount || 0}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    hotPostSection.appendChild(postCardLink);
+                    
+                    const likeButton = postCardLink.querySelector('.like-button');
+                    if (likeButton) {
+                        likeButton.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            alert('좋아요 기능은 게시글 상세 페이지에서 이용해주세요.');
+                        });
+                    }
+
+                } else {
+                    placeholder.textContent = '핫한 게시물을 찾을 수 없습니다.';
+                }
+
+            } catch (error) {
+                console.error('가장 핫한 게시물을 불러오는데 실패했습니다:', error);
+                placeholder.textContent = '핫한 게시물을 불러오는데 오류가 발생했습니다.';
             }
+        }
 
-            // URL 쿼리 파라미터 확인
-            const urlParams = new URLSearchParams(window.location.search);
-            const tabParam = urlParams.get('tab');
-            if (tabParam) {
-                switchTab(tabParam);
-            }
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    switchTab(this.dataset.tab);
-                });
-            });
-
-            // 초기 탭 밑줄 위치 설정 (쿼리 파라미터가 없을 경우)
-            if (!tabParam) {
-                updateTabUnderline(document.querySelector('.category-tab.active'));
-            }
-
-            // 검색 닫기 버튼 기능
-            const searchInput = document.querySelector('.search-input');
-            const searchCloseBtn = document.querySelector('.search-close-btn');
-            
-            searchCloseBtn.addEventListener('click', function() {
-                searchInput.value = '';
-                searchInput.focus();
-            });
-
-            // 좋아요 버튼 토글 기능
-            const likeButtons = document.querySelectorAll('.like-button, .like-icon');
-            likeButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.classList.toggle('active');
-                    const likesContainer = this.closest('.likes, .action-item');
-                    const likeCount = likesContainer.querySelector('.like-count, .action-count');
-                    const currentCount = parseInt(likeCount.textContent);
-                    likeCount.textContent = this.classList.contains('active') ? currentCount + 1 : currentCount - 1;
-                });
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            // 페이지가 로드되면 바로 핫 포스트를 불러옵니다.
+            loadHotPost();
         });
     </script>
 </body>

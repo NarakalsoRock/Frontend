@@ -6,21 +6,18 @@ window.BASE_API_URL = `${APP_BASE_URL}/api`;
 window.MOVIES_API_URL = `${window.BASE_API_URL}/movies`;
 window.AUTH_URL = `${window.BASE_API_URL}/auth`;
 window.ACTIONS_URL = `${window.BASE_API_URL}/actions`;
+window.POSTS_API_URL = `${window.BASE_API_URL}/posts`;
 
 const TMDB_API_KEY = 'e79d211004d63ca22d668182dc17ebbb';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
-// 전역 변수 설정
-window.BASE_URL = `${APP_BASE_URL}/api/movies`;
-window.AUTH_URL = `${APP_BASE_URL}/api/auth`;
-
-// TMDB API 관련 함수들
+// TMDB API 관련 함수들 (변경 없음, 기존 코드 유지)
 async function fetchTMDBNowPlaying() {
     try {
         const response = await fetch(
             `${TMDB_BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&language=ko-KR&region=KR`
         );
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -88,66 +85,52 @@ async function fetchTMDBMovieDetails(movieId) {
     }
 }
 
-// 토큰 검증 함수
-async function validateToken() {
+
+// 토큰 유효성 검증 함수 (내부 사용)
+async function validateTokenInternal() {
     const token = localStorage.getItem('token');
     if (!token) {
-        return false;
+        return { isValid: false, user: null };
     }
-
     try {
         const response = await fetch(`${window.AUTH_URL}/me`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-
         if (!response.ok) {
-            if (response.status === 401) {
-                localStorage.removeItem('token');
-                // 현재 페이지가 로그인이 필요한 페이지인 경우에만 리다이렉트
-                if (window.location.pathname.includes('mypage.html')) {
-                    localStorage.setItem('redirectAfterLogin', 'mypage.html');
-                    window.location.href = 'login.html';
-                }
-            }
-            return false;
+            if (response.status === 401) localStorage.removeItem('token');
+            return { isValid: false, user: null };
         }
-
         const data = await response.json();
-        return data.success;
+        return { isValid: data.success, user: data.success ? data.data : null };
     } catch (error) {
         console.error('토큰 검증 실패:', error);
-        return false;
+        return { isValid: false, user: null };
     }
 }
 
-// 로그인 상태 체크 (페이지 로드 시 자동 실행)
-async function checkLoginStatus() {
-    const isValid = await validateToken();
-    if (!isValid && window.location.pathname.includes('mypage.html')) {
-        localStorage.setItem('redirectAfterLogin', 'mypage.html');
-        window.location.href = 'login.html';
-    }
+// 로그인 상태 확인 (외부 호출 가능)
+// 이 함수는 단순히 현재 로그인 상태(토큰 유효성)만 반환하고, 리다이렉션은 각 페이지에서 필요에 따라 처리합니다.
+window.checkLoginStatus = async function() {
+    const { isValid } = await validateTokenInternal();
     return isValid;
-}
+};
 
-// 페이지 로드 시 토큰 검증 실행
-document.addEventListener('DOMContentLoaded', checkLoginStatus);
+// 사용자 정보 가져오기 (외부 호출 가능)
+// 로그인이 되어 있으면 사용자 정보를, 아니면 null을 반환합니다.
+window.getCurrentUser = async function() {
+    const { isValid, user } = await validateTokenInternal();
+    return isValid ? user : null;
+};
 
-window.checkLoginStatus = checkLoginStatus;
-window.validateToken = validateToken;
 
-// 메인 영화 가져오기
+// 메인 영화 가져오기 (변경 없음)
 async function getMainMovie() {
     try {
         const response = await fetch(`${window.MOVIES_API_URL}/main-movie`);
         if (!response.ok) {
             throw new Error(`API 요청 실패: ${response.status}`);
         }
-        const data = await response.json();
-        console.log('메인 영화 데이터:', data);
-        return data;
+        return await response.json();
     } catch (error) {
         console.error('메인 영화를 가져오는데 실패했습니다:', error);
         throw error;
@@ -155,16 +138,14 @@ async function getMainMovie() {
 }
 window.getMainMovie = getMainMovie;
 
-// 현재 상영작 가져오기
+// 현재 상영작 가져오기 (변경 없음)
 async function getNowPlaying(page = 1) {
     try {
         const response = await fetch(`${window.MOVIES_API_URL}/now-playing?page=${page}`);
         if (!response.ok) {
             throw new Error(`API 요청 실패: ${response.status}`);
         }
-        const data = await response.json();
-        console.log('현재 상영작 데이터:', data);
-        return data;
+        return await response.json();
     } catch (error) {
         console.error('현재 상영작을 가져오는데 실패했습니다:', error);
         throw error;
@@ -172,16 +153,14 @@ async function getNowPlaying(page = 1) {
 }
 window.getNowPlaying = getNowPlaying;
 
-// 개봉 예정작 가져오기
+// 개봉 예정작 가져오기 (변경 없음)
 async function getUpcoming(page = 1) {
     try {
         const response = await fetch(`${window.MOVIES_API_URL}/upcoming?page=${page}`);
         if (!response.ok) {
             throw new Error(`API 요청 실패: ${response.status}`);
         }
-        const data = await response.json();
-        console.log('개봉 예정작 데이터:', data);
-        return data;
+        return await response.json();
     } catch (error) {
         console.error('개봉 예정작을 가져오는데 실패했습니다:', error);
         throw error;
@@ -189,61 +168,43 @@ async function getUpcoming(page = 1) {
 }
 window.getUpcoming = getUpcoming;
 
-// 영화 상세 정보 가져오기
+// 영화 상세 정보 가져오기 (변경 없음, 좋아요/북마크는 기존 로직 따름)
 async function getMovieDetails(movieId) {
     try {
-        // TMDB에서 영화 상세 정보를 가져옴 (이 안에 vote_average 등이 포함됨)
         const tmdbData = await fetchTMDBMovieDetails(movieId);
-
-        // 백엔드 서버에서 사용자별 좋아요/북마크 정보를 가져오기 시도
         const token = localStorage.getItem('token');
         const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-
         let isLikedFromServer = false;
         let isBookmarkedFromServer = false;
 
-        if (token) { // 토큰이 있을 때만 사용자 정보를 요청
+        if (token) {
             try {
-                // movieId를 문자열로 변환하고 URL에서 특수문자 제거
                 const cleanMovieId = String(movieId).replace(/[^0-9]/g, '');
-                
-                const response = await fetch(`${window.MOVIES_API_URL}/${cleanMovieId}`, {
-                    headers: headers
-                });
-
+                const response = await fetch(`${window.MOVIES_API_URL}/${cleanMovieId}`, { headers });
                 if (response.ok) {
                     const backendMovieData = await response.json();
                     isLikedFromServer = backendMovieData.isLiked || false;
                     isBookmarkedFromServer = backendMovieData.isBookmarked || false;
                 }
             } catch (error) {
-                // 오류 발생 시 기본값 사용
+                console.warn('좋아요/북마크 상태 가져오기 실패 (무시하고 진행):', error);
             }
         }
-
-        // 최종적으로 TMDB 데이터와 서버에서 받은 (또는 기본값) 좋아요/북마크 상태를 합쳐서 반환
-        return {
-            ...tmdbData,
-            isLiked: isLikedFromServer,
-            isBookmarked: isBookmarkedFromServer
-        };
-
+        return { ...tmdbData, isLiked: isLikedFromServer, isBookmarked: isBookmarkedFromServer };
     } catch (error) {
+        console.error('영화 상세 정보를 가져오는데 실패했습니다:', error);
         throw error;
     }
 }
 window.getMovieDetails = getMovieDetails;
 
-// 영화 검색
+
+// 영화 검색 (변경 없음)
 window.searchMovies = async function(query, page = 1) {
-    console.log(`api.js: searchMovies 호출됨 - query: "${query}", page: ${page}`);
     try {
         const response = await fetch(`${window.MOVIES_API_URL}/search?query=${encodeURIComponent(query)}&page=${page}`);
-        console.log(`api.js: search API 요청 URL: ${response.url}`);
-        
         if (!response.ok) {
             const errorText = await response.text();
-            console.error("Search API response not OK:", response.status, errorText);
             try {
                 const errorData = JSON.parse(errorText);
                 throw new Error(errorData.message || `영화 검색 실패: ${response.status}`);
@@ -252,10 +213,7 @@ window.searchMovies = async function(query, page = 1) {
             }
         }
         const data = await response.json();
-        console.log('api.js: search API 응답 데이터:', data);
-
         if (data.results && !data.movies) {
-            console.log('api.js: TMDB results를 movies로 변환 중');
             return {
                 movies: data.results,
                 page: data.page,
@@ -270,29 +228,29 @@ window.searchMovies = async function(query, page = 1) {
     }
 };
 
-// 사용자 정보 가져오기
-async function getMe() {
+// 사용자 정보 가져오기 (getMe는 마이페이지 등에서 사용, 여기서는 getCurrentUser 사용 권장)
+// window.getMe는 기존 호환성을 위해 유지, 하지만 내부적으로 getCurrentUser와 유사하게 작동 가능
+async function getMe() { // 기존 mypage.js 등에서 사용될 수 있으므로 유지
     const token = localStorage.getItem('token');
     if (!token) {
         console.warn('사용자 토큰이 없습니다. 로그인이 필요합니다.');
+        // 마이페이지에서 호출 시 리다이렉션 처리는 마이페이지 자체에서 하는 것이 좋음
         return null;
     }
     try {
         const response = await fetch(`${window.AUTH_URL}/me`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) {
             if (response.status === 401) {
                 localStorage.removeItem('token');
-                alert('세션이 만료되었거나 유효하지 않습니다. 다시 로그인해주세요.');
-                window.location.href = 'login.html';
+                // 이 함수를 호출하는 곳에서 리다이렉션 처리
             }
             const errorData = await response.json().catch(() => ({ error: `서버 응답 오류: ${response.status}` }));
             throw new Error(errorData.error || `API 요청 실패: ${response.status}`);
         }
-        return await response.json();
+        const userData = await response.json();
+        return userData; // success 포함된 전체 객체 반환
     } catch (error) {
         console.error('사용자 정보를 가져오는데 실패했습니다:', error);
         return null;
@@ -300,11 +258,13 @@ async function getMe() {
 }
 window.getMe = getMe;
 
-// 영화 좋아요/북마크 토글 공통 함수
+
+// 영화 좋아요/북마크 토글 공통 함수 (변경 없음, 기존 로직 따름)
 async function toggleMovieInteraction(movieId, title, posterPath, type) {
     const token = localStorage.getItem('token');
     if (!token) {
         alert('로그인이 필요합니다.');
+        localStorage.setItem('redirectAfterLogin', window.location.href);
         window.location.href = 'login.html';
         return null;
     }
@@ -327,9 +287,7 @@ async function toggleMovieInteraction(movieId, title, posterPath, type) {
                 posterPath: posterPath
             })
         });
-
         const responseData = await response.json();
-
         if (!response.ok) {
             console.error(`${interactionTypeDisplay} 요청 실패:`, response.status, responseData);
             alert(`${interactionTypeDisplay} 처리 중 오류: ${responseData.error || responseData.message || '알 수 없는 오류가 발생했습니다.'}`);
@@ -339,7 +297,6 @@ async function toggleMovieInteraction(movieId, title, posterPath, type) {
             }
             return null;
         }
-        
         return responseData;
     } catch (error) {
         console.error(`${interactionTypeDisplay} API 호출 중 네트워크 또는 JSON 파싱 오류:`, error);
@@ -348,73 +305,58 @@ async function toggleMovieInteraction(movieId, title, posterPath, type) {
     }
 }
 
-// 영화 좋아요 토글
+// 영화 좋아요 토글 (변경 없음)
 window.toggleMovieLike = async function(movieId, title, posterPath) {
     return await toggleMovieInteraction(movieId, title, posterPath, 'like');
 };
 
-// 영화 북마크 토글
+// 영화 북마크 토글 (변경 없음)
 window.toggleMovieBookmark = async function(movieId, title, posterPath) {
     return await toggleMovieInteraction(movieId, title, posterPath, 'bookmark');
 };
 
-// 좋아요한 영화 목록 가져오기
+// 좋아요한 영화 목록 가져오기 (변경 없음)
 async function getLikedMovies() {
     const token = localStorage.getItem('token');
     if (!token) { console.warn('Token not found for getLikedMovies'); return null; }
     try {
         const response = await fetch(`${window.MOVIES_API_URL}/liked`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-        if (!response.ok) {
-            throw new Error('API 요청 실패');
-        }
-        const data = await response.json();
-        console.log('좋아요한 영화 데이터 (별도호출 시):', data);
-        return data;
+        if (!response.ok) throw new Error('API 요청 실패');
+        return await response.json();
     } catch (error) {
-        console.error('좋아요한 영화 목록을 가져오는데 실패했습니다 (별도호출 시):', error);
+        console.error('좋아요한 영화 목록을 가져오는데 실패했습니다:', error);
         return { movies: [] };
     }
 }
 window.getLikedMovies = getLikedMovies;
 
-// 북마크한 영화 목록 가져오기
+// 북마크한 영화 목록 가져오기 (변경 없음)
 async function getBookmarkedMovies() {
     const token = localStorage.getItem('token');
     if (!token) { console.warn('Token not found for getBookmarkedMovies'); return null; }
     try {
         const response = await fetch(`${window.MOVIES_API_URL}/bookmarked`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-        if (!response.ok) {
-            throw new Error('API 요청 실패');
-        }
-        const data = await response.json();
-        console.log('북마크한 영화 데이터 (별도호출 시):', data);
-        return data;
+        if (!response.ok) throw new Error('API 요청 실패');
+        return await response.json();
     } catch (error) {
-        console.error('북마크한 영화 목록을 가져오는데 실패했습니다 (별도호출 시):', error);
+        console.error('북마크한 영화 목록을 가져오는데 실패했습니다:', error);
         return { movies: [] };
     }
 }
 window.getBookmarkedMovies = getBookmarkedMovies;
 
-// 추천 영화 가져오기
+
+// 추천 영화 가져오기 (변경 없음)
 async function getRecommendedMovies(movieId) {
     try {
         const response = await fetch(
             `${TMDB_BASE_URL}/movie/${movieId}/recommendations?api_key=${TMDB_API_KEY}&language=ko-KR`
         );
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         return data.results.map(movie => ({
             id: movie.id,
@@ -428,38 +370,25 @@ async function getRecommendedMovies(movieId) {
         return [];
     }
 }
+window.getRecommendedMovies = getRecommendedMovies;
 
-// 인물 상세 정보 가져오기
+
+// 인물 상세 정보 가져오기 (변경 없음)
 async function getPersonDetails(personId) {
     try {
-        // 한국어 데이터, 외부 링크 데이터, 출연작 정보를 동시에 가져오기
         const [korResponse, externalResponse, creditsResponse] = await Promise.all([
             fetch(`${TMDB_BASE_URL}/person/${personId}?api_key=${TMDB_API_KEY}&language=ko-KR`),
             fetch(`${TMDB_BASE_URL}/person/${personId}/external_ids?api_key=${TMDB_API_KEY}`),
             fetch(`${TMDB_BASE_URL}/person/${personId}/movie_credits?api_key=${TMDB_API_KEY}&language=ko-KR`)
         ]);
-        
-        if (!korResponse.ok) {
-            throw new Error(`HTTP error! status: ${korResponse.status}`);
-        }
-
+        if (!korResponse.ok) throw new Error(`HTTP error! status: ${korResponse.status}`);
         const korData = await korResponse.json();
         const externalData = externalResponse.ok ? await externalResponse.json() : {};
         const creditsData = creditsResponse.ok ? await creditsResponse.json() : { cast: [], crew: [] };
-
-        // 한국어 약력이 없는 경우에만 영어 데이터 가져오기
         if (!korData.biography) {
-            const engResponse = await fetch(
-                `${TMDB_BASE_URL}/person/${personId}?api_key=${TMDB_API_KEY}&language=en-US`
-            );
-            
-            if (engResponse.ok) {
-                const engData = await engResponse.json();
-                korData.biography = engData.biography;
-            }
+            const engResponse = await fetch(`${TMDB_BASE_URL}/person/${personId}?api_key=${TMDB_API_KEY}&language=en-US`);
+            if (engResponse.ok) korData.biography = (await engResponse.json()).biography;
         }
-
-        // 외부 링크 데이터 추가
         const externalLinks = {
             instagram_id: externalData.instagram_id ? `https://www.instagram.com/${externalData.instagram_id}` : null,
             twitter_id: externalData.twitter_id ? `https://twitter.com/${externalData.twitter_id}` : null,
@@ -467,102 +396,211 @@ async function getPersonDetails(personId) {
             imdb_id: externalData.imdb_id ? `https://www.imdb.com/name/${externalData.imdb_id}` : null,
             homepage: korData.homepage || null
         };
-
-        // 연기 경력 정보 생성 (개봉연도 순으로 정렬)
-        const actingCareer = creditsData.cast
-            .filter(movie => movie.release_date) // 개봉일이 있는 작품만 선택
-            .sort((a, b) => new Date(b.release_date) - new Date(a.release_date)) // 최신순 정렬
-            .slice(0, 5) // 최근 5개 작품만 선택
-            .map(movie => ({
-                id: movie.id, // 영화 ID 추가
-                title: movie.title,
-                character: movie.character || '정보 없음',
-                release_date: movie.release_date,
-                popularity: movie.popularity,
-                vote_average: movie.vote_average
-            }));
-
-        return {
-            ...korData,
-            name: korData.name,
-            place_of_birth: korData.place_of_birth,
-            biography: korData.biography || '약력 정보가 없습니다.',
-            external_links: externalLinks,
-            acting_career: actingCareer
-        };
+        const actingCareer = creditsData.cast.filter(m => m.release_date).sort((a, b) => new Date(b.release_date) - new Date(a.release_date)).slice(0, 5).map(m => ({ id: m.id, title: m.title, character: m.character || '정보 없음', release_date: m.release_date, popularity: m.popularity, vote_average: m.vote_average }));
+        return { ...korData, biography: korData.biography || '약력 정보가 없습니다.', external_links: externalLinks, acting_career: actingCareer };
     } catch (error) {
         console.error('인물 상세 정보를 가져오는데 실패했습니다:', error);
         throw error;
     }
 }
+window.getPersonDetails = getPersonDetails;
 
-// 인물의 출연작 정보 가져오기
+// 인물의 출연작 정보 가져오기 (변경 없음)
 async function getPersonMovieCredits(personId) {
     try {
-        const response = await fetch(
-            `${TMDB_BASE_URL}/person/${personId}/movie_credits?api_key=${TMDB_API_KEY}&language=ko-KR`
-        );
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
+        const response = await fetch(`${TMDB_BASE_URL}/person/${personId}/movie_credits?api_key=${TMDB_API_KEY}&language=ko-KR`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         return await response.json();
     } catch (error) {
         console.error('인물의 출연작 정보를 가져오는데 실패했습니다:', error);
         throw error;
     }
 }
+window.getPersonMovieCredits = getPersonMovieCredits;
 
-// 영화의 관련 시리즈 정보 가져오기
+// 영화의 관련 시리즈 정보 가져오기 (변경 없음)
 async function getMovieSeries(movieId) {
     try {
-        // TMDB API에서 컬렉션 정보 가져오기
-        const response = await fetch(
-            `${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=ko-KR&append_to_response=belongs_to_collection`
-        );
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
+        const response = await fetch(`${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=ko-KR&append_to_response=belongs_to_collection`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        
-        if (!data.belongs_to_collection) {
-            return null;
-        }
-
-        // 컬렉션의 상세 정보 가져오기
-        const collectionResponse = await fetch(
-            `${TMDB_BASE_URL}/collection/${data.belongs_to_collection.id}?api_key=${TMDB_API_KEY}&language=ko-KR`
-        );
-
-        if (!collectionResponse.ok) {
-            throw new Error(`HTTP error! status: ${collectionResponse.status}`);
-        }
-
+        if (!data.belongs_to_collection) return null;
+        const collectionResponse = await fetch(`${TMDB_BASE_URL}/collection/${data.belongs_to_collection.id}?api_key=${TMDB_API_KEY}&language=ko-KR`);
+        if (!collectionResponse.ok) throw new Error(`HTTP error! status: ${collectionResponse.status}`);
         const collectionData = await collectionResponse.json();
-        
-        // 영화들을 개봉일 순으로 정렬
-        const sortedMovies = collectionData.parts.sort((a, b) => {
-            return new Date(a.release_date) - new Date(b.release_date);
-        });
-
-        return {
-            id: collectionData.id,
-            name: collectionData.name,
-            overview: collectionData.overview,
-            poster_path: collectionData.poster_path,
-            movies: sortedMovies.map(movie => ({
-                id: movie.id,
-                title: movie.title,
-                poster_path: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : null,
-                release_date: movie.release_date,
-                overview: movie.overview
-            }))
-        };
+        const sortedMovies = collectionData.parts.sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
+        return { id: collectionData.id, name: collectionData.name, overview: collectionData.overview, poster_path: collectionData.poster_path, movies: sortedMovies.map(m => ({ id: m.id, title: m.title, poster_path: m.poster_path ? `https://image.tmdb.org/t/p/w500${m.poster_path}` : null, release_date: m.release_date, overview: m.overview })) };
     } catch (error) {
         console.error('시리즈 정보를 가져오는데 실패했습니다:', error);
         return null;
     }
-} 
+}
+window.getMovieSeries = getMovieSeries;
+
+
+// --- 게시판 API 함수들 ---
+
+// 게시글 목록 가져오기
+async function getPosts(boardType, page = 1, limit = 10) {
+    try {
+        const response = await fetch(`${window.POSTS_API_URL}?type=${boardType}&page=${page}&limit=${limit}`);
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: `게시글 목록 로드 실패: ${response.status}` }));
+            throw new Error(errorData.error || `API 요청 실패: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`${boardType} 게시판 목록을 가져오는데 실패했습니다:`, error);
+        throw error;
+    }
+}
+window.getPosts = getPosts;
+
+// 특정 게시글 상세 정보 가져오기
+async function getPostDetails(postId) {
+    try {
+        const response = await fetch(`${window.POSTS_API_URL}/${postId}`);
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: `게시글 상세 정보 로드 실패: ${response.status}` }));
+            throw new Error(errorData.error || `API 요청 실패: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`게시글(ID: ${postId}) 상세 정보를 가져오는데 실패했습니다:`, error);
+        throw error;
+    }
+}
+window.getPostDetails = getPostDetails;
+
+// 새 게시글 작성
+async function createPost(title, content, boardType) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('게시글을 작성하려면 로그인이 필요합니다.');
+        localStorage.setItem('redirectAfterLogin', `write-post.html?type=${boardType}`); // 현재 글쓰기 페이지로 돌아오도록
+        window.location.href = 'login.html';
+        return null; // 여기서 함수 실행 중단
+    }
+    try {
+        const response = await fetch(window.POSTS_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ title, content, boardType })
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: `게시글 작성 실패: ${response.status}` }));
+            if (response.status === 401) { // 토큰 만료 또는 유효하지 않은 경우
+                 alert('세션이 만료되었거나 유효하지 않습니다. 다시 로그인해주세요.');
+                 localStorage.removeItem('token');
+                 localStorage.setItem('redirectAfterLogin', `write-post.html?type=${boardType}`);
+                 window.location.href = 'login.html';
+                 return null;
+            }
+            throw new Error(errorData.error || `API 요청 실패: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('게시글 작성에 실패했습니다:', error);
+        alert(`게시글 작성 오류: ${error.message}`);
+        // throw error; // 여기서 에러를 다시 던지지 않으면 호출부에서 null을 받게 됨
+        return null; // 오류 발생 시 null 반환 명시
+    }
+}
+window.createPost = createPost;
+
+// 게시글 좋아요 토글
+async function togglePostLike(postId) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('좋아요를 표시하려면 로그인이 필요합니다.');
+        localStorage.setItem('redirectAfterLogin', window.location.href); // 현재 페이지(post-detail)로 돌아오도록
+        window.location.href = 'login.html';
+        return null;
+    }
+    try {
+        const response = await fetch(`${window.POSTS_API_URL}/${postId}/like`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: `좋아요 처리 실패: ${response.status}` }));
+             if (response.status === 401) {
+                 alert('세션이 만료되었거나 유효하지 않습니다. 다시 로그인해주세요.');
+                 localStorage.removeItem('token');
+                 localStorage.setItem('redirectAfterLogin', window.location.href);
+                 window.location.href = 'login.html';
+                 return null;
+            }
+            throw new Error(errorData.error || `API 요청 실패: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`게시글(ID: ${postId}) 좋아요 처리에 실패했습니다:`, error);
+        alert(`좋아요 처리 오류: ${error.message}`);
+        return null;
+    }
+}
+window.togglePostLike = togglePostLike;
+
+// 댓글 작성
+async function createComment(postId, content) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('댓글을 작성하려면 로그인이 필요합니다.');
+        localStorage.setItem('redirectAfterLogin', window.location.href); // 현재 페이지(post-detail)로 돌아오도록
+        window.location.href = 'login.html';
+        return null;
+    }
+    try {
+        const response = await fetch(`${window.POSTS_API_URL}/${postId}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ content })
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: `댓글 작성 실패: ${response.status}` }));
+            if (response.status === 401) {
+                 alert('세션이 만료되었거나 유효하지 않습니다. 다시 로그인해주세요.');
+                 localStorage.removeItem('token');
+                 localStorage.setItem('redirectAfterLogin', window.location.href);
+                 window.location.href = 'login.html';
+                 return null;
+            }
+            throw new Error(errorData.error || `API 요청 실패: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`게시글(ID: ${postId})에 댓글 작성 실패:`, error);
+        alert(`댓글 작성 오류: ${error.message}`);
+        return null;
+    }
+}
+window.createComment = createComment;
+
+// 댓글 목록 가져오기
+async function getComments(postId, page = 1, limit = 10) {
+    try {
+        const response = await fetch(`${window.POSTS_API_URL}/${postId}/comments?page=${page}&limit=${limit}`);
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: `댓글 목록 로드 실패: ${response.status}` }));
+            throw new Error(errorData.error || `API 요청 실패: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`게시글(ID: ${postId})의 댓글 목록을 가져오는데 실패했습니다:`, error);
+        throw error; // 이 함수는 UI에서 직접 호출되므로 에러를 던져서 UI단에서 처리하도록 할 수 있음
+    }
+}
+window.getComments = getComments;
+
+// 페이지 로드 시 실행되던 DOMContentLoaded 이벤트 리스너는 각 HTML 파일로 이동하거나,
+// 필요한 경우에만 실행하도록 변경합니다. 여기서는 로그인 상태만 반환하는 함수를 제공합니다.
+// document.addEventListener('DOMContentLoaded', checkLoginStatusAndRedirect); // 이 줄은 주석 처리 또는 삭제
