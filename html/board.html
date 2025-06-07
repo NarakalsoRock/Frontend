@@ -93,20 +93,22 @@
         <div class="footer-text">© 2025 CineX. All rights reserved.</div>
     </footer>
 
+    <script src="../js/board.js"></script>
     <script>
-        // URL 파라미터에서 게시판 타입을 가져와서 제목과 설명을 업데이트
         window.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const boardType = urlParams.get('type');
             const boardTitle = document.querySelector('.board-title');
             const boardDescription = document.querySelector('.board-description');
             const writeButton = document.getElementById('writeButton');
+            const postList = document.querySelector('.post-list');
 
             // 글쓰기 버튼 href 업데이트
             if (boardType) {
                 writeButton.href = `write-post.html?type=${boardType}`;
             }
 
+            // 게시판 타입에 따른 UI 업데이트
             if (boardType === 'info') {
                 document.title = 'CineX - 정보 게시판';
                 boardTitle.textContent = '정보 게시판';
@@ -120,7 +122,45 @@
                 boardTitle.textContent = '토론 게시판';
                 boardDescription.textContent = '특정 영화나 영화 관련 주제에 대해 사용자들이 자유롭게 의견을 교환하고, 심층적인 논의를 펼칠 수 있도록 설계된 커뮤니티 공간입니다.';
             }
+
+            // 게시글 목록 렌더링
+            renderPosts(window.boardManager.getPosts(boardType));
+
+            // 검색 버튼 이벤트 핸들러
+            const searchButton = document.querySelector('.board-search-button');
+            searchButton.addEventListener('click', function() {
+                const searchTerm = prompt('검색어를 입력하세요:');
+                if (searchTerm) {
+                    const filteredPosts = window.boardManager.searchPosts(searchTerm, boardType);
+                    renderPosts(filteredPosts);
+                }
+            });
         });
+
+        // 게시글 목록 렌더링 함수
+        function renderPosts(posts) {
+            const postList = document.querySelector('.post-list');
+            postList.innerHTML = posts.map(post => `
+                <a href="post-detail.html?id=${post.id}&type=${post.type}" class="post-card">
+                    <div class="post-header">
+                        <h2 class="post-title">${post.title}</h2>
+                        <span class="post-date">${post.date}</span>
+                    </div>
+                    <p class="post-preview">${post.content}</p>
+                    <div class="post-footer">
+                        <div class="post-meta">
+                            <span>조회 ${post.views}</span>
+                        </div>
+                        <div class="post-meta">
+                            <span>좋아요 ${post.likes}</span>
+                        </div>
+                        <div class="post-meta">
+                            <span>댓글 ${post.comments.length}</span>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        }
     </script>
 </body>
 </html>

@@ -92,11 +92,12 @@
         <div class="footer-text">© 2025 CineX. All rights reserved.</div>
     </footer>
 
+    <script src="../js/board.js"></script>
     <script>
         window.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
+            const postId = parseInt(urlParams.get('id'));
             const boardType = urlParams.get('type');
-            const postId = urlParams.get('id');
             const boardTitle = document.querySelector('.board-title');
             
             // 게시판 타입에 따라 제목 업데이트
@@ -111,27 +112,42 @@
                 boardTitle.textContent = '토론 게시판';
             }
 
+            // 게시글 데이터 로드
+            const post = window.boardManager.getPost(postId);
+            if (post) {
+                document.querySelector('.post-title').textContent = post.title;
+                document.querySelector('.author-name').textContent = post.author;
+                document.querySelector('.post-date').textContent = post.date;
+                document.querySelector('.post-content').textContent = post.content;
+                document.getElementById('likeCount').textContent = post.likes;
+                document.getElementById('commentCount').textContent = post.comments.length;
+
+                // 좋아요 상태 체크
+                const isLiked = post.likedBy.includes('anonymous');
+                if (isLiked) {
+                    document.getElementById('likeButton').classList.add('active');
+                }
+
+                // 댓글 목록 렌더링
+                renderComments(post.comments);
+            }
+
             // 좋아요 버튼 기능
             const likeButton = document.getElementById('likeButton');
             const likeCount = document.getElementById('likeCount');
-            let isLiked = false;
-            let likes = 0;
 
             likeButton.addEventListener('click', function() {
-                isLiked = !isLiked;
-                likes = isLiked ? likes + 1 : likes - 1;
-                likeCount.textContent = likes;
+                const newLikes = window.boardManager.toggleLike(postId);
+                if (newLikes !== null) {
+                    likeCount.textContent = newLikes;
                 this.classList.toggle('active');
+                }
             });
 
             // 댓글 폼 제출 처리
             const commentForm = document.getElementById('commentForm');
             const commentList = document.getElementById('commentList');
             const commentCount = document.getElementById('commentCount');
-            let comments = 1; // 예시 댓글 1개 포함
-
-            // 초기 댓글 수 업데이트
-            commentCount.textContent = comments;
 
             commentForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -139,25 +155,17 @@
                 const commentText = textarea.value.trim();
 
                 if (commentText) {
-                    const now = new Date();
-                    const comment = document.createElement('div');
-                    comment.className = 'comment';
-                    comment.innerHTML = `
-                        <div class="comment-header">
-                            <div class="author-avatar">
-                                <svg viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
-                                </svg>
-                            </div>
-                            <span class="comment-author">사용자</span>
-                            <time class="comment-date" datetime="${now.toISOString()}">방금 전</time>
-                        </div>
-                        <p class="comment-text">${commentText}</p>
-                    `;
-                    commentList.insertBefore(comment, commentList.firstChild);
+                    const newComment = {
+                        author: "사용자",
+                        content: commentText
+                    };
+                    
+                    const addedComment = window.boardManager.addComment(postId, newComment);
+                    if (addedComment) {
+                        renderComments(post.comments);
                     textarea.value = '';
-                    comments++;
-                    commentCount.textContent = comments;
+                        commentCount.textContent = post.comments.length;
+                    }
                 }
             });
 
@@ -170,6 +178,25 @@
                 commentInput.focus();
             });
         });
+
+        // 댓글 목록 렌더링 함수
+        function renderComments(comments) {
+            const commentList = document.getElementById('commentList');
+            commentList.innerHTML = comments.map(comment => `
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="author-avatar">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
+                            </svg>
+                        </div>
+                        <span class="comment-author">${comment.author}</span>
+                        <time class="comment-date">${comment.date}</time>
+                    </div>
+                    <p class="comment-text">${comment.content}</p>
+                </div>
+            `).join('');
+        }
     </script>
 </body>
 </html>
