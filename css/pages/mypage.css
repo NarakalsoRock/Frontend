@@ -11,9 +11,6 @@
     /* overflow: hidden; (컨텐츠가 넘칠 경우를 대비하여 제거하거나 필요에 따라 추가) */
 }
 
-.nav-item.active {
-    background: #673AB7;
-}
 
 /* Page Title Section */
 .page-title-section {

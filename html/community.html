@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineX - 커뮤니티</title>
     <link rel="stylesheet" href="../css/pages/community.css">
-    <script src="../js/api.js" defer></script> </head>
+    <script src="../js/api.js" defer></script>
+</head>
 <body>
     <header class="header">
         <a href="index.html" class="logo">CineX</a>
@@ -31,8 +32,6 @@
 
         <div class="category-tabs">
             <button class="category-tab active" data-tab="board">게시판</button>
-            <button class="category-tab" data-tab="curation">큐레이션</button>
-            <div class="tab-underline"></div>
         </div>
 
         <div class="tab-content" id="boardContent">
@@ -59,66 +58,6 @@
                 </div>
             </section>
         </div>
-
-        <div class="tab-content" id="curationContent" style="display: none;">
-             <div class="curation-header">
-                <h2 class="section-title">내 큐레이션</h2>
-                <div class="search-wrapper">
-                    <input type="text" class="search-input" placeholder="검색">
-                    <button class="search-close-btn">×</button>
-                </div>
-            </div>
-            <div class="curation-grid">
-                <a href="create-curation.html" class="curation-item create-item">
-                    <div class="create-icon">+</div>
-                </a>
-                <a href="curation-detail.html" class="curation-item">
-                    <div class="poster-stack">
-                        <img src="https://placehold.co/240x360" alt="영화 포스터 1" class="poster">
-                        <img src="https://placehold.co/240x360" alt="영화 포스터 2" class="poster">
-                        <img src="https://placehold.co/240x360" alt="영화 포스터 3" class="poster">
-                    </div>
-                    <div class="curation-info">
-                        <h3 class="curation-title">들어와라 이것이 애니다</h3>
-                        <div class="curation-meta">
-                            <span class="author">조윤정</span>
-                            <div class="likes">
-                                <span class="like-icon">♥</span>
-                                <span class="like-count">50</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="section-divider"></div>
-            <div class="recently-section">
-                <div class="section-header">
-                    <h2 class="section-title">Recently</h2>
-                    <a href="curation-list.html" class="more-link">
-                        <span class="arrow">›</span>
-                    </a>
-                </div>
-                <div class="curation-grid">
-                     <a href="curation-detail.html" class="curation-item">
-                        <div class="poster-stack">
-                            <img src="https://placehold.co/240x360" alt="영화 포스터 1" class="poster">
-                            <img src="https://placehold.co/240x360" alt="영화 포스터 2" class="poster">
-                            <img src="https://placehold.co/240x360" alt="영화 포스터 3" class="poster">
-                        </div>
-                        <div class="curation-info">
-                            <h3 class="curation-title">들어와라 이것이 애니다</h3>
-                            <div class="curation-meta">
-                                <span class="author">조윤정</span>
-                                <div class="likes">
-                                    <span class="like-icon">♥</span>
-                                    <span class="like-count">50</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
     </main>
 
     <footer class="footer">
@@ -143,14 +82,10 @@
             const placeholder = hotPostSection.querySelector('.post-card-placeholder');
 
             try {
-                // 모든 타입의 게시글을 가져오기 위해 각 타입별로 호출 후 병합 (백엔드에 통합 API가 없으므로)
-                // 실제 운영시에는 백엔드에 핫 포스트 전용 API를 만드는 것이 좋음
                 const types = ['info', 'review', 'discussion'];
                 let allPosts = [];
 
                 for (const type of types) {
-                    // 각 타입별로 첫 페이지만 가져와서 (예: 최대 100개) 그 중에서 조회수 높은 것을 찾음
-                    // 더 정확하려면 모든 페이지를 다 가져와야 하나, 성능상 비효율적
                     const response = await window.getPosts(type, 1, 100); // api.js
                     if (response.success && response.data) {
                         allPosts = allPosts.concat(response.data);
@@ -162,18 +97,15 @@
                     return;
                 }
 
-                // 조회수(views) 기준으로 가장 높은 게시글 찾기
                 const hotPost = allPosts.sort((a, b) => (b.views || 0) - (a.views || 0))[0];
 
                 if (hotPost) {
-                    placeholder.remove(); // 기존 placeholder 제거
+                    placeholder.remove();
                     const postCardLink = document.createElement('a');
                     postCardLink.href = `post-detail.html?id=${hotPost._id}&type=${hotPost.boardType}`;
                     postCardLink.className = 'post-card-link';
 
-                    // 서버에서 받은 content는 줄바꿈 문자를 포함할 수 있으므로 nl2br과 유사한 처리 필요
                     const postContentHTML = nl2br(hotPost.content).substring(0, 150) + (hotPost.content.length > 150 ? '...' : '');
-
 
                     postCardLink.innerHTML = `
                         <div class="post-card">
@@ -205,13 +137,11 @@
                         </div>
                     `;
                     hotPostSection.appendChild(postCardLink);
-
-                    // 새로 추가된 좋아요 버튼에 이벤트 리스너 추가 (실제 좋아요 기능은 상세 페이지에서)
+                    
                     const likeButton = postCardLink.querySelector('.like-button');
                     if (likeButton) {
                         likeButton.addEventListener('click', function(e) {
-                            e.preventDefault(); // 링크 이동 방지
-                            // 상세 페이지에서 실제 좋아요 처리
+                            e.preventDefault();
                             alert('좋아요 기능은 게시글 상세 페이지에서 이용해주세요.');
                         });
                     }
@@ -226,76 +156,9 @@
             }
         }
 
-
         document.addEventListener('DOMContentLoaded', function() {
-            // 탭 전환 기능
-            const tabs = document.querySelectorAll('.category-tab');
-            const boardContent = document.getElementById('boardContent');
-            const curationContent = document.getElementById('curationContent');
-            const tabUnderline = document.querySelector('.tab-underline');
-
-            function updateTabUnderline(activeTab) {
-                if (!activeTab) return;
-                const tabRect = activeTab.getBoundingClientRect();
-                const containerRect = activeTab.parentElement.getBoundingClientRect();
-                tabUnderline.style.width = `${tabRect.width}px`;
-                tabUnderline.style.left = `${activeTab.offsetLeft - containerRect.left}px`;
-            }
-
-            function switchTab(tabName) {
-                const targetTab = document.querySelector(`.category-tab[data-tab="${tabName}"]`);
-                if (targetTab) {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    targetTab.classList.add('active');
-                    updateTabUnderline(targetTab);
-
-                    if (tabName === 'board') {
-                        boardContent.style.display = 'block';
-                        curationContent.style.display = 'none';
-                        loadHotPost(); // 게시판 탭 활성화 시 핫 포스트 로드
-                    } else {
-                        boardContent.style.display = 'none';
-                        curationContent.style.display = 'block';
-                    }
-                }
-            }
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const tabParam = urlParams.get('tab');
-
-            if (tabParam) {
-                switchTab(tabParam);
-            } else {
-                // 기본적으로 'board' 탭이 활성화되어 있다고 가정하고 핫 포스트 로드
-                switchTab('board');
-            }
-
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    switchTab(this.dataset.tab);
-                     // URL에 탭 정보 추가 (페이지 새로고침 시 유지되도록)
-                    const newUrl = new URL(window.location);
-                    newUrl.searchParams.set('tab', this.dataset.tab);
-                    window.history.pushState({path:newUrl.href},'',newUrl.href);
-                });
-            });
-
-            // 초기 탭 밑줄 위치 설정
-             const initialActiveTab = document.querySelector('.category-tab.active');
-            if(initialActiveTab) updateTabUnderline(initialActiveTab);
-
-
-            // 검색 닫기 버튼 기능 (큐레이션 탭 내부)
-            const searchInput = curationContent.querySelector('.search-input');
-            const searchCloseBtn = curationContent.querySelector('.search-close-btn');
-
-            if(searchInput && searchCloseBtn) {
-                searchCloseBtn.addEventListener('click', function() {
-                    searchInput.value = '';
-                    searchInput.focus();
-                });
-            }
+            // 페이지가 로드되면 바로 핫 포스트를 불러옵니다.
+            loadHotPost();
         });
     </script>
 </body>
