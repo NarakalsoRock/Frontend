@@ -46,21 +46,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             renderBookmarkedMoviesChart(result.data.bookmarkedMovies || []); //
             displayLikedMovies(result.data.likedMovies || []); //
             displayBookmarkedMovies(result.data.bookmarkedMovies || []); //
+            setupLogoutButton();
+            setupSearch(); // 검색 기능 설정
         } else {
             throw new Error(result.error || '사용자 데이터를 가져오는데 실패했습니다.'); //
-        }
-
-        // 로그아웃 버튼 이벤트 리스너 추가
-        const logoutBtn = document.getElementById('logoutButton');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => {
-                if (typeof window.logout === 'function') {
-                    window.logout(); // auth.js에 정의된 전역 logout 함수 호출
-                } else {
-                    console.error('logout 함수를 찾을 수 없습니다. auth.js가 올바르게 로드되었는지 확인하세요.');
-                    alert('로그아웃 기능을 사용할 수 없습니다.');
-                }
-            });
         }
 
     } catch (error) {
@@ -229,5 +218,63 @@ function renderMovieList(container, movies, emptyMessage) {
             </div>
         `; //
         container.insertAdjacentHTML('beforeend', movieItemHTML); //
+    });
+}
+
+// 로그아웃 버튼 이벤트 리스너 추가
+function setupLogoutButton() {
+    const logoutBtn = document.getElementById('logoutButton');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            if (typeof window.logout === 'function') {
+                window.logout(); // auth.js에 정의된 전역 logout 함수 호출
+            } else {
+                console.error('logout 함수를 찾을 수 없습니다. auth.js가 올바르게 로드되었는지 확인하세요.');
+                alert('로그아웃 기능을 사용할 수 없습니다.');
+            }
+        });
+    }
+}
+
+// 검색 기능 설정
+function setupSearch() {
+    const searchInput = document.querySelector('.header-search-input');
+    const searchButton = document.querySelector('.header-search-button');
+
+    // 검색 실행 함수
+    async function executeSearch() {
+        const query = searchInput.value.trim();
+        if (!query) return;
+
+        try {
+            // 영화와 인물 동시 검색
+            const [movieResponse, personResponse] = await Promise.all([
+                fetch(`${API_BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ko-KR&page=1`),
+                fetch(`${API_BASE_URL}/search/person?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ko-KR&page=1`)
+            ]);
+
+            const [movieData, personData] = await Promise.all([
+                movieResponse.json(),
+                personResponse.json()
+            ]);
+
+            // 검색 결과가 있으면 검색 페이지로 이동
+            if (movieData.results.length > 0 || personData.results.length > 0) {
+                window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+            } else {
+                alert('검색 결과가 없습니다.');
+            }
+        } catch (error) {
+            console.error('검색 중 오류 발생:', error);
+            alert('검색 중 오류가 발생했습니다.');
+        }
+    }
+
+    // 이벤트 리스너 설정
+    searchButton.addEventListener('click', executeSearch);
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            executeSearch();
+        }
     });
 }
