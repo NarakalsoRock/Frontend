@@ -12,52 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 정렬 기능 초기화
-    const sortButton = document.querySelector('.sort-button');
-    const sortOptions = document.querySelector('.sort-options');
-
-    if (sortButton && sortOptions) {
-        sortButton.addEventListener('click', function() {
-            sortOptions.style.display = sortOptions.style.display === 'block' ? 'none' : 'block';
-        });
-
-        sortOptions.querySelectorAll('.sort-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const sortType = this.textContent;
-                sortButton.textContent = sortType + ' ▼';
-                sortOptions.style.display = 'none';
-                
-                switch(sortType) {
-                    case '예매율순':
-                        currentMovies.sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));
-                        break;
-                    case '개봉일순':
-                        currentMovies.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
-                        break;
-                    case '관람등급':
-                        currentMovies.sort((a, b) => {
-                            const ratingOrder = { 'ALL': 0, '12': 1, '15': 2, '18': 3 };
-                            return (ratingOrder[a.rating] || 0) - (ratingOrder[b.rating] || 0);
-                        });
-                        break;
-                    case '장르별':
-                        currentMovies.sort((a, b) => {
-                            const genreA = a.genre_ids && a.genre_ids.length > 0 ? a.genre_ids[0] : Number.MAX_SAFE_INTEGER;
-                            const genreB = b.genre_ids && b.genre_ids.length > 0 ? b.genre_ids[0] : Number.MAX_SAFE_INTEGER;
-                            return genreA - genreB;
-                        });
-                        break;
-                }
-                
-                displayMovies(currentMovies);
-            });
-        });
-
-        document.addEventListener('click', function(event) {
-            if (sortButton && !sortButton.contains(event.target) && sortOptions && !sortOptions.contains(event.target)) {
-                sortOptions.style.display = 'none';
-            }
-        });
-    }
+    initializeSortingFeature(currentMovies);
 });
 
 function displayMovies(movies) {
@@ -116,4 +71,43 @@ function displayMovies(movies) {
     });
 
     lazyImages.forEach(img => imageObserver.observe(img));
+}
+
+// 정렬 기능 초기화
+function initializeSortingFeature(movies) {
+    const sortButton = document.querySelector('.sort-button');
+    const sortOptions = document.querySelector('.sort-options');
+    if (!sortButton || !sortOptions) return;
+
+    const sortFunctions = {
+        '예매율순': (a, b) => b.vote_average - a.vote_average,
+        '개봉일순': (a, b) => new Date(a.release_date) - new Date(b.release_date)
+    };
+
+    let isOptionsVisible = false;
+    
+    sortButton.addEventListener('click', () => {
+        isOptionsVisible = !isOptionsVisible;
+        sortOptions.style.display = isOptionsVisible ? 'block' : 'none';
+    });
+
+    sortOptions.querySelectorAll('.sort-option').forEach(option => {
+        option.addEventListener('click', () => {
+            const sortType = option.textContent;
+            sortButton.textContent = sortType + ' ▼';
+            isOptionsVisible = false;
+            sortOptions.style.display = 'none';
+            
+            const sortedMovies = [...movies].sort(sortFunctions[sortType]);
+            requestAnimationFrame(() => displayMovies(sortedMovies));
+        });
+    });
+
+    // 외부 클릭 시 옵션 닫기
+    document.addEventListener('click', (event) => {
+        if (!sortButton.contains(event.target) && !sortOptions.contains(event.target)) {
+            isOptionsVisible = false;
+            sortOptions.style.display = 'none';
+        }
+    });
 } 

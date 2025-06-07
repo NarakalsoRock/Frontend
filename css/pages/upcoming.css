@@ -139,6 +139,9 @@
     width: 180px;
     position: relative; /* 자식 요소 absolute 위치 기준 */
     padding-bottom: 20px; /* movie-info 와의 간격 */
+    transform: translateZ(0);
+    will-change: transform;
+    contain: content;
 }
 
 .poster-container {
@@ -425,3 +428,34 @@
 }
 
 /* 기존 Like Button 관련 주석 처리된 부분은 최종적으로 정리 */
+
+/* 로딩 인디케이터 스타일 */
+.loading-indicator {
+    text-align: center;
+    padding: 20px;
+    color: #fff;
+    font-size: 1.2em;
+}
+
+/* 이미지 로딩 최적화 */
+.movie-poster.lazy {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    will-change: opacity;
+    transform: translateZ(0);
+}
+
+.movie-poster:not(.lazy) {
+    opacity: 1;
+}
+
+/* 애니메이션 최적화 */
+@media (prefers-reduced-motion: no-preference) {
+    .movie-item {
+        transition: transform 0.2s ease-out;
+    }
+    
+    .movie-item:hover {
+        transform: translateY(-5px);
+    }
+}
