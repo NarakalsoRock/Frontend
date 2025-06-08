@@ -1,224 +1,165 @@
-// API 기본 URL은 movieApi.js에서 가져옵니다
+// 예고편 모달 열기
+function openTrailerModal(videoId) {
+    const modal = document.getElementById('trailerModal');
+    if (!modal || !videoId) return;
+
+    const iframe = modal.querySelector('iframe');
+    if (!iframe) return;
+
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    modal.classList.add('active'); // CSS 클래스로 제어
+}
+
+// 예고편 모달 닫기
+function closeTrailerModal() {
+    const modal = document.getElementById('trailerModal');
+    if (!modal) return;
+
+    const iframe = modal.querySelector('iframe');
+    if (iframe) {
+        iframe.src = ''; // 비디오 재생 중지
+    }
+    modal.classList.remove('active'); // CSS 클래스로 제어
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // URL에서 영화 ID 가져오기
         const urlParams = new URLSearchParams(window.location.search);
         const rawMovieId = urlParams.get('id');
-        
-        // movieId가 없거나 유효하지 않은 경우 처리
+
         if (!rawMovieId) {
             throw new Error('영화 ID가 없습니다.');
         }
-
-        // movieId에서 숫자만 추출
         const movieId = rawMovieId.replace(/[^0-9]/g, '');
-        console.log('정제된 영화 ID:', movieId);
-
         if (!movieId) {
             throw new Error('유효하지 않은 영화 ID입니다.');
         }
 
-        // 영화 상세 정보와 시리즈 정보를 동시에 가져오기
-        const [movieData, seriesData] = await Promise.all([
+        const [movieData, seriesData, recommendedMovies] = await Promise.all([
             getMovieDetails(movieId),
-            getMovieSeries(movieId)
+            getMovieSeries(movieId),
+            getRecommendedMovies(movieId)
         ]);
 
-        // 영화 상세 정보 업데이트
         updateMovieDetails(movieData);
-        
-        // 시리즈 정보가 있는 경우에만 표시
+        updateRecommendedMovies(recommendedMovies);
+
         if (seriesData) {
             updateSeriesInfo(seriesData);
         } else {
-            // 시리즈 정보가 없는 경우 섹션 숨기기
             const seriesSection = document.querySelector('.related-series');
-            if (seriesSection) {
-                seriesSection.style.display = 'none';
-            }
+            if (seriesSection) seriesSection.style.display = 'none';
         }
 
-        // 추천 영화 가져오기 및 표시
-        const recommendedMovies = await getRecommendedMovies(movieId);
-        updateRecommendedMovies(recommendedMovies);
-
-        // 미디어 섹션 초기화
         await initializeMediaSection(movieId);
-
-        // 트레일러 로딩
-        await loadTrailer(movieId);
+        setupModalListeners();
 
     } catch (error) {
         console.error('영화 상세 정보 로딩 중 오류 발생:', error);
         showErrorMessage();
-        showTrailerError();
     }
 });
 
-// 영화 상세 정보 업데이트 함수
+// 모달 이벤트 리스너 설정 (한 번만 실행)
+function setupModalListeners() {
+    const modal = document.getElementById('trailerModal');
+    if (!modal) return;
+
+    const closeBtn = modal.querySelector('.modal-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeTrailerModal);
+    }
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeTrailerModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeTrailerModal();
+        }
+    });
+}
+
+// 영화 상세 정보 업데이트
 function updateMovieDetails(movie) {
-    // 포스터 이미지 업데이트
+    document.title = `CineX - ${movie.title}`;
+    
     const posterImg = document.querySelector('.movie-poster');
     if (posterImg) {
         posterImg.src = movie.poster_path || 'https://placehold.co/380x540';
         posterImg.alt = movie.title;
     }
 
-    // 제목 업데이트
     const titleElement = document.querySelector('.movie-title');
     if (titleElement) {
         titleElement.textContent = movie.title;
     }
 
-    // 메타 정보 업데이트
     const metaElement = document.querySelector('.movie-meta');
     if (metaElement) {
         metaElement.innerHTML = `
             <span class="rating">${movie.adult ? '18' : movie.vote_average >= 7 ? '15' : movie.vote_average >= 5 ? '12' : 'ALL'}</span>
-            <span class="release-date">${movie.release_date}</span>
+            <span class="release-date">${movie.release_date || ''}</span>
             <span class="score">★ ${movie.vote_average.toFixed(1)}</span>
-            <span class="duration">${movie.runtime}분</span>
-            <span class="genre">${movie.genres.join(', ')}</span>
+            <span class="duration">${movie.runtime ? movie.runtime + '분' : ''}</span>
+            <span class="genre">${movie.genres ? movie.genres.join(', ') : ''}</span>
         `;
     }
 
-    // 줄거리 업데이트
     const synopsisText = document.querySelector('.synopsis-text');
     if (synopsisText) {
         synopsisText.textContent = movie.overview || '등록된 줄거리가 없습니다.';
     }
 
-    // 출연진 정보 업데이트 (있는 경우)
-    if (movie.cast && movie.cast.length > 0) {
-        const creditsScroll = document.querySelector('.credits-scroll');
-        if (creditsScroll) {
+    const creditsScroll = document.querySelector('.credits-scroll');
+    if (creditsScroll) {
+        if (movie.cast && movie.cast.length > 0) {
             creditsScroll.innerHTML = movie.cast.map(actor => `
                 <a href="person-detail.html?id=${actor.id}" class="credit-item">
-                    <img src="${actor.profile_path || 'https://placehold.co/150x150'}" 
-                         alt="${actor.name}" 
-                         class="credit-image">
-                    <div class="credit-info">
-                        <p class="credit-name">${actor.name}</p>
-                        <p class="credit-role">${actor.character}</p>
-                    </div>
+                    <img src="${actor.profile_path || 'https://placehold.co/150x150'}" alt="${actor.name}" class="credit-image">
+                    <div class="credit-info"><p class="credit-name">${actor.name}</p></div>
                 </a>
             `).join('');
+        } else {
+            creditsScroll.innerHTML = '<p>출연진 정보가 없습니다.</p>';
         }
     }
-
-    // 좋아요 버튼 이벤트 리스너
+    
+    // 버튼 이벤트 리스너 설정
     const likeButton = document.querySelector('.btn-like');
     if (likeButton) {
-        // 초기 상태 설정 (서버에서 받은 상태 기준)
-        if (movie.isLiked) {
-            likeButton.classList.add('active');
-        } else {
-            likeButton.classList.remove('active');
-        }
-
-        likeButton.addEventListener('click', async function() {
-            try {
-                const result = await toggleMovieLike(
-                    movie.id,
-                    movie.title,
-                    movie.poster_path
-                );
-
-                if (result && result.success) {
-                    const newState = !this.classList.contains('active');
-                    if (newState) {
-                        this.classList.add('active');
-                    } else {
-                        this.classList.remove('active');
-                    }
-                }
-            } catch (error) {
-                console.error('좋아요 토글 실패:', error);
-            }
-        });
+        likeButton.classList.toggle('active', movie.isLiked);
+        likeButton.onclick = async () => {
+            const result = await toggleMovieLike(movie.id, movie.title, movie.poster_path);
+            if (result && result.success) likeButton.classList.toggle('active');
+        };
     }
 
-    // 북마크 버튼 이벤트 리스너
     const bookmarkButton = document.querySelector('.btn-bookmark');
     if (bookmarkButton) {
-        // 초기 상태 설정 (서버에서 받은 상태 기준)
-        if (movie.isBookmarked) {
-            bookmarkButton.classList.add('active');
-        } else {
-            bookmarkButton.classList.remove('active');
-        }
-
-        bookmarkButton.addEventListener('click', async function() {
-            try {
-                const result = await toggleMovieBookmark(
-                    movie.id,
-                    movie.title,
-                    movie.poster_path
-                );
-
-                if (result && result.success) {
-                    const newState = !this.classList.contains('active');
-                    if (newState) {
-                        this.classList.add('active');
-                    } else {
-                        this.classList.remove('active');
-                    }
-                }
-            } catch (error) {
-                console.error('북마크 토글 실패:', error);
-            }
-        });
+        bookmarkButton.classList.toggle('active', movie.isBookmarked);
+        bookmarkButton.onclick = async () => {
+            const result = await toggleMovieBookmark(movie.id, movie.title, movie.poster_path);
+            if (result && result.success) bookmarkButton.classList.toggle('active');
+        };
     }
 
-    // 예고편 모달 관련 코드
     const trailerBtn = document.querySelector('.btn-trailer');
-    const modal = document.getElementById('trailerModal');
-    const closeBtn = modal.querySelector('.modal-close');
-    const iframe = modal.querySelector('iframe');
-
-    if (trailerBtn && modal && closeBtn && iframe) {
-        // 예고편 URL (실제 예고편 주소로 변경 필요)
-        const trailerUrl = movie.trailer_url || `https://www.youtube.com/embed/${movie.video_id}`;
-
-        trailerBtn.addEventListener('click', function() {
-            modal.style.display = 'block';
-            iframe.src = trailerUrl;
-    });
-
-        closeBtn.addEventListener('click', function() {
-            modal.style.display = 'none';
-            iframe.src = '';
-    });
-
-        window.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                iframe.src = '';
-        }
-    });
-    }
-
-    // 가로 스크롤 영역에서 마우스 휠 이벤트 처리
-    const scrollContainers = document.querySelectorAll('.credits-grid, .movie-grid');
-    
-    scrollContainers.forEach(container => {
-        container.addEventListener('wheel', (e) => {
-            if (e.deltaY !== 0) {
-                e.preventDefault();
-                container.scrollLeft += e.deltaY;
+    if (trailerBtn) {
+        trailerBtn.onclick = () => {
+            if (movie.video_id) {
+                openTrailerModal(movie.video_id);
+            } else {
+                alert('이 영화의 예고편을 찾을 수 없습니다.');
             }
-        });
-    });
-
-    document.querySelectorAll('.scroll-more-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            window.location.href = 'media.html';
-        });
-    });
+        };
+    }
 }
 
-// 시리즈 정보 업데이트 함수
+// 시리즈 정보 업데이트
 function updateSeriesInfo(series) {
     const seriesSection = document.querySelector('.related-series');
     if (!seriesSection) return;
@@ -227,60 +168,39 @@ function updateSeriesInfo(series) {
     const seriesList = seriesSection.querySelector('.related-series-list');
     const viewCollectionBtn = seriesSection.querySelector('.btn-view-collection');
 
-    if (bannerTitle) {
-        bannerTitle.textContent = `${series.name} 시리즈에 포함된 작품`;
-    }
-
-    if (seriesList) {
-        // 영화 제목들을 쉼표로 구분하여 표시
-        seriesList.textContent = series.movies
-            .map(movie => movie.title)
-            .join(', ');
-    }
-
-    if (viewCollectionBtn) {
-        viewCollectionBtn.onclick = () => {
-            // 시리즈 페이지로 이동하면서 시리즈 ID를 전달
-            location.href = `series.html?collection_id=${series.id}`;
-        };
-    }
+    if (bannerTitle) bannerTitle.textContent = `${series.name} 시리즈에 포함된 작품`;
+    if (seriesList) seriesList.textContent = series.movies.map(movie => movie.title).join(', ');
+    if (viewCollectionBtn) viewCollectionBtn.onclick = () => location.href = `series.html?collection_id=${series.id}`;
 }
 
-// 에러 메시지 표시 함수
+// 에러 메시지 표시
 function showErrorMessage() {
     const mainContent = document.querySelector('.main-content');
     if (mainContent) {
-        mainContent.innerHTML = `
-            <div class="error-message">
-                <p>죄송합니다. 정보를 불러오는 중 오류가 발생했습니다.</p>
-                <p>잠시 후 다시 시도해 주세요.</p>
-            </div>
-        `;
+        mainContent.innerHTML = `<div class="error-message" style="text-align:center; padding: 40px;"><p>죄송합니다. 정보를 불러오는 중 오류가 발생했습니다.</p></div>`;
     }
 }
 
-// 추천 영화 업데이트 함수
+// 추천 영화 업데이트
 function updateRecommendedMovies(movies) {
     const recommendedGrid = document.querySelector('.recommended-movies .movie-grid');
-    if (recommendedGrid && movies.length > 0) {
+    if (!recommendedGrid) return;
+    
+    if (movies && movies.length > 0) {
         recommendedGrid.innerHTML = movies.map(movie => `
             <a href="movie-detail.html?id=${movie.id}" class="movie-item">
-                <img src="${movie.poster_path || 'https://placehold.co/150x220'}" 
-                     alt="${movie.title}" 
-                     class="movie-poster">
-                <div class="movie-info">
-                    <div class="movie-title">${movie.title}</div>
-                    <div class="release-date">${formatDate(movie.release_date)}</div>
-                </div>
+                <img src="${movie.poster_path || 'https://placehold.co/150x220'}" alt="${movie.title}" class="movie-poster">
+                <div class="movie-info"><div class="movie-title">${movie.title}</div><div class="release-date">${formatDate(movie.release_date)}</div></div>
             </a>
         `).join('');
-    } else if (recommendedGrid) {
+    } else {
         recommendedGrid.innerHTML = '<p class="no-recommendations">추천 영화가 없습니다.</p>';
     }
 }
 
-// 날짜 포맷 함수
+// 날짜 포맷
 function formatDate(dateString) {
+    if (!dateString) return '';
     const date = new Date(dateString);
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
@@ -288,241 +208,87 @@ function formatDate(dateString) {
 // 미디어 섹션 초기화
 async function initializeMediaSection(movieId) {
     try {
-        // 비디오와 이미지 데이터 동시에 가져오기
         const [videosResponse, imagesResponse] = await Promise.all([
-            fetch(`${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=ko-KR`),
-            fetch(`${TMDB_BASE_URL}/movie/${movieId}/images?api_key=${TMDB_API_KEY}`)
+            fetch(`${window.TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${window.TMDB_API_KEY}&language=ko-KR`),
+            fetch(`${window.TMDB_BASE_URL}/movie/${movieId}/images?api_key=${window.TMDB_API_KEY}`)
         ]);
 
-        if (!videosResponse.ok || !imagesResponse.ok) {
-            throw new Error('미디어 데이터를 가져오는데 실패했습니다.');
-        }
+        if (!videosResponse.ok || !imagesResponse.ok) throw new Error('미디어 데이터 로딩 실패');
 
         const videosData = await videosResponse.json();
         const imagesData = await imagesResponse.json();
 
-        // 트레일러 섹션 업데이트
         updateTrailers(videosData.results);
-        
-        // 스틸컷 섹션 업데이트
         updateStills(imagesData);
-
-        // 미디어 링크에 영화 ID 추가
         updateMediaLink(movieId);
 
     } catch (error) {
         console.error('미디어 섹션 초기화 중 오류 발생:', error);
+        document.querySelector('#trailers').innerHTML = '<p>동영상 정보를 불러오지 못했습니다.</p>';
+        document.querySelector('#stills').innerHTML = '<p>이미지 정보를 불러오지 못했습니다.</p>';
     }
 }
 
-// 트레일러 섹션 업데이트
+// 동영상/트레일러 업데이트
 function updateTrailers(videos) {
     const trailersGrid = document.querySelector('.video-grid');
-    if (!trailersGrid || !videos.length) return;
+    if (!trailersGrid) return;
 
-    // 최대 1개의 트레일러만 표시
-    const trailer = videos.find(video => video.type === 'Trailer');
-    if (trailer) {
-        const thumbnailUrl = `https://img.youtube.com/vi/${trailer.key}/maxresdefault.jpg`;
-        trailersGrid.innerHTML = `
-            <div class="media-item video">
-                <img src="${thumbnailUrl}" alt="${trailer.name}" class="media-thumbnail">
-                <button class="play-button" data-video-id="${trailer.key}">▶</button>
-            </div>
-        `;
+    const trailers = videos.filter(v => v.type === 'Trailer' && v.site === 'YouTube').slice(0, 2);
 
-        // 트레일러 재생 버튼 이벤트 리스너
-        const playButton = trailersGrid.querySelector('.play-button');
-        if (playButton) {
-            playButton.addEventListener('click', () => {
-                const videoId = playButton.dataset.videoId;
-                openTrailerModal(videoId);
-            });
-        }
+    if (trailers.length > 0) {
+        trailersGrid.innerHTML = trailers.map(trailer => {
+            const thumbnailUrl = `https://i.ytimg.com/vi/${trailer.key}/hqdefault.jpg`;
+            return `
+                <div class="media-item video" onclick="openTrailerModal('${trailer.key}')">
+                    <img src="${thumbnailUrl}" alt="${trailer.name}" class="media-thumbnail">
+                    <button class="play-button" aria-label="재생">▶</button>
+                    <div class="video-info"><div class="video-title">${trailer.name}</div></div>
+                </div>`;
+        }).join('');
+    } else {
+        trailersGrid.innerHTML = '<p>사용 가능한 트레일러가 없습니다.</p>';
     }
 }
 
-// 스틸컷 섹션 업데이트
+// 포스터/스틸컷 업데이트
 function updateStills(imagesData) {
     const stillsScroll = document.querySelector('.media-stills-scroll');
     if (!stillsScroll) return;
 
-    const images = [...(imagesData.backdrops || []), ...(imagesData.posters || [])]
-        .slice(0, 4)
-        .map(image => `https://image.tmdb.org/t/p/w500${image.file_path}`);
+    const images = [...(imagesData.backdrops || []), ...(imagesData.posters || [])].slice(0, 5);
 
     if (images.length > 0) {
-        stillsScroll.innerHTML = images.map(imageUrl => `
+        stillsScroll.innerHTML = images.map(image => `
             <div class="media-item image">
-                <img src="${imageUrl}" alt="영화 스틸컷" class="media-image">
+                <img src="https://image.tmdb.org/t/p/w500${image.file_path}" alt="영화 스틸컷" class="media-image">
             </div>
         `).join('');
+    } else {
+        stillsScroll.innerHTML = '<p>사용 가능한 이미지가 없습니다.</p>';
     }
 }
 
-// 미디어 링크 업데이트
+// 미디어 페이지 링크 업데이트
 function updateMediaLink(movieId) {
     const mediaLink = document.querySelector('.media-link');
-    if (mediaLink) {
-        mediaLink.href = `media.html?id=${movieId}`;
-    }
+    if (mediaLink) mediaLink.href = `media.html?id=${movieId}`;
 
     const mediaScrollMoreBtn = document.querySelector('.media-scroll-more-btn');
-    if (mediaScrollMoreBtn) {
-        mediaScrollMoreBtn.onclick = () => location.href = `media.html?id=${movieId}`;
-    }
+    if (mediaScrollMoreBtn) mediaScrollMoreBtn.onclick = () => location.href = `media.html?id=${movieId}`;
 }
 
-// 미디어 탭 전환
+// 미디어 탭 기능
 document.addEventListener('DOMContentLoaded', () => {
     const mediaTabs = document.querySelectorAll('.media-tab');
-    const mediaContents = document.querySelectorAll('.media-content');
-
     mediaTabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            // 활성 탭 변경
             mediaTabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-
-            // 컨텐츠 변경
-            const targetId = tab.dataset.tab;
-            mediaContents.forEach(content => {
-                content.classList.toggle('hidden', content.id !== targetId);
+            
+            document.querySelectorAll('.media-content').forEach(content => {
+                content.classList.toggle('hidden', content.id !== tab.dataset.tab);
             });
         });
     });
-
-    // URL에서 영화 ID를 가져와서 미디어 섹션 초기화
-    const urlParams = new URLSearchParams(window.location.search);
-    const movieId = urlParams.get('id');
-    if (movieId) {
-        initializeMediaSection(movieId);
-    }
 });
-
-// 트레일러 관련 함수들
-async function loadTrailer(movieId) {
-    try {
-        const movieData = await getMovieDetails(movieId);
-        const videoId = movieData.video_id;
-        
-        if (!videoId) {
-            showTrailerError();
-            return;
-        }
-
-        const trailerSection = document.querySelector('.trailer-section');
-        if (!trailerSection) return;
-
-        // 트레일러 섹션 초기화
-        trailerSection.innerHTML = `
-            <div class="trailer-container">
-                <div class="trailer-thumbnail" data-video-id="${videoId}">
-                    <img src="https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg" 
-                         alt="트레일러 썸네일"
-                         onerror="this.src='https://i.ytimg.com/vi/${videoId}/hqdefault.jpg'">
-                    <div class="play-button">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // 트레일러 클릭 이벤트 설정
-        const trailerThumbnail = trailerSection.querySelector('.trailer-thumbnail');
-        if (trailerThumbnail) {
-            trailerThumbnail.addEventListener('click', () => {
-                openTrailerModal(videoId);
-            });
-        }
-
-        hideTrailerError();
-    } catch (error) {
-        console.error('트레일러 로딩 중 오류 발생:', error);
-        showTrailerError();
-    }
-}
-
-function showTrailerError() {
-    try {
-        const videoContainer = document.querySelector('.media-item.video');
-        if (!videoContainer) {
-            console.error('비디오 컨테이너를 찾을 수 없습니다.');
-            return;
-        }
-
-        const errorState = videoContainer.querySelector('.video-error-state');
-        const videoContent = videoContainer.querySelector('.video-content');
-
-        if (!errorState || !videoContent) {
-            console.error('오류 상태 또는 비디오 콘텐츠 요소를 찾을 수 없습니다.');
-            return;
-        }
-        
-        errorState.classList.remove('hidden');
-        videoContent.classList.add('hidden');
-    } catch (error) {
-        console.error('트레일러 오류 표시 중 문제 발생:', error);
-    }
-}
-
-function hideTrailerError() {
-    try {
-        const videoContainer = document.querySelector('.media-item.video');
-        if (!videoContainer) {
-            console.error('비디오 컨테이너를 찾을 수 없습니다.');
-            return;
-        }
-
-        const errorState = videoContainer.querySelector('.video-error-state');
-        const videoContent = videoContainer.querySelector('.video-content');
-
-        if (!errorState || !videoContent) {
-            console.error('오류 상태 또는 비디오 콘텐츠 요소를 찾을 수 없습니다.');
-            return;
-        }
-        
-        errorState.classList.add('hidden');
-        videoContent.classList.remove('hidden');
-    } catch (error) {
-        console.error('트레일러 오류 숨기기 중 문제 발생:', error);
-    }
-}
-
-function openTrailerModal(videoId) {
-    const modal = document.getElementById('trailerModal');
-    if (!modal) return;
-
-    const iframe = modal.querySelector('iframe');
-    if (!iframe) return;
-
-    modal.style.display = 'block';
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-
-    // ESC 키로 모달 닫기
-    const escHandler = (e) => {
-        if (e.key === 'Escape') {
-            closeTrailerModal();
-            document.removeEventListener('keydown', escHandler);
-        }
-    };
-    document.addEventListener('keydown', escHandler);
-
-    // 모달 외부 클릭으로 닫기
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeTrailerModal();
-        }
-    });
-}
-
-function closeTrailerModal() {
-    const modal = document.getElementById('trailerModal');
-    if (!modal) return;
-
-    const iframe = modal.querySelector('iframe');
-    if (iframe) {
-        iframe.src = '';
-        }
-    modal.style.display = 'none';
-}
