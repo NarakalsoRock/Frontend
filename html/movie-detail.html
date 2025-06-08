@@ -31,38 +31,28 @@
 
     <main class="main-content">
         <section class="movie-detail">
+            <!-- 로딩 인디케이터 -->
+            <div class="loading-indicator" style="display: none;">
+                <div class="spinner"></div>
+                <p>영화 정보를 불러오는 중...</p>
+            </div>
+
+            <!-- 에러 메시지 -->
+            <div class="error-message" style="display: none;">
+                <p>죄송합니다. 영화 정보를 불러오는 중 오류가 발생했습니다.</p>
+                <p>잠시 후 다시 시도해 주세요.</p>
+            </div>
+
             <div class="movie-header">
                 <div class="poster-container">
-                    <img src="https://placehold.co/380x540" alt="영화 포스터" class="movie-poster">
-                    <div class="pin" style="left: 30%; top: 40%;" data-role="actor" data-name="스칼렛 요한슨" data-character="블랙 위도우">
-                        <div class="pin-icon">+</div>
-                        <a href="person-detail.html" class="pin-popup">
-                            <img src="https://placehold.co/60x60" alt="배우 사진" class="pin-image">
-                            <div class="pin-info">
-                                <p class="pin-name">스칼렛 요한슨</p>
-                                <p class="pin-role">배우</p>
-                                <p class="pin-character">블랙 위도우 역</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="pin" style="left: 60%; top: 55%;" data-role="actor" data-name="플로렌스 퓨" data-character="옐레나 벨로바">
-                        <div class="pin-icon">+</div>
-                        <a href="person-detail.html" class="pin-popup">
-                            <img src="https://placehold.co/60x60" alt="배우 사진" class="pin-image">
-                            <div class="pin-info">
-                                <p class="pin-name">플로렌스 퓨</p>
-                                <p class="pin-role">배우</p>
-                                <p class="pin-character">옐레나 벨로바 역</p>
-                            </div>
-                        </a>
+                    <img src="" alt="" class="movie-poster" loading="lazy">
+                    <div class="pin-container">
+                        <!-- 핀 포인트는 동적으로 추가됩니다 -->
                     </div>
                 </div>
                 <div class="movie-info">
-                    <h1 class="movie-title">진격의 거인: 더 라스트 어택</h1> <div class="movie-meta">
-                        <span class="rating">15</span> <span class="release-date">2025.03.13</span>
-                        <span class="score">★ 9.5</span> <span class="duration">144분</span>
-                        <span class="genre">액션, 애니메이션</span>
-                    </div>
+                    <h1 class="movie-title"></h1>
+                    <div class="movie-meta"></div>
                     <div class="action-buttons">
                         <button class="btn-like" aria-label="좋아요">
                             <svg class="icon-heart" viewBox="0 0 24 24">
@@ -74,7 +64,7 @@
                                 <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
                             </svg>
                         </button>
-                        <button class="btn-trailer" aria-label="예고편 재생"> 
+                        <button class="btn-trailer" aria-label="예고편 재생">
                             <svg class="icon-play" viewBox="0 0 24 24">
                                 <path d="M8 5v14l11-7z"/>
                             </svg>
@@ -83,9 +73,7 @@
                     </div>
                     <section class="movie-synopsis">
                         <h2 class="section-title">개요</h2>
-                        <p class="synopsis-text">
-                            거인의 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서 숨을 죽이고 살고 있는 인류. 백 년의 평화는 초대형 거인의 습격으로 파괴됐고, 어머니를 잃은 소년 엘런 예거는 모든 거인을 없앨 것을 맹세하고 거인과 싸우는 조사병단의 일원이 되었다... (후략)
-                        </p>
+                        <p class="synopsis-text"></p>
                     </section>
                 </div>
             </div>
@@ -93,49 +81,18 @@
             <section class="movie-credits">
                 <div class="section-header">
                     <h2 class="section-title">제작진 및 출연자</h2>
-                    <button class="credits-scroll-more-btn" onclick="location.href='film-crew.html'" aria-label="제작진 및 출연자 전체 보기">&gt;</button>
                 </div>
                 <div class="credits-scroll-wrapper">
                     <div class="credits-scroll">
-                        <a href="person-detail.html" class="credit-item">
-                            <img src="https://placehold.co/150x150" alt="이사야마 하지메" class="credit-image">
-                            <div class="credit-info">
-                                <p class="credit-name">이사야마 하지메</p>
-                            </div>
-                        </a>
-                        <a href="person-detail.html" class="credit-item">
-                            <img src="https://placehold.co/150x150" alt="카지 유우키" class="credit-image">
-                            <div class="credit-info">
-                                <p class="credit-name">카지 유우키</p>
-                            </div>
-                        </a>
-                        <a href="person-detail.html" class="credit-item">
-                            <img src="https://placehold.co/150x150" alt="이시카와 유이" class="credit-image">
-                            <div class="credit-info">
-                                <p class="credit-name">이시카와 유이</p>
-                            </div>
-                        </a>
-                        <a href="person-detail.html" class="credit-item">
-                            <img src="https://placehold.co/150x150" alt="카미야 히로시" class="credit-image">
-                            <div class="credit-info">
-                                <p class="credit-name">카미야 히로시</p>
-                            </div>
-                        </a>
-                        <a href="person-detail.html" class="credit-item">
-                            <img src="https://placehold.co/150x150" alt="박로미" class="credit-image">
-                            <div class="credit-info">
-                                <p class="credit-name">박로미</p>
-                            </div>
-                        </a>
-                        <!-- 필요시 더 추가 -->
+                        <!-- 제작진 및 출연자는 동적으로 추가됩니다 -->
                     </div>
                 </div>
             </section>
 
             <section class="movie-media">
-                <div class="section-header"> 
+                <div class="section-header">
                     <div class="section-title media-section-title">
-                        <a href="media.html" class="media-link">미디어</a>
+                        <a href="#" class="media-link">미디어</a>
                     </div>
                     <div class="media-tabs">
                         <button class="media-tab active" data-tab="trailers">동영상/트레일러</button>
@@ -144,39 +101,15 @@
                 </div>
                 <div class="media-content" id="trailers">
                     <div class="media-grid video-grid">
-                        <div class="media-item video">
-                            <div class="video-error-state hidden">
-                                <svg class="video-error-icon" viewBox="0 0 24 24" width="48" height="48">
-                                    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                                </svg>
-                                <p class="video-error-message">트레일러를 불러올 수 없습니다</p>
-                                <p class="video-error-submessage">잠시 후 다시 시도해 주세요</p>
-                            </div>
-                            <div class="video-content">
-                            <img src="https://placehold.co/300x169" alt="트레일러 썸네일" class="media-thumbnail">
-                            <button class="play-button">▶</button>
-                            </div>
-                        </div>
+                        <!-- 트레일러는 동적으로 추가됩니다 -->
                     </div>
                 </div>
                 <div class="media-content hidden" id="stills">
                     <div class="media-stills-scroll-wrapper">
                         <div class="media-stills-scroll">
-                            <div class="media-item image">
-                                <img src="https://placehold.co/300x169" alt="스틸컷1" class="media-image">
-                            </div>
-                            <div class="media-item image">
-                                <img src="https://placehold.co/300x169" alt="스틸컷2" class="media-image">
-                            </div>
-                            <div class="media-item image">
-                                <img src="https://placehold.co/300x169" alt="스틸컷3" class="media-image">
-                            </div>
-                            <div class="media-item image">
-                                <img src="https://placehold.co/300x169" alt="스틸컷4" class="media-image">
-                            </div>
-                            <!-- 필요시 더 추가 -->
+                            <!-- 스틸컷은 동적으로 추가됩니다 -->
                         </div>
-                        <button class="media-scroll-more-btn" onclick="location.href='media.html'" aria-label="미디어 페이지로 이동">&gt;</button>
+                        <button class="media-scroll-more-btn" aria-label="미디어 페이지로 이동">&gt;</button>
                     </div>
                 </div>
             </section>
@@ -184,11 +117,9 @@
             <section class="related-series">
                 <h2 class="section-title">관련 시리즈</h2>
                 <div class="related-series-banner">
-                    <h3 class="related-series-banner-title">진격의 거인 시리즈에 포함된 작품</h3>
-                    <p class="related-series-list">
-                        진격의 거인 1기, 홍련의 화살, 자유의 날개, 극장판 진격의 거인 2기: 각성의 포효, 진격의 거인 3기, 진격의 거인 The Final Season 파트1, 진격의 거인 The Final Season 파트2, 진격의 거인 크로니클, and 진격의 거인 더 라스트 어택
-                    </p>
-                    <button class="btn-view-collection" onclick="location.href='series.html'">컬렉션 보기</button>
+                    <h3 class="related-series-banner-title"></h3>
+                    <p class="related-series-list"></p>
+                    <button class="btn-view-collection">컬렉션 보기</button>
                 </div>
             </section>
 
@@ -197,19 +128,19 @@
                     <h2 class="section-title">추천 영화</h2>
                 </div>
                 <div class="movie-grid">
-                    <!-- 여기는 JavaScript에서 동적으로 채워질 예정입니다 -->
+                    <!-- 추천 영화는 동적으로 추가됩니다 -->
                 </div>
             </section>
 
             <!-- 예고편 모달 -->
-    <div class="trailer-modal" id="trailerModal">
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <div class="video-container">
+            <div class="trailer-modal" id="trailerModal">
+                <div class="modal-content">
+                    <button class="modal-close">&times;</button>
+                    <div class="video-container">
                         <iframe src="" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
         </section>
     </main>
 

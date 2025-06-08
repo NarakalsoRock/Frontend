@@ -161,7 +161,7 @@ document.addEventListener('click', async (e) => {
         const movieId = movieItem.dataset.movieId;
         window.location.href = `movie-detail.html?id=${movieId}`;
     }
-});
+}); 
 
 // 검색 기능 설정
 function setupSearch() {

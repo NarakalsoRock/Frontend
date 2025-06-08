@@ -26,9 +26,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (movieCache.data && movieCache.timestamp && (now - movieCache.timestamp < movieCache.CACHE_DURATION)) {
             upcomingMovies = movieCache.data;
         } else {
-            const response = await window.getUpcoming();
-            if (response && response.movies) {
-                upcomingMovies = response.movies;
+        const response = await window.getUpcoming();
+        if (response && response.movies) {
+            upcomingMovies = response.movies;
                 // 캐시 업데이트
                 movieCache.data = upcomingMovies;
                 movieCache.timestamp = now;
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const today = new Date();
         upcomingMovies = upcomingMovies.filter(movie => new Date(movie.release_date) > today);
         
-        displayMoviesByMonth(upcomingMovies);
+            displayMoviesByMonth(upcomingMovies);
     } catch (error) {
         console.error('데이터 로딩 중 오류 발생:', error);
         loadingIndicator.textContent = '영화 목록을 불러오는데 실패했습니다.';
@@ -71,28 +71,28 @@ function initializeSortingFeature(movies) {
     sortButton.addEventListener('click', () => {
         isOptionsVisible = !isOptionsVisible;
         sortOptions.style.display = isOptionsVisible ? 'block' : 'none';
-    });
+        });
 
-    sortOptions.querySelectorAll('.sort-option').forEach(option => {
+        sortOptions.querySelectorAll('.sort-option').forEach(option => {
         option.addEventListener('click', () => {
             const sortType = option.textContent;
-            sortButton.textContent = sortType + ' ▼';
+                sortButton.textContent = sortType + ' ▼';
             isOptionsVisible = false;
-            sortOptions.style.display = 'none';
-            
+                sortOptions.style.display = 'none';
+                
             const sortedMovies = [...movies].sort(sortFunctions[sortType]);
             requestAnimationFrame(() => displayMoviesByMonth(sortedMovies));
+            });
         });
-    });
 
     // 외부 클릭 시 옵션 닫기
     document.addEventListener('click', (event) => {
-        if (!sortButton.contains(event.target) && !sortOptions.contains(event.target)) {
+            if (!sortButton.contains(event.target) && !sortOptions.contains(event.target)) {
             isOptionsVisible = false;
-            sortOptions.style.display = 'none';
-        }
-    });
-}
+                sortOptions.style.display = 'none';
+            }
+        });
+    }
 
 // 월별로 영화 그룹화 함수
 function groupMoviesByMonth(movies) {
@@ -151,7 +151,7 @@ function displayMoviesByMonth(movies) {
 
     // Intersection Observer로 이미지 지연 로딩
     setupLazyLoading();
-}
+                }
 
 // 영화 요소 생성 함수
 function createMovieElement(movie, today) {
@@ -163,24 +163,24 @@ function createMovieElement(movie, today) {
     const dDay = Math.ceil((releaseDate - today) / (1000 * 60 * 60 * 24));
     
     movieItem.innerHTML = `
-        <div class="poster-container">
-            <a href="movie-detail.html?id=${movie.id}">
+                        <div class="poster-container">
+                            <a href="movie-detail.html?id=${movie.id}">
                 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                      data-src="${movie.poster_path ? `https://image.tmdb.org/t/p/${POSTER_SIZES.THUMBNAIL}${movie.poster_path}` : '../images/no-poster.png'}"
-                     alt="${movie.title || '영화 제목 없음'}"
+                                     alt="${movie.title || '영화 제목 없음'}" 
                      class="movie-poster lazy">
-            </a>
-        </div>
-        <div class="movie-info">
-            <div class="movie-header">
+                            </a>
+                        </div>
+                        <div class="movie-info">
+                            <div class="movie-header">
                 <span class="rating">${movie.rating || 'ALL'}</span>
-                <span class="title">${movie.title || '제목 정보 없음'}</span>
-            </div>
-            <div class="movie-details">
-                <span class="release-date">${movie.release_date || '개봉일 정보 없음'} (D-${dDay})</span>
-            </div>
-        </div>
-    `;
+                                <span class="title">${movie.title || '제목 정보 없음'}</span>
+                            </div>
+                            <div class="movie-details">
+                                <span class="release-date">${movie.release_date || '개봉일 정보 없음'} (D-${dDay})</span>
+                        </div>
+                    </div>
+                `;
 
     return movieItem;
 }
