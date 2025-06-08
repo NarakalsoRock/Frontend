@@ -60,8 +60,11 @@ function displayMovieContent(movie, seriesData, recommendedMovies) {
     const movieDetailSection = document.querySelector('.movie-detail');
     if (!movieDetailSection) return;
 
+    // 수정된 부분: 영화 평점을 기준으로 관람 등급을 추정하는 로직 적용
+    const rating = movie.adult ? '18' : (movie.vote_average >= 7 ? '15' : (movie.vote_average >= 5 ? '12' : 'ALL'));
+
     const metaInfoHTML = `
-        <span class="rating">${movie.adult ? '18+' : 'ALL'}</span>
+        <span class="rating">${rating}</span>
         <span class="release-date">${movie.release_date || '미정'}</span>
         <span class="score">★ ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}</span>
         <span class="duration">${movie.runtime ? movie.runtime + '분' : ''}</span>
@@ -237,7 +240,6 @@ async function initializeMediaSection(movieId) {
         const imagesData = await imagesResponse.json();
 
         updateTrailers(videosData.results);
-        // 수정된 부분: updateStills 함수에 movieId를 전달합니다.
         updateStills(imagesData, movieId);
         updateMediaLink(movieId);
         setupMediaTabs();
@@ -275,7 +277,6 @@ function updateTrailers(videos) {
 }
 
 // 포스터/스틸컷 업데이트
-// 수정된 부분: movieId를 인자로 받아 버튼의 링크에 사용합니다.
 function updateStills(imagesData, movieId) {
     const stillsWrapper = document.querySelector('.media-stills-scroll-wrapper');
     const stillsScroll = document.querySelector('.media-stills-scroll');
@@ -290,7 +291,6 @@ function updateStills(imagesData, movieId) {
             </div>
         `).join('');
 
-        // 수정된 부분: 기존 버튼이 있다면 제거하고 새로 생성하여 중복을 방지합니다.
         const existingButton = stillsWrapper.querySelector('.media-scroll-more-btn');
         if (existingButton) {
             existingButton.remove();
@@ -298,7 +298,7 @@ function updateStills(imagesData, movieId) {
 
         const moreButton = document.createElement('button');
         moreButton.className = 'media-scroll-more-btn';
-        moreButton.innerHTML = '&gt;';
+        moreButton.innerHTML = '>';
         moreButton.setAttribute('aria-label', '미디어 페이지로 이동');
         moreButton.onclick = () => {
             location.href = `media.html?id=${movieId}`;
