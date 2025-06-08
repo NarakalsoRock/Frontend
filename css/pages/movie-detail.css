@@ -334,7 +334,13 @@
     scroll-behavior: smooth;
     padding-bottom: 8px;
     flex: 1;
+    scrollbar-width: none;           /* Firefox에서 스크롤바 숨김 */
+    -ms-overflow-style: none;        /* IE, Edge에서 스크롤바 숨김 */
 }
+.credits-scroll::-webkit-scrollbar {
+    display: none;                   /* Chrome, Safari, Opera에서 스크롤바 숨김 */
+}
+
 .credit-item {
     display: flex;
     flex-direction: column;
@@ -356,7 +362,7 @@
     margin-top: 10px;
     text-align: center;
 }
-.credits-scroll-more-btn {
+/* .credits-scroll-more-btn {
     flex: 0 0 auto;
     margin-left: 12px;
     background: #673ab7;
@@ -374,7 +380,7 @@
 }
 .credits-scroll-more-btn:hover {
     background: #512da8;
-}
+} */
 
 /* 미디어 섹션 */
 .movie-media {
