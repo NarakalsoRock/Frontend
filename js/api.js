@@ -12,6 +12,11 @@ window.POSTS_API_URL = `${window.BASE_API_URL}/posts`;
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = 'e79d211004d63ca22d668182dc17ebbb'; // TMDB API 키
 
+// 다른 JS 파일에서 TMDB API를 직접 호출할 수 있도록 전역 변수로 설정
+window.TMDB_BASE_URL = API_BASE_URL;
+window.TMDB_API_KEY = API_KEY;
+
+
 // TMDB API 관련 함수들 (변경 없음, 기존 코드 유지)
 async function fetchTMDBNowPlaying() {
     try {
@@ -71,7 +76,7 @@ async function fetchTMDBMovieDetails(movieId) {
             overview: movieData.overview,
             genres: movieData.genres.map(genre => genre.name),
             adult: movieData.adult,
-            video_id: videosData.results?.[0]?.key,
+            video_id: videosData.results?.find(v => v.site === 'YouTube' && v.type === 'Trailer')?.key,
             cast: creditsData.cast.slice(0, 10).map(actor => ({
                 id: actor.id,
                 name: actor.name,
@@ -601,7 +606,3 @@ async function getComments(postId, page = 1, limit = 10) {
     }
 }
 window.getComments = getComments;
-
-// 페이지 로드 시 실행되던 DOMContentLoaded 이벤트 리스너는 각 HTML 파일로 이동하거나,
-// 필요한 경우에만 실행하도록 변경합니다. 여기서는 로그인 상태만 반환하는 함수를 제공합니다.
-// document.addEventListener('DOMContentLoaded', checkLoginStatusAndRedirect); // 이 줄은 주석 처리 또는 삭제
