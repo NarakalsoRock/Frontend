@@ -7,16 +7,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             displayMainMovie(mainMovie);
         }
 
-        // 현재 상영작 로드
-        const response = await getNowPlaying();
-        console.log('받아온 현재 상영작:', response); // 디버깅용
-        if (response && response.movies) {
-            displayNowPlaying(response.movies);
+        // 현재 상영작과 개봉 예정작 병렬로 로드
+        const [nowPlayingResponse, upcomingResponse] = await Promise.all([
+            getNowPlaying(),
+            getUpcoming()
+        ]);
+
+        if (nowPlayingResponse && nowPlayingResponse.movies) {
+            displayNowPlaying(nowPlayingResponse.movies);
         }
 
-        // 개봉 예정작 로드
-        const upcomingResponse = await getUpcoming();
-        console.log('받아온 개봉 예정작:', upcomingResponse); // 디버깅용
         if (upcomingResponse && upcomingResponse.movies) {
             displayUpcoming(upcomingResponse.movies);
         }
@@ -46,14 +46,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // 메인 영화 표시 함수
 function displayMainMovie(movie) {
-    // 배경 이미지 설정
     const mainMovieSection = document.querySelector('.main-movie');
     mainMovieSection.style.backgroundImage = `url(${movie.backdrop_path})`;
 
-    // 제목 설정
     document.querySelector('.main-movie-title').textContent = movie.title;
 
-    // 영화 정보 설정
     const movieInfo = document.querySelector('.main-movie-info');
     movieInfo.innerHTML = `
         <span class="movie-rating">평점 ${movie.vote_average.toFixed(1)}</span>
@@ -61,51 +58,45 @@ function displayMainMovie(movie) {
         <span class="movie-release">${formatDate(movie.release_date)}</span>
     `;
 
-    // 장르 설정
     const genresContainer = document.querySelector('.movie-genres');
     genresContainer.innerHTML = movie.genres
         .map(genre => `<span>${genre}</span>`)
         .join('');
 
-    // 줄거리 설정
     document.querySelector('.main-movie-description').textContent = movie.overview;
 
-    // 감독 정보 설정
     const directorContainer = document.querySelector('.movie-director');
     if (movie.director) {
         directorContainer.textContent = `감독: ${movie.director.name}`;
     }
 
-    // 상세보기 버튼 이벤트 리스너
     const detailButton = document.querySelector('.btn-detail');
     if (detailButton) {
         detailButton.href = `movie-detail.html?id=${movie.id}`;
     }
 
-    // 예고편 버튼 이벤트 리스너
-    const trailerButton = document.querySelector('.btn-trailer');
-    if (trailerButton) {
-        trailerButton.addEventListener('click', () => {
-            openTrailerModal(movie.video_id);
-        });
-    }
+    // 예고편 버튼 이벤트 리스너 (기능 유지)
+    // const trailerButton = document.querySelector('.btn-trailer');
+    // if (trailerButton && movie.video_id) {
+    //     trailerButton.onclick = () => openTrailerModal(movie.video_id);
+    // }
 }
 
 // 예고편 모달 관련 함수들
 function openTrailerModal(videoId) {
-    const modal = document.querySelector('.trailer-modal');
+    const modal = document.getElementById('trailerModal');
     const iframe = modal.querySelector('iframe');
     if (modal && iframe && videoId) {
-        modal.style.display = 'block';
+        modal.classList.add('active');
         iframe.src = `https://www.youtube.com/embed/${videoId}`;
     }
 }
 
 function closeTrailerModal() {
-    const modal = document.querySelector('.trailer-modal');
+    const modal = document.getElementById('trailerModal');
     const iframe = modal.querySelector('iframe');
     if (modal && iframe) {
-        modal.style.display = 'none';
+        modal.classList.remove('active');
         iframe.src = '';
     }
 }
@@ -118,90 +109,52 @@ function formatDate(dateString) {
 
 // 현재 상영작 표시 함수
 function displayNowPlaying(movies) {
-    const container = document.querySelector('.now-playing .movie-grid');
+    const container = document.getElementById('nowPlayingMovies');
     if (!container) return;
-
-    container.innerHTML = movies.map(movie => {
-        console.log('영화 포스터 URL:', movie.poster_path); // 디버깅용
-        return `
-            <div class="movie-item" data-movie-id="${movie.id}">
-                <img src="${movie.poster_path || 'https://placehold.co/150x220'}" 
-                     alt="${movie.title}" 
-                     class="movie-poster"
-                     onerror="this.onerror=null; this.src='https://placehold.co/150x220';">
-                <div class="movie-title">${movie.title}</div>
-            </div>
-        `;
-    }).join('');
+    container.innerHTML = movies.map(movie => `
+        <a href="movie-detail.html?id=${movie.id}" class="movie-item">
+            <img src="${movie.poster_path || 'https://placehold.co/150x220'}" 
+                 alt="${movie.title}" 
+                 class="movie-poster"
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='https://placehold.co/150x220';">
+            <div class="movie-title">${movie.title}</div>
+        </a>
+    `).join('');
 }
 
 // 개봉 예정작 표시 함수
 function displayUpcoming(movies) {
-    const container = document.querySelector('.coming-soon .movie-grid');
+    const container = document.getElementById('upcomingMovies');
     if (!container) return;
-
-    container.innerHTML = movies.map(movie => {
-        console.log('영화 포스터 URL:', movie.poster_path); // 디버깅용
-        return `
-            <div class="movie-item" data-movie-id="${movie.id}">
-                <img src="${movie.poster_path || 'https://placehold.co/150x220'}" 
-                     alt="${movie.title}" 
-                     class="movie-poster"
-                     onerror="this.onerror=null; this.src='https://placehold.co/150x220';">
-                <div class="movie-title">${movie.title}</div>
-            </div>
-        `;
-    }).join('');
+    container.innerHTML = movies.map(movie => `
+        <a href="movie-detail.html?id=${movie.id}" class="movie-item">
+            <img src="${movie.poster_path || 'https://placehold.co/150x220'}" 
+                 alt="${movie.title}" 
+                 class="movie-poster"
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='https://placehold.co/150x220';">
+            <div class="movie-title">${movie.title}</div>
+        </a>
+    `).join('');
 }
-
-// 영화 클릭 이벤트 처리
-document.addEventListener('click', async (e) => {
-    const movieItem = e.target.closest('.movie-item');
-    if (movieItem) {
-        const movieId = movieItem.dataset.movieId;
-        window.location.href = `movie-detail.html?id=${movieId}`;
-    }
-});
 
 // 검색 기능 설정
 function setupSearch() {
     const searchInput = document.querySelector('.header-search-input');
     const searchButton = document.querySelector('.header-search-button');
 
-    // 검색 실행 함수
     async function executeSearch() {
         const query = searchInput.value.trim();
-        if (!query) return;
-
-        try {
-            // 영화와 인물 동시 검색
-            const [movieResponse, personResponse] = await Promise.all([
-                fetch(`${API_BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ko-KR&page=1`),
-                fetch(`${API_BASE_URL}/search/person?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ko-KR&page=1`)
-            ]);
-
-            const [movieData, personData] = await Promise.all([
-                movieResponse.json(),
-                personResponse.json()
-            ]);
-
-            // 검색 결과가 있으면 검색 페이지로 이동
-            if (movieData.results.length > 0 || personData.results.length > 0) {
-                window.location.href = `search.html?query=${encodeURIComponent(query)}`;
-            } else {
-                alert('검색 결과가 없습니다.');
-            }
-        } catch (error) {
-            console.error('검색 중 오류 발생:', error);
-            alert('검색 중 오류가 발생했습니다.');
+        if (query) {
+            window.location.href = `search.html?query=${encodeURIComponent(query)}`;
         }
     }
 
-    // 이벤트 리스너 설정
     searchButton.addEventListener('click', executeSearch);
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             executeSearch();
         }
     });
-} 
+}
