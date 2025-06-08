@@ -1,3 +1,10 @@
+// TMDB API 설정
+const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3';
+const TMDB_API_KEY = 'e79d211004d63ca22d668182dc17ebbb'; // TMDB API 키
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
+const POSTER_SIZE = 'w500';
+const BACKDROP_SIZE = 'original';
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // URL에서 컬렉션 ID 가져오기
@@ -10,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // TMDB API에서 컬렉션 정보 가져오기
         const response = await fetch(
-            `${TMDB_BASE_URL}/collection/${collectionId}?api_key=${TMDB_API_KEY}&language=ko-KR`
+            `${TMDB_API_BASE_URL}/collection/${collectionId}?api_key=${TMDB_API_KEY}&language=ko-KR`
         );
 
         if (!response.ok) {
@@ -55,7 +62,7 @@ function updateSeriesInfo(collection, movies) {
     const moviesHTML = movies.map(movie => `
         <div class="series-item-wrapper">
             <div class="series-poster-container" onclick="location.href='movie-detail.html?id=${movie.id}'">
-                <img src="${movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://placehold.co/210x259'}" 
+                <img src="${movie.poster_path ? `${TMDB_IMAGE_BASE_URL}/${POSTER_SIZE}${movie.poster_path}` : 'https://placehold.co/210x259'}" 
                      alt="${movie.title} 포스터" 
                      class="series-poster" />
             </div>

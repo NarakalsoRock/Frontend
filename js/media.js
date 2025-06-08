@@ -1,3 +1,10 @@
+// TMDB API 설정
+const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3';
+const TMDB_API_KEY = 'e79d211004d63ca22d668182dc17ebbb'; // TMDB API 키
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
+const POSTER_SIZE = 'w500';
+const BACKDROP_SIZE = 'original';
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // URL에서 영화 ID 가져오기
@@ -10,8 +17,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 비디오와 이미지 데이터 동시에 가져오기
         const [videosResponse, imagesResponse] = await Promise.all([
-            fetch(`${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=ko-KR`),
-            fetch(`${TMDB_BASE_URL}/movie/${movieId}/images?api_key=${TMDB_API_KEY}`)
+            fetch(`${TMDB_API_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=ko-KR`),
+            fetch(`${TMDB_API_BASE_URL}/movie/${movieId}/images?api_key=${TMDB_API_KEY}`)
         ]);
 
         if (!videosResponse.ok || !imagesResponse.ok) {
@@ -179,7 +186,7 @@ function displayImages(imagesData) {
     // 포스터와 스틸컷을 합치고 최대 10개만 선택
     const allImages = [...posters, ...backdrops]
         .slice(0, 10)
-        .map(image => `https://image.tmdb.org/t/p/w500${image.file_path}`);
+        .map(image => `${TMDB_IMAGE_BASE_URL}/${POSTER_SIZE}${image.file_path}`);
 
     // 이미지 표시
     allImages.forEach((imageUrl, index) => {
@@ -192,7 +199,8 @@ function displayImages(imagesData) {
             
             // 클릭 시 원본 이미지 보기
             posterItem.addEventListener('click', () => {
-                window.open(imageUrl.replace('/w500/', '/original/'), '_blank');
+                const originalUrl = imageUrl.replace(`/${POSTER_SIZE}/`, `/${BACKDROP_SIZE}/`);
+                window.open(originalUrl, '_blank');
             });
         }
     });

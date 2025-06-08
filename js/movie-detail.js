@@ -1,3 +1,11 @@
+// TMDB API 설정
+const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3';
+const TMDB_API_KEY = 'e79d211004d63ca22d668182dc17ebbb'; // TMDB API 키
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
+const POSTER_SIZE = 'w500';
+const BACKDROP_SIZE = 'original';
+const PROFILE_SIZE = 'w185';
+
 // API 기본 URL은 movieApi.js에서 가져옵니다
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -18,6 +26,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!movieId) {
             throw new Error('유효하지 않은 영화 ID입니다.');
         }
+
+        // 미디어 링크 업데이트
+        updateMediaLinks(movieId);
 
         // 영화 상세 정보와 시리즈 정보를 동시에 가져오기
         const [movieData, seriesData] = await Promise.all([
@@ -61,7 +72,9 @@ function updateMovieDetails(movie) {
     // 포스터 이미지 업데이트
     const posterImg = document.querySelector('.movie-poster');
     if (posterImg) {
-        posterImg.src = movie.poster_path || 'https://placehold.co/380x540';
+        posterImg.src = movie.poster_path ? 
+            `${TMDB_IMAGE_BASE_URL}/${POSTER_SIZE}${movie.poster_path}` : 
+            'https://placehold.co/380x540';
         posterImg.alt = movie.title;
     }
 
@@ -95,7 +108,9 @@ function updateMovieDetails(movie) {
         if (creditsScroll) {
             creditsScroll.innerHTML = movie.cast.map(actor => `
                 <a href="person-detail.html?id=${actor.id}" class="credit-item">
-                    <img src="${actor.profile_path || 'https://placehold.co/150x150'}" 
+                    <img src="${actor.profile_path ? 
+                        `${TMDB_IMAGE_BASE_URL}/${PROFILE_SIZE}${actor.profile_path}` : 
+                        'https://placehold.co/150x150'}" 
                          alt="${actor.name}" 
                          class="credit-image">
                     <div class="credit-info">
@@ -213,7 +228,9 @@ function updateMovieDetails(movie) {
 
     document.querySelectorAll('.scroll-more-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            window.location.href = 'media.html';
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieId = urlParams.get('id');
+            window.location.href = `media.html?id=${movieId}`;
         });
     });
 }
@@ -290,8 +307,8 @@ async function initializeMediaSection(movieId) {
     try {
         // 비디오와 이미지 데이터 동시에 가져오기
         const [videosResponse, imagesResponse] = await Promise.all([
-            fetch(`${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=ko-KR`),
-            fetch(`${TMDB_BASE_URL}/movie/${movieId}/images?api_key=${TMDB_API_KEY}`)
+            fetch(`${TMDB_API_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=ko-KR`),
+            fetch(`${TMDB_API_BASE_URL}/movie/${movieId}/images?api_key=${TMDB_API_KEY}`)
         ]);
 
         if (!videosResponse.ok || !imagesResponse.ok) {
@@ -308,7 +325,7 @@ async function initializeMediaSection(movieId) {
         updateStills(imagesData);
 
         // 미디어 링크에 영화 ID 추가
-        updateMediaLink(movieId);
+        updateMediaLinks(movieId);
 
     } catch (error) {
         console.error('미디어 섹션 초기화 중 오류 발생:', error);
@@ -349,7 +366,7 @@ function updateStills(imagesData) {
 
     const images = [...(imagesData.backdrops || []), ...(imagesData.posters || [])]
         .slice(0, 4)
-        .map(image => `https://image.tmdb.org/t/p/w500${image.file_path}`);
+        .map(image => `${TMDB_IMAGE_BASE_URL}/${POSTER_SIZE}${image.file_path}`);
 
     if (images.length > 0) {
         stillsScroll.innerHTML = images.map(imageUrl => `
@@ -361,15 +378,19 @@ function updateStills(imagesData) {
 }
 
 // 미디어 링크 업데이트
-function updateMediaLink(movieId) {
+function updateMediaLinks(movieId) {
+    // 미디어 섹션 제목 링크 업데이트
     const mediaLink = document.querySelector('.media-link');
     if (mediaLink) {
         mediaLink.href = `media.html?id=${movieId}`;
     }
 
-    const mediaScrollMoreBtn = document.querySelector('.media-scroll-more-btn');
-    if (mediaScrollMoreBtn) {
-        mediaScrollMoreBtn.onclick = () => location.href = `media.html?id=${movieId}`;
+    // 미디어 더보기 버튼 업데이트
+    const mediaMoreBtn = document.querySelector('.media-scroll-more-btn');
+    if (mediaMoreBtn) {
+        mediaMoreBtn.onclick = () => {
+            window.location.href = `media.html?id=${movieId}`;
+        };
     }
 }
 
