@@ -1,58 +1,6 @@
-/* Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background: #000000;
-    color: #ffffff;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    min-height: 100vh; /* Ensure body takes full viewport height for scrolling */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Header (from index.css / now-playing.css) */
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    z-index: 1000;
-}
-
-.logo {
-    color: #673AB7;
-    font-size: 36px;
-    font-weight: 700;
-}
-
-.nav {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.nav-item:hover {
-    background: rgba(103, 58, 183, 0.2);
-}
+@import url(../common/common.css);
+@import url(../common/footer.css);
+@import url(../common/header.css);
 
 .nav-item.active {
     background: #673AB7;
@@ -143,8 +91,8 @@ body {
 }
 
 /* Movies Section (Monthly upcoming) */
-.movies-section {
-    padding: 40px 0;
+.movies-container { /* movies-section 클래스가 중복되어 movies-container로 변경된 부분 유지 */
+    padding: 40px 5%;
 }
 
 .month-section {
@@ -155,65 +103,58 @@ body {
     color: white;
     font-size: 24px;
     font-weight: 600;
-    margin: 0 5% 20px;
-    padding-left: 10px;
-    border-left: 4px solid #673AB7;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    position: relative;
 }
 
-.movie-list-container {
-    width: 100%;
-    overflow-x: auto;
-    padding: 20px 0;
-    scrollbar-width: thin;
-    scrollbar-color: #673AB7 #19181C;
-}
-
-.movie-list-container::-webkit-scrollbar {
-    height: 8px;
-}
-
-.movie-list-container::-webkit-scrollbar-track {
-    background: #19181C;
-}
-
-.movie-list-container::-webkit-scrollbar-thumb {
+.month-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
     background: #673AB7;
-    border-radius: 4px;
-}
-
-.movie-list-container::-webkit-scrollbar-thumb:hover {
-    background: #7b4fc9;
 }
 
 .movie-grid {
     display: flex;
     gap: 30px;
-    padding: 0 5%;
-    min-width: min-content;
+    overflow-x: auto;
+    padding: 20px; /* 내부 스크롤 시 여백 */
+    margin: 0 -20px; /* movies-container의 padding과 상쇄 */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scroll-padding: 20px; /* 스크롤 스냅 시 여백 */
+}
+
+.movie-grid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .movie-item {
-    position: relative;
-    flex: 0 0 auto;
+    flex: 0 0 auto; /* 아이템 크기 고정 */
     width: 180px;
+    position: relative; /* 자식 요소 absolute 위치 기준 */
+    padding-bottom: 20px; /* movie-info 와의 간격 */
 }
 
 .poster-container {
     position: relative;
     width: 100%;
     margin-bottom: 15px;
-    overflow: hidden;
+    overflow: visible; /* 수정: hidden -> visible */
     border-radius: 8px;
+    background: #2a2a2a; /* 포스터 이미지 로딩 전 배경 */
+    aspect-ratio: 180/260; /* 포스터 비율 유지 */
 }
 
 .movie-poster {
-    width: 180px;
-    height: 260px;
-    transition: transform 0.3s ease;
-}
-
-.movie-item:hover .movie-poster {
-    transform: scale(1.05);
+    width: 100%;
+    height: 100%; /* .poster-container 에 맞춤 */
+    object-fit: cover; /* 비율 유지하며 채우기 */
 }
 
 .movie-info {
@@ -234,16 +175,17 @@ body {
     border-radius: 4px;
     font-size: 14px;
     font-weight: 500;
+    flex-shrink: 0; /* 등급 표시가 줄어들지 않도록 */
 }
 
 .title {
     color: white;
     font-size: 16px;
     font-weight: 500;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    flex: 1; /* 남은 공간 모두 차지 */
+    white-space: nowrap; /* 한 줄로 표시 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 말줄임표(...) 처리 */
 }
 
 .movie-details {
@@ -257,19 +199,59 @@ body {
     font-size: 14px;
 }
 
-/* Movie Actions (Buttons) */
+/* 좋아요 & 북마크 버튼 */
+.like-button, .bookmark-button {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px); /* 배경 블러 효과 (지원 브라우저) */
+    border: none;
+    border-radius: 50%;
+    width: 36px; /* 버튼 크기 */
+    height: 36px; /* 버튼 크기 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0; /* 기본 숨김 */
+    z-index: 10; /* 수정: z-index 값 증가 (기존 z-index: 1 에서 변경) */
+}
+
+.movie-item:hover .like-button, /* .poster-container 대신 .movie-item에 호버했을 때로 유지 (사용자 코드 기준) */
+.movie-item:hover .bookmark-button,
+.like-button.active,
+.bookmark-button.active {
+    opacity: 1; /* 호버 또는 active 시 나타남 */
+}
+
+.like-button {
+    top: 10px;
+    right: 10px;
+}
+
+.bookmark-button {
+    top: 10px;
+    left: 10px;
+}
+
+.like-button:hover, .bookmark-button:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+}
+
+/* Movie Actions (Buttons) - 영화 정보 하단 버튼들 (별개 유지) */
 .movie-actions {
     display: flex;
-    gap: 5px; /* 버튼들 사이 간격 */
-    margin-top: auto; /* info 하단에 붙도록 */
+    gap: 5px; 
+    margin-top: auto; 
     align-items: center;
-    justify-content: flex-start; /* 버튼들을 왼쪽으로 정렬 */
+    justify-content: flex-start; 
 }
 
 .btn-book {
-    background-color: #673AB7; /* 보라색 */
+    background-color: #673AB7; 
     color: white;
-    padding: 6px 12px; /* */
+    padding: 6px 12px;
     border-radius: 5px;
     border: none;
     font-size: 13px;
@@ -282,14 +264,14 @@ body {
 }
 
 .btn-special {
-    background-color: #333; /* Darker gray for special screening like Dolby Cinema */
+    background-color: #333; 
     color: white;
-    padding: 6px 10px; /* */
+    padding: 6px 10px;
     border-radius: 5px;
     border: none;
-    font-size: 11px; /* */
+    font-size: 11px;
     cursor: pointer;
-    white-space: nowrap; /* 글자가 줄바꿈되지 않도록 */
+    white-space: nowrap;
     transition: background-color 0.3s ease;
 }
 
@@ -297,46 +279,49 @@ body {
     background-color: #555;
 }
 
-.btn-like {
-    background: none;
-    border: none; /* 테두리 제거 */
-    color: #999; /* 좋아요 색상 (회색) */
-    font-size: 18px; /* 하트 아이콘 크기 */
-    cursor: pointer;
-    padding: 0; /* 패딩 제거 */
-    margin-right: 5px; /* 예매 버튼과의 간격 */
+/* 좋아요 아이콘 */
+.heart-icon {
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: background-image 0.3s ease;
 }
 
-.btn-like:hover {
-    color: #E0E0E0; /* 호버 시 밝은 회색 */
+.like-button:hover .heart-icon { /* 호버 시 아이콘 변경은 JS에서 active 클래스로 제어하므로 CSS 중복 제거 가능 */
+    /* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff0000' stroke='%23ff0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E"); */
 }
 
-/* Footer */
-.footer {
-    width: 100%;
-    max-width: 1440px;
-    margin: 0 auto;
-    height: 74px;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    padding-left: 5%;
-    padding-right: 5%;
-    flex-shrink: 0;
+.like-button.active .heart-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff0000' stroke='%23ff0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E");
 }
 
-.footer-text {
-    color: #673AB7;
-    font-size: 16px;
-    font-weight: 500;
+/* 북마크 아이콘 (SVG이므로 HTML에 직접 포함된 스타일을 사용) */
+.bookmark-icon {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+    transition: all 0.3s ease;
+}
+
+.bookmark-button:hover .bookmark-icon {
+    fill: #673AB7;
+    stroke: #673AB7;
+}
+
+.bookmark-button.active .bookmark-icon {
+    fill: #673AB7;
+    stroke: #673AB7;
 }
 
 /* Responsive Design */
 @media (max-width: 1200px) {
     .filter-container,
-    .movies-container {
+    .movies-container { /* movies-section -> movies-container */
         padding: 0 3%;
     }
 }
@@ -348,10 +333,10 @@ body {
     }
     .sort-button {
         padding: 8px 15px;
-        height: 32px;
+        /* height: 32px; /* 제거 또는 조정 */
     }
     .sort-options {
-        top: 35px;
+        /* top: 35px; /* 제거 또는 조정 */
         min-width: 140px;
     }
     .sort-option {
@@ -359,27 +344,33 @@ body {
         font-size: 13px;
     }
     .movie-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* 포스터 크기 조정 */
-        gap: 30px 20px;
+        gap: 30px 20px; /* 반응형 그리드 미사용으로 주석 처리된 부분 복원 */
     }
-    .poster-container {
-        padding-bottom: calc(260 / 180 * 100%); /* 비율 유지 */
-    }
+    /* .poster-container 관련 padding-bottom 주석 유지 */
     .title {
         font-size: 16px;
     }
-    .rating, .booking-rate, .release-date {
+    .rating, .release-date { /* .booking-rate 제거 (upcoming에는 없음) */
         font-size: 12px;
     }
     .btn-book, .btn-special {
         padding: 5px 10px;
         font-size: 11px;
     }
-    .btn-like {
-        font-size: 16px;
+    .like-button, .bookmark-button { /* 버튼 크기 및 위치 미디어쿼리 적용 */
+        width: 32px;  /* 조정된 크기 */
+        height: 32px; /* 조정된 크기 */
+        top: 8px;
+    }
+    .like-button { right: 8px; }
+    .bookmark-button { left: 8px; }
+
+    .heart-icon, .bookmark-icon {
+        width: 16px; /* 아이콘 크기 조정 */
+        height: 16px;/* 아이콘 크기 조정 */
     }
     .month-title {
-        font-size: 30px;
+        font-size: 22px; /* 조정 */
     }
 }
 
@@ -405,24 +396,30 @@ body {
         padding: 8px 15px;
     }
     .movie-grid {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 20px 15px;
+        gap: 20px 15px; /* 반응형 그리드 미사용으로 주석 처리된 부분 복원 */
     }
-    .poster-container {
-        padding-bottom: calc(260 / 180 * 100%); /* 비율 유지 */
-    }
+    /* .poster-container 관련 padding-bottom 주석 유지 */
     .title {
         font-size: 14px;
     }
-    .rating, .booking-rate, .release-date {
+    .rating, .release-date {
         font-size: 11px;
     }
     .btn-book, .btn-special {
         padding: 4px 8px;
         font-size: 10px;
     }
-    .btn-like {
-        font-size: 14px;
+    .like-button, .bookmark-button {
+        width: 28px; /* 조정된 크기 */
+        height: 28px;/* 조정된 크기 */
+        top: 6px;
+    }
+    .like-button { right: 6px; }
+    .bookmark-button { left: 6px; }
+
+    .heart-icon, .bookmark-icon {
+        width: 14px; /* 아이콘 크기 조정 */
+        height: 14px;/* 아이콘 크기 조정 */
     }
     .month-title {
         font-size: 20px;
@@ -444,12 +441,12 @@ body {
     }
     .filter-container {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch; /* 수정: flex-start -> stretch */
         gap: 15px;
     }
     .filter-tabs {
         width: 100%;
-        justify-content: center; /* 탭들을 중앙 정렬 */
+        justify-content: center;
     }
     .filter-tab {
         font-size: 14px;
@@ -466,65 +463,39 @@ body {
         right: auto;
         left: 0;
     }
-    .movie-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px 10px;
+    .movie-grid { /* upcoming.css 에서는 flex 이므로 grid-template-columns 불필요 */
+        gap: 15px; /* flex gap */
     }
+    .movie-item { /* 2열 레이아웃을 위해 너비 조정 */
+       flex-basis: calc(50% - 7.5px); /* (100% - gap) / 2 */
+       width: calc(50% - 7.5px);
+    }
+
     .month-title {
-        font-size: 20px;
+        font-size: 18px; /* 조정 */
     }
     .title {
         font-size: 13px;
     }
-    .rating, .booking-rate, .release-date {
+    .rating, .release-date {
         font-size: 10px;
     }
     .btn-book, .btn-special {
         padding: 3px 6px;
         font-size: 9px;
     }
-    .btn-like {
-        font-size: 12px;
+    .like-button, .bookmark-button {
+        width: 24px; /* 조정된 크기 */
+        height: 24px;/* 조정된 크기 */
+        top: 4px;
+    }
+    .like-button { right: 4px; }
+    .bookmark-button { left: 4px; }
+    
+    .heart-icon, .bookmark-icon {
+        width: 12px; /* 아이콘 크기 조정 */
+        height: 12px;/* 아이콘 크기 조정 */
     }
 }
 
-/* Like Button */
-.like-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    opacity: 0;
-}
-
-.poster-container:hover .like-button {
-    opacity: 1;
-}
-
-.like-button:hover {
-    background: rgba(0, 0, 0, 0.7);
-    transform: scale(1.1);
-}
-
-.heart-icon {
-    width: 20px;
-    height: 20px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: background-image 0.3s ease;
-}
-
-.like-button.active .heart-icon {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff0000' stroke='%23ff0000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E");
-}
+/* 기존 Like Button 관련 주석 처리된 부분은 최종적으로 정리 */

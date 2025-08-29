@@ -4,25 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineX</title>
-    <link rel="stylesheet" href="/css/pages/index.css">
+    <link rel="stylesheet" href="../css/pages/index.css">
+    <script src="../js/index.js" defer></script>
 </head>
 <body>
     <header class="header">
-        <div class="logo">CineX</div>
+        <a href="index.html" class="logo">CineX</a>
+        <div class="header-search-container">
+            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
+            <button type="button" class="header-search-button" aria-label="검색">
+                <svg class="header-search-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
         <nav class="nav">
-            <a href="index.html" class="nav-item active">Home</a> 
+            <a href="index.html" class="nav-item">Home</a>
             <a href="now-playing.html" class="nav-item">Now playing</a>
             <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item">Community</a>
             <a href="mypage.html" class="nav-item">My page</a>
         </nav>
     </header>
 
     <section class="main-movie">
-        <h1 class="main-movie-title">Main Movie</h1>
-        <p class="main-movie-description">This section is description of main movie.</p>
-        <div class="main-movie-buttons">
-            <button class="btn-detail">상세보기</button>
-            <button class="btn-trailer">예고편 보기</button>
+        <div class="main-movie-content">
+            <h1 class="main-movie-title"></h1>
+            <div class="main-movie-info">
+                <span class="movie-rating"></span>
+                <span class="movie-runtime"></span>
+                <span class="movie-release"></span>
+                <span class="movie-vote"></span>
+            </div>
+            <div class="movie-genres"></div>
+            <p class="main-movie-description"></p>
+            <div class="movie-director"></div>
+            <div class="main-movie-buttons">
+                <a href="movie-detail.html" class="btn-detail">상세보기</a>
+                <button class="btn-trailer" onclick="openTrailerModal()">예고편 보기</button>
+            </div>
         </div>
     </section>
 
@@ -33,47 +53,8 @@
                 <a href="now-playing.html" class="arrow">&gt;</a>
             </div>
         </div>
-        <div class="movie-grid">
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="썬더볼츠" class="movie-poster">
-                <div class="movie-title">썬더볼츠</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="진격의 거인" class="movie-poster">
-                <div class="movie-title">진격의 거인</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="AKIRA" class="movie-poster">
-                <div class="movie-title">AKIRA</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="카우보이 비밥" class="movie-poster">
-                <div class="movie-title">카우보이 비밥</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="Devil May Cry" class="movie-poster">
-                <div class="movie-title">Devil May Cry</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="Solo Leveling" class="movie-poster">
-                <div class="movie-title">Solo Leveling</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="귀멸의 칼날" class="movie-poster">
-                <div class="movie-title">귀멸의 칼날</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="스즈메의 문단속" class="movie-poster">
-                <div class="movie-title">스즈메의 문단속</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="너의 이름은" class="movie-poster">
-                <div class="movie-title">너의 이름은</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="날씨의 아이" class="movie-poster">
-                <div class="movie-title">날씨의 아이</div>
-            </div>
+        <div class="movie-grid" id="nowPlayingMovies">
+            <!-- 영화 목록이 여기에 동적으로 로드됩니다 -->
         </div>
     </section>
 
@@ -84,52 +65,27 @@
                 <a href="upcoming.html" class="arrow">&gt;</a>
             </div>
         </div>
-        <div class="movie-grid">
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="블레이드 러너 2049" class="movie-poster">
-                <div class="movie-title">블레이드 러너 2049</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="듄: 파트 2" class="movie-poster">
-                <div class="movie-title">듄: 파트 2</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="메이즈 러너" class="movie-poster">
-                <div class="movie-title">메이즈 러너</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="인터스텔라" class="movie-poster">
-                <div class="movie-title">인터스텔라</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="매트릭스" class="movie-poster">
-                <div class="movie-title">매트릭스</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="아바타 3" class="movie-poster">
-                <div class="movie-title">아바타 3</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="스파이더맨" class="movie-poster">
-                <div class="movie-title">스파이더맨</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="배트맨" class="movie-poster">
-                <div class="movie-title">배트맨</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="원더우먼" class="movie-poster">
-                <div class="movie-title">원더우먼</div>
-            </div>
-            <div class="movie-item">
-                <img src="https://placehold.co/150x220" alt="슈퍼맨" class="movie-poster">
-                <div class="movie-title">슈퍼맨</div>
-            </div>
+        <div class="movie-grid" id="upcomingMovies">
+            <!-- 개봉 예정작 목록이 여기에 동적으로 로드됩니다 -->
         </div>
     </section>
+
+    <div class="trailer-modal" id="trailerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeTrailerModal()">&times;</button>
+            <div class="video-container">
+                <iframe src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer">
         <div class="footer-text">© 2025 CineX. All rights reserved.</div>
     </footer>
+    
+    <!-- API 및 페이지 스크립트 -->
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script src="../js/index.js"></script>
 </body>
 </html>

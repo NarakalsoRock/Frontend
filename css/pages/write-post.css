@@ -1,0 +1,352 @@
+/* frontend/css/pages/write-post.css */
+
+/* 공통 스타일은 common.css에 있다고 가정하고 import 합니다. */
+@import url(../common/common.css);
+@import url(../common/footer.css); /* 푸터 스타일 (HTML에 푸터가 있다면 필요) */
+@import url(../common/header.css); /* 헤더 스타일 */
+
+/* 기본적인 body 스타일 (common.css에 있을 법한 내용) */
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 320px;
+    max-width: 1440px; /* 원본 HTML의 너비에 맞춰 페이지 최대 너비 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+}
+
+/* Header Styles (common/header.css로 분리되었다고 가정) */
+/* .header, .header-content, .logo-wrapper, .logo-back-arrow, .logo, .nav, .nav-item 스타일은
+   common/header.css에 정의되어 있고 이 파일에서는 import해서 사용한다고 가정합니다. */
+
+/* Main Content Wrapper */
+.write-post-main-content {
+    width: 100%;
+    max-width: 1440px; /* 원본 너비 유지 */
+    padding: 100px 45px 40px; /* 헤더 높이(80px) + 상단 여백, 좌우 여백 (원본 left 값 29px, 49px 고려) */
+    margin: 0 auto; /* 중앙 정렬 */
+    box-sizing: border-box;
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 허용 */
+}
+
+/* 헤더와 제목 입력 필드 사이의 구분선 */
+.header-divider {
+    width: 100%; /* 원본 1337.01px */
+    height: 1px;
+    background: white;
+    margin-bottom: 20px; /* 제목 입력 필드와의 간격 (원본 226px - 100px - 99px = 27px, 대략 20px) */
+    /* 원본 HTML의 구분선은 header 아래에 바로 위치하는 것처럼 보이지만,
+       실제 레이아웃에서 제목 입력 필드 위에 오는 것이 일반적입니다.
+       여기서는 헤더 아래의 간격을 고려하여 main-content의 padding-top과
+       이 요소의 margin-bottom으로 위치를 조정했습니다. */
+}
+
+/* 제목 입력 필드 */
+.input-title-container {
+    margin-bottom: 25px; /* 내용 입력 필드와의 간격 (원본 264px - 226px = 38px, 대략 25px) */
+}
+
+.post-title-input {
+    width: 614px; /* 원본 너비 */
+    height: 48px; /* 원본 높이 */
+    background: transparent; /* 배경 없음 */
+    border: none;
+    outline: none; /* 클릭 시 아웃라인 제거 */
+    color: white;
+    font-size: 32px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    padding: 0; /* 기본 패딩 제거 */
+    box-sizing: border-box;
+}
+
+.post-title-input::placeholder {
+    color: white; /* 플레이스홀더 색상 */
+    opacity: 0.7; /* 플레이스홀더 투명도 */
+}
+
+/* 내용 입력 에디터 컨테이너 */
+.content-editor-container {
+    width: 100%; /* 원본 1316px */
+    height: 489px; /* 원본 높이 */
+    background: #393740;
+    overflow: hidden; /* 내부 텍스트 넘침 처리 */
+    margin-bottom: 40px; /* 완료 버튼과의 간격 */
+    border-radius: 0; /* 원본에 border-radius 없음 */
+}
+
+.post-content-textarea {
+    width: 100%;
+    height: 100%;
+    background: transparent; /* 배경 없음 */
+    border: none;
+    outline: none; /* 클릭 시 아웃라인 제거 */
+    color: white;
+    font-size: 32px; /* 원본 32px */
+    font-family: Inter;
+    font-weight: 500; /* 원본 500 */
+    word-wrap: break-word;
+    padding: 18px 10px; /* 원본의 left 10px, top 18px 고려 */
+    box-sizing: border-box;
+    resize: none; /* 사용자가 크기 조절 못하도록 */
+}
+
+.post-content-textarea::placeholder {
+    color: white; /* 플레이스홀더 색상 */
+    opacity: 0.7;
+}
+
+/* 완료 버튼 컨테이너 */
+.complete-button-container {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    width: 100%;
+    /* margin-top은 content-editor-container의 margin-bottom으로 처리 */
+}
+
+.complete-button {
+    width: 145px;
+    height: 52px;
+    background: #673AB7;
+    border-radius: 10px;
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.complete-button:hover {
+    background-color: #7b4fc9;
+}
+
+/* Footer Styles (common/footer.css로 분리되었다고 가정) */
+/* .footer, .footer-text 스타일은 common/footer.css에 정의되어 있고
+   이 파일에서는 import해서 사용한다고 가정합니다. */
+
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .write-post-main-content {
+        padding: 100px 30px 30px;
+    }
+    .post-title-input {
+        width: 100%; /* 너비 100%로 확장 */
+        font-size: 28px;
+    }
+    .post-content-textarea {
+        font-size: 24px;
+    }
+    .complete-button {
+        width: 120px;
+        height: 48px;
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 3%;
+        height: 70px;
+    }
+    .logo-back-arrow {
+        font-size: 30px;
+    }
+    .nav {
+        gap: 15px;
+    }
+    .nav-item {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
+    .write-post-main-content {
+        padding: 90px 20px 20px;
+    }
+    .post-title-input {
+        font-size: 24px;
+        height: 40px;
+    }
+    .post-content-textarea {
+        font-size: 20px;
+    }
+    .complete-button {
+        width: 100px;
+        height: 44px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 60px;
+    }
+    .logo-back-arrow {
+        font-size: 24px;
+    }
+    .nav {
+        display: none; /* 모바일에서 네비게이션 숨김 */
+    }
+    .write-post-main-content {
+        padding: 80px 15px 15px;
+    }
+    .post-title-input {
+        font-size: 20px;
+        height: 36px;
+    }
+    .post-content-textarea {
+        font-size: 16px;
+    }
+    .complete-button {
+        width: 80px;
+        height: 40px;
+        font-size: 16px;
+    }
+}
+
+.write-post-content {
+    width: 100%;
+    max-width: 1440px;
+    padding: 100px 49px 40px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.write-post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.write-post-title {
+    color: #673AB7;
+    font-size: 48px;
+    font-family: Inter;
+    font-weight: 700;
+    margin: 0;
+}
+
+.write-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.form-input, .form-textarea {
+    background: #393740;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    color: white;
+    font-size: 16px;
+    font-family: Inter;
+    resize: vertical;
+}
+
+.form-input {
+    height: 48px;
+}
+
+.form-textarea {
+    min-height: 300px;
+}
+
+.form-input:focus, .form-textarea:focus {
+    outline: 2px solid #673AB7;
+}
+
+.button-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.submit-button, .cancel-button {
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-button {
+    background: #673AB7;
+    color: white;
+    border: none;
+}
+
+.submit-button:hover {
+    background: #7B52C7;
+}
+
+.cancel-button {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.cancel-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .write-post-content {
+        padding: 80px 20px 40px;
+    }
+
+    .write-post-title {
+        font-size: 36px;
+    }
+
+    .form-label {
+        font-size: 16px;
+    }
+
+    .form-input, .form-textarea {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .submit-button, .cancel-button {
+        width: 100%;
+        padding: 12px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .write-post-content {
+        padding: 60px 16px 32px;
+    }
+
+    .write-post-title {
+        font-size: 28px;
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "cinex-frontend",
+  "version": "1.0.0",
+  "description": "CineX Frontend",
+  "scripts": {
+    "start": "http-server . --cors -p 3000 -c-1 -o /html/index.html -e html"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

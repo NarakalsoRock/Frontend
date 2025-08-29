@@ -1,0 +1,396 @@
+/* frontend/css/pages/person-detail.css */
+@import url(../common/common.css);
+@import url(../common/footer.css);
+@import url(../common/header.css);
+
+
+.main-content {
+    flex-grow: 1; /* body의 min-height:100vh에서 남은 공간을 채움 */
+    padding: 100px 5% 40px; /* 헤더 높이(80px) + 상단 여백, 좌우 여백, 하단 여백 */
+    max-width: 1440px; /* body의 최대 너비와 일치 */
+    margin: 0 auto; /* 중앙 정렬 */
+    box-sizing: border-box;
+}
+
+.person-detail-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* 반응형 시 줄바꿈 */
+    gap: 40px; /* 좌우 컬럼 간격 */
+    justify-content: center; /* 중앙 정렬 (내용이 적을 때) */
+    align-items: flex-start; /* 좌우 컬럼 상단 정렬 */
+}
+
+.person-profile-section {
+    flex-shrink: 0; /* 인물 사진 섹션이 줄어들지 않도록 */
+    width: 307px; /* 프로필 이미지의 원래 너비에 맞춤 */
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* 섹션 블록 간 간격 */
+    /* position: relative; /* 자식 absolute 필요시 */
+}
+
+.person-profile-image {
+    width: 100%; /* 부모 너비에 맞춤 */
+    height: auto; /* 비율 유지 */
+    aspect-ratio: 307 / 460;
+    border-radius: 15px;
+    display: block; /* 이미지 하단 공백 제거 */
+}
+
+.person-details-section {
+    flex-grow: 1; /* 남은 공간을 채움 */
+    max-width: calc(100% - 307px - 40px); /* 왼쪽 컬럼 너비와 간격을 제외한 나머지 공간 사용 */
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* 섹션 블록 간 간격 */
+}
+
+.person-name {
+    font-size: 48px; /* 이미지 참고하여 조정 */
+    font-weight: 700;
+    color: #673AB7;
+    margin-bottom: 20px; /* 약력 섹션과의 간격 */
+    line-height: 1.2;
+    word-wrap: break-word;
+}
+
+.section-block {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 제목과 내용 사이 간격 */
+}
+
+/* 섹션 제목 공통 스타일 */
+.section-title {
+    color: #673AB7;
+    font-size: 28px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-bottom: 0; /* section-block의 gap이 간격 조절 */
+}
+
+/* 인물 정보 내용 */
+.person-info-content,
+.person-biography-content,
+.person-awards-content {
+    color: white;
+    font-size: 18px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+    line-height: 1.6;
+}
+
+/* 공식 사이트 아이콘 스타일 */
+.official-site-icons {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.official-site-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.8;
+}
+
+.official-site-icon:hover {
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+.official-site-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: #fff;
+}
+
+.official-site-separator {
+    color: #666;
+    font-size: 1.2rem;
+    margin: 0 0.5rem;
+}
+
+.no-links {
+    color: #666;
+    font-style: italic;
+    margin: 0;
+}
+
+/* ========================================================================= */
+/* 주요 작품 섹션 (가로 스크롤) */
+/* ========================================================================= */
+.main-works-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
+}
+
+.main-works-grid::-webkit-scrollbar {
+    display: none;
+}
+
+
+.movie-item {
+    flex-shrink: 0;
+    width: 160px; /* 아이템 너비 조정 (이미지 너비 163px, 167px, 168px 등을 고려하여 통일) */
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.movie-item:hover {
+    transform: scale(1.03);
+}
+
+.movie-poster {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 160 / 240; /* 포스터 이미지 비율에 맞게 조정 (원본 이미지 163x245, 167x251 등 다양함) */
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.movie-title {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* ========================================================================= */
+/* 반응형 디자인 (media queries) */
+/* ========================================================================= */
+@media (max-width: 1024px) {
+    .person-detail-wrapper {
+        flex-direction: column; /* 세로로 쌓이도록 변경 */
+        align-items: center; /* 중앙 정렬 */
+        gap: 30px;
+    }
+
+    .person-profile-section,
+    .person-details-section {
+        width: 100%; /* 너비를 100%로 확장 */
+        max-width: 600px; /* 너무 넓어지지 않도록 최대 너비 설정 */
+        align-items: center; /* 내부 요소 중앙 정렬 */
+        text-align: center; /* 텍스트 중앙 정렬 */
+    }
+
+    .person-profile-image {
+        margin: 0 auto;
+    }
+
+    .person-name {
+        font-size: 40px;
+        margin-top: 20px; /* 이미지와의 간격 (모바일에서 이름이 이미지 아래로 왔을 때) */
+    }
+
+    .section-block {
+        gap: 10px; /* 모바일에서 섹션 블록 내부 간격 */
+    }
+    .section-title {
+        font-size: 24px;
+        margin-top: 30px; /* 이전 섹션과의 간격 */
+    }
+    .section-title:first-child { /* 첫 섹션 제목은 상단 마진 줄임 (인물 사진 아래 인물 정보) */
+        margin-top: 20px;
+    }
+
+    .person-info-content,
+    .person-biography-content,
+    .person-awards-content {
+        text-align: center;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .official-site-icons {
+        justify-content: center;
+    }
+
+    .main-works-grid {
+        justify-content: flex-start; /* 스크롤 목록은 좌측 정렬 */
+    }
+
+    .movie-item {
+        width: 140px;
+    }
+    .movie-poster {
+        aspect-ratio: 140 / 210; /* 비율 조정 */
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 90px 3% 30px;
+    }
+    .person-name {
+        font-size: 36px;
+    }
+    .section-title {
+        font-size: 20px;
+    }
+    .person-info-content,
+    .person-biography-content,
+    .person-awards-content {
+        font-size: 16px;
+    }
+    .movie-item {
+        width: 120px;
+    }
+    .movie-poster {
+        aspect-ratio: 120 / 180;
+    }
+    .movie-title {
+        font-size: 14px;
+    }
+    .official-site-icon {
+        width: 28px;
+        height: 28px;
+    }
+    .official-site-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    .official-site-separator {
+        font-size: 24px;
+    }
+    .career-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .career-year {
+        width: 100%;
+        text-align: left;
+        padding-top: 0;
+    }
+
+    .career-title {
+        font-size: 16px;
+    }
+
+    .career-role {
+        font-size: 14px;
+    }
+
+    .career-rating {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 80px 2% 20px;
+    }
+    .person-profile-section,
+    .person-details-section {
+        gap: 20px;
+    }
+    .person-name {
+        font-size: 30px;
+    }
+    .section-title {
+        font-size: 18px;
+    }
+    .person-info-content,
+    .person-biography-content,
+    .person-awards-content {
+        font-size: 14px;
+    }
+    .movie-item {
+        width: 100px;
+    }
+    .movie-poster {
+        aspect-ratio: 100 / 150;
+    }
+    .movie-title {
+        font-size: 12px;
+    }
+    .official-site-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* 연기 경력 스타일 */
+.career-item {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: rgba(103, 58, 183, 0.1);
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.career-item:hover {
+    transform: translateX(5px);
+    background: rgba(103, 58, 183, 0.2);
+    box-shadow: 0 2px 8px rgba(103, 58, 183, 0.2);
+}
+
+.career-item:active {
+    transform: translateX(5px) scale(0.98);
+}
+
+.career-year {
+    flex-shrink: 0;
+    width: 60px;
+    color: #673AB7;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    padding-top: 5px;
+}
+
+.career-info {
+    flex-grow: 1;
+}
+
+.career-title {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.career-role {
+    color: #9575CD;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.career-rating {
+    color: #FFD700;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.no-career {
+    color: #666;
+    font-style: italic;
+    padding: 15px;
+    text-align: center;
+    background: rgba(103, 58, 183, 0.1);
+    border-radius: 8px;
+}

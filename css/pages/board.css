@@ -1,0 +1,440 @@
+/* frontend/css/pages/board.css */
+
+/* 공통 스타일은 common.css에 있다고 가정하고 import 합니다. */
+@import url(../common/common.css);
+@import url(../common/footer.css); /* 푸터 스타일 */
+@import url(../common/header.css); /* 헤더 스타일 */
+
+/* 기본적인 body 스타일 (common.css에 있을 법한 내용) */
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 320px;
+    max-width: 1440px; /* 원본 HTML의 너비에 맞춰 페이지 최대 너비 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+}
+
+/* Header Styles (common/header.css로 분리되었다고 가정) */
+/* .header, .header-content, .logo-wrapper, .logo-back-arrow, .logo, .nav, .nav-item 스타일은
+   common/header.css에 정의되어 있고 이 파일에서는 import해서 사용한다고 가정합니다. */
+/* 만약 header.css에 정의되지 않았다면, 현재 헤더 스타일을 이 파일에 직접 포함해야 합니다. */
+
+/* Main Content Wrapper */
+.board-main-content {
+    width: 100%;
+    max-width: 1440px;
+    padding: 100px 49px 40px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.board-title {
+    color: #673AB7;
+    font-size: 48px;
+    font-family: Inter;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.board-description {
+    color: #D9D9D9;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 500;
+    margin-bottom: 40px;
+    line-height: 1.5;
+}
+
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post-card {
+    background: #393740;
+    padding: 20px;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.post-title {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    margin-right: auto;
+}
+
+.post-date {
+    color: #D9D9D9;
+    font-size: 14px;
+}
+
+.post-preview {
+    color: #D9D9D9;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.post-footer {
+    display: flex;
+    gap: 20px;
+}
+
+.post-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #D9D9D9;
+    font-size: 14px;
+}
+
+/* 상단 버튼 영역 */
+.board-header {
+    margin-bottom: 20px;
+}
+
+.board-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.board-title {
+    color: #673AB7;
+    font-size: 48px;
+    font-family: Inter;
+    font-weight: 700;
+    margin: 0;
+}
+
+.board-buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.write-button, .board-search-button {
+    background: #673AB7;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.write-button:hover, .board-search-button:hover {
+    background: #7B52C7;
+}
+
+.board-search-button {
+    background: #2196F3;
+}
+
+.board-search-button:hover {
+    background: #1976D2;
+}
+
+.button-icon {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
+
+.board-description {
+    color: #D9D9D9;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 500;
+    margin: 0 0 40px 0;
+    line-height: 1.5;
+}
+
+/* 게시물 목록 섹션 */
+.post-list-section {
+    /* 이 섹션은 게시물 카드만 포함하므로 추가적인 스타일은 필요 없을 수 있습니다. */
+    /* 다만, 각 게시물 카드 사이의 간격은 .post-card에 정의되어 있습니다. */
+}
+
+/* 게시물 카드 공통 스타일 (community.css에서 가져온 스타일) */
+.post-card {
+    background: #393740;
+    padding: 15px 17px; /* 원본의 left/top 값 고려 */
+    margin-bottom: 20px; /* 게시물 카드 간 간격 */
+    border-radius: 0; /* 원본에 border-radius 없음 */
+    overflow: hidden; /* 내부 텍스트 넘침 처리 */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 아이콘, 닉네임, 시간 간격 */
+    margin-bottom: 10px; /* 유저 정보와 제목 사이 간격 */
+}
+
+.user-profile-icon {
+    width: 37px;
+    height: 37px;
+    background: transparent; /* 배경 없음 */
+    border-radius: 50%; /* 원형 */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-profile-icon-inner {
+    width: 24.67px;
+    height: 27.75px;
+    background: transparent; /* 배경 없음 */
+    outline: 4px white solid; /* 원본의 아웃라인 */
+    outline-offset: -2px;
+}
+
+.user-nickname {
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+
+.post-datetime {
+    color: white;
+    font-size: 14px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-left: auto; /* 시간을 오른쪽으로 밀착 */
+}
+
+.post-content {
+    color: #D9D9D9;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    line-height: 1.5; /* 가독성 */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 3줄까지 표시하고 넘치면 ... */
+    -webkit-box-orient: vertical;
+}
+
+.post-content .underline {
+    text-decoration: underline;
+}
+
+.post-actions {
+    display: flex;
+    gap: 20px; /* 좋아요/댓글 아이템 간 간격 */
+    margin-top: 20px; /* 내용과 액션 사이 간격 */
+}
+
+.action-item {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 아이콘과 숫자 간 간격 */
+}
+
+.action-icon {
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-icon-inner-like {
+    width: 20.90px;
+    height: 18.23px;
+    background: transparent; /* 배경 없음 */
+    outline: 4px white solid; /* 원본의 아웃라인 */
+    outline-offset: -2px;
+}
+
+.action-icon-inner-comment {
+    width: 18px;
+    height: 18px;
+    background: transparent; /* 배경 없음 */
+    outline: 4px white solid; /* 원본의 아웃라인 */
+    outline-offset: -2px;
+}
+
+.action-count {
+    color: white;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+
+
+/* Footer Styles (common/footer.css로 분리되었다고 가정) */
+/* .footer, .footer-text 스타일은 common/footer.css에 정의되어 있고
+   이 파일에서는 import해서 사용한다고 가정합니다. */
+
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .board-main-content {
+        padding: 100px 30px 30px;
+    }
+    .board-title {
+        font-size: 40px;
+    }
+    .board-description {
+        font-size: 18px;
+    }
+    .post-title {
+        font-size: 20px;
+    }
+    .post-preview {
+        font-size: 16px;
+    }
+    .write-button {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+    .user-nickname, .post-title, .action-count {
+        font-size: 20px;
+    }
+    .post-content {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 3%;
+        height: 70px;
+    }
+    .logo-back-arrow {
+        font-size: 30px;
+    }
+    .nav {
+        gap: 15px;
+    }
+    .nav-item {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
+    .board-main-content {
+        padding: 80px 20px 40px;
+    }
+    .board-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    .board-buttons {
+        width: 100%;
+    }
+    .write-button, .board-search-button {
+        flex: 1;
+        justify-content: center;
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+    .user-nickname, .post-title, .action-count {
+        font-size: 18px;
+    }
+    .post-content {
+        font-size: 16px;
+        -webkit-line-clamp: 2; /* 모바일에서 더 짧게 */
+    }
+    .post-datetime {
+        font-size: 12px;
+    }
+    .post-card {
+        padding: 10px;
+    }
+    .board-title {
+        font-size: 36px;
+    }
+    .board-description {
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 60px;
+    }
+    .logo-back-arrow {
+        font-size: 24px;
+    }
+    .nav {
+        display: none; /* 모바일에서 네비게이션 숨김 */
+    }
+    .board-main-content {
+        padding: 80px 15px 15px;
+    }
+    .board-title {
+        font-size: 28px;
+    }
+    .board-description {
+        font-size: 14px;
+    }
+    .write-button, .board-search-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    .user-nickname, .post-title, .action-count {
+        font-size: 16px;
+    }
+    .post-content {
+        font-size: 14px;
+        -webkit-line-clamp: 2;
+    }
+    .user-profile-icon {
+        width: 30px;
+        height: 30px;
+    }
+    .user-profile-icon-inner {
+        width: 18px;
+        height: 20px;
+        outline-width: 3px;
+    }
+    .action-icon {
+        width: 20px;
+        height: 20px;
+    }
+    .action-icon-inner-like {
+        width: 16px;
+        height: 14px;
+        outline-width: 3px;
+    }
+    .action-icon-inner-comment {
+        width: 14px;
+        height: 14px;
+        outline-width: 3px;
+    }
+}

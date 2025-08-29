@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // const loginBtn = document.getElementById('loginBtn');
 
     if (loginForm) {
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
             
             const email = loginEmailInput.value.trim();
             const password = loginPasswordInput.value.trim();
@@ -18,28 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8080/api/auth/login', { // 백엔드 로그인 API 주소
+                const response = await fetch(`${window.AUTH_URL}/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ email, password })
                 });
-
-                const data = await response.json();
-
+                
                 if (response.ok) {
-                    alert(data.message);
-                    localStorage.setItem('token', data.token); // JWT 토큰 저장
-                    // 사용자 정보를 필요한 경우 저장 (예: 닉네임)
-                    // localStorage.setItem('userNickname', data.user.nickname);
-                    window.location.href = 'my-page.html'; // 로그인 성공 후 마이페이지로 이동
+                    const data = await response.json();
+                    localStorage.setItem('token', data.token);
+                    
+                    // 저장된 리다이렉트 URL이 있는지 확인
+                    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+                    localStorage.removeItem('redirectAfterLogin'); // 사용 후 삭제
+                    
+                    // 리다이렉트 URL이 있으면 해당 페이지로, 없으면 홈으로 이동
+                    window.location.href = redirectUrl || 'index.html';
                 } else {
-                    alert(data.error || '로그인에 실패했습니다.');
+                    const error = await response.json();
+                    alert(error.message || '로그인에 실패했습니다.');
                 }
             } catch (error) {
-                console.error('Fetch error:', error);
-                alert('서버와 통신 중 오류가 발생했습니다. 다시 시도해주세요.');
+                console.error('로그인 요청 실패:', error);
+                alert('로그인 처리 중 오류가 발생했습니다.');
             }
         });
     }

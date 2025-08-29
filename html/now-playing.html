@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineX - Now Playing</title>
-    <link rel="stylesheet" href="/css/pages/now-playing.css">
+    <link rel="stylesheet" href="../css/pages/now-playing.css">
 </head>
 <body>
     <header class="header">
-        <div class="logo">CineX</div>
+        <a href="index.html" class="logo">CineX</a>
+        <div class="header-search-container">
+            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
+            <button type="button" class="header-search-button" aria-label="검색">
+                <svg class="header-search-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
         <nav class="nav">
             <a href="index.html" class="nav-item">Home</a>
-            <a href="now-playing.html" class="nav-item active">Now playing</a>
+            <a href="now-playing.html" class="nav-item">Now playing</a>
             <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item">Community</a>
             <a href="mypage.html" class="nav-item">My page</a>
         </nav>
     </header>
@@ -40,7 +49,17 @@
                 <div class="movie-item">
                     <div class="rank">1</div>
                     <div class="poster-container">
-                        <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <a href="movie-detail.html?id=201">
+                            <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        </a>
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -57,7 +76,17 @@
                 <div class="movie-item">
                     <div class="rank">2</div>
                     <div class="poster-container">
-                        <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <a href="movie-detail.html?id=202">
+                            <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        </a>
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -74,7 +103,17 @@
                 <div class="movie-item">
                     <div class="rank">3</div>
                     <div class="poster-container">
-                        <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <a href="movie-detail.html?id=203">
+                            <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        </a>
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -91,7 +130,17 @@
                 <div class="movie-item">
                     <div class="rank">4</div>
                     <div class="poster-container">
-                        <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <a href="movie-detail.html?id=204">
+                            <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        </a>
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -108,7 +157,17 @@
                 <div class="movie-item">
                     <div class="rank">5</div>
                     <div class="poster-container">
-                        <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <a href="movie-detail.html?id=205">
+                            <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        </a>
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -125,7 +184,17 @@
                 <div class="movie-item">
                     <div class="rank">6</div>
                     <div class="poster-container">
-                        <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <a href="movie-detail.html?id=206">
+                            <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        </a>
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -142,7 +211,17 @@
                 <div class="movie-item">
                     <div class="rank">7</div>
                     <div class="poster-container">
-                        <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <a href="movie-detail.html?id=207">
+                            <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        </a>
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -159,7 +238,17 @@
                 <div class="movie-item">
                     <div class="rank">8</div>
                     <div class="poster-container">
-                        <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <a href="movie-detail.html?id=208">
+                            <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        </a>
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -176,7 +265,17 @@
                 <div class="movie-item">
                     <div class="rank">9</div>
                     <div class="poster-container">
-                        <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <a href="movie-detail.html?id=209">
+                            <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        </a>
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -194,6 +293,14 @@
                     <div class="rank">10</div>
                     <div class="poster-container">
                         <img src="https://placehold.co/180x260/2a2a2a/2a2a2a" alt="영화 포스터" class="movie-poster">
+                        <button class="like-button">
+                            <i class="heart-icon"></i>
+                        </button>
+                        <button class="bookmark-button">
+                            <svg class="bookmark-icon" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="movie-info">
                         <div class="movie-header">
@@ -211,34 +318,13 @@
         </div>
     </section>
 
-    <script>
-        // Sort Dropdown Functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const sortButton = document.querySelector('.sort-button');
-            const sortOptions = document.querySelector('.sort-options');
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
 
-            if (sortButton && sortOptions) {
-                sortButton.addEventListener('click', function() {
-                    sortOptions.style.display = sortOptions.style.display === 'block' ? 'none' : 'block';
-                });
-
-                sortOptions.querySelectorAll('.sort-option').forEach(option => {
-                    option.addEventListener('click', function() {
-                        sortButton.textContent = this.textContent + ' ▼';
-                        sortOptions.style.display = 'none';
-                        // Add logic here to actually sort movies based on selection
-                        console.log('Selected sort option:', this.textContent);
-                    });
-                });
-
-                // Close dropdown if clicked outside
-                document.addEventListener('click', function(event) {
-                    if (!sortButton.contains(event.target) && !sortOptions.contains(event.target)) {
-                        sortOptions.style.display = 'none';
-                    }
-                });
-            }
-        });
-    </script>
+    <!-- API 및 페이지 스크립트 -->
+    <script src="../js/api.js"></script>
+    <script src="../js/now-playing.js"></script>
+    <script src="../js/header.js"></script>
 </body>
 </html>

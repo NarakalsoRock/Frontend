@@ -1,19 +1,6 @@
-/* Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background: black;
-    color: white;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    min-height: 100vh; /* Ensure body takes full viewport height */
-    display: flex;
-    flex-direction: column;
-}
+@import url(../common/common.css);
+@import url(../common/footer.css);
+@import url(../common/header.css);
 
 .page-wrapper {
     width: 100%;
@@ -22,58 +9,6 @@ body {
     position: relative;
     background: black;
     /* overflow: hidden; (컨텐츠가 넘칠 경우를 대비하여 제거하거나 필요에 따라 추가) */
-}
-
-/* Header */
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    z-index: 1000;
-}
-
-.logo-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* <와 CineX 사이 간격 */
-}
-
-.logo-back-arrow {
-    color: #673AB7; /* 보라색 */
-    font-size: 36px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.logo {
-    color: #673AB7;
-    font-size: 36px;
-    font-weight: 700;
-}
-
-.nav {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.nav-item:hover {
-    background: rgba(103, 58, 183, 0.2);
 }
 
 .nav-item.active {
@@ -148,7 +83,7 @@ body {
     margin-top: 20px;
 }
 
-.profile-image-placeholder {
+.profile-image {
     width: 260px;
     height: 260px;
     background: #D9D9D9;
@@ -353,22 +288,39 @@ body {
     font-size: 14px;
 }
 
-/* Footer */
-.footer {
-    width: 100%;
-    height: 74px;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: auto;
+
+/* mypage.css 에 추가 */
+.stats-grid .chart-card {
+    /* 기존 stat-card 스타일 유지 */
+    display: flex; /* 내부 요소 정렬을 위해 flex 사용 가능 */
+    flex-direction: column; /* 컨텐츠를 세로로 쌓음 */
+    justify-content: space-between; /* 내부 요소 간 간격 조정 */
 }
 
-.footer-text {
-    color: #673AB7;
-    font-size: 16px;
-    font-weight: 500;
+.chart-container {
+    position: relative; /* Chart.js가 내부에서 올바르게 위치하도록 */
+    height: 250px;  /* 그래프의 원하는 높이 (예시) */
+    width: 100%;    /* 카드의 전체 너비 사용 */
+    margin-bottom: 10px; /* 하단 총 개수와의 간격 */
 }
+
+/* Chart.js 캔버스 자체는 부모 컨테이너에 맞춰짐 */
+#likedMoviesChart {
+    /* width와 height 속성은 Chart.js가 직접 제어하므로 !important를 사용하지 않는 것이 좋음 */
+    /* 대신 부모인 .chart-container의 크기를 제어 */
+}
+
+/* 기존 .stat-card .stat-value 스타일은 유지 또는 필요시 조정 */
+.stat-card .stat-value { 
+    font-size: 1.2em; 
+    text-align: right; 
+}
+
+.stat-card .stat-value #totalLikedMoviesCountText {
+    font-weight: bold;
+}
+
+
 
 /* Responsive Design */
 @media (max-width: 1200px) {
@@ -382,7 +334,7 @@ body {
         flex-direction: column;
     }
     
-    .profile-image-placeholder {
+    .profile-image {
         width: 200px;
         height: 200px;
         margin: 0 auto;
@@ -406,7 +358,7 @@ body {
         font-size: 30px;
     }
     
-    .profile-image-placeholder {
+    .profile-image {
         width: 150px;
         height: 150px;
     }
@@ -457,7 +409,7 @@ body {
         font-size: 24px;
     }
     
-    .profile-image-placeholder {
+    .profile-image {
         width: 120px;
         height: 120px;
     }

@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineX - Upcoming</title>
-    <link rel="stylesheet" href="../css/pages/upcoming.css">
+    <title>CineX - 미디어</title>
+    <link rel="stylesheet" href="../css/pages/media.css">
+    <!-- API 설정 및 유틸리티 함수들 -->
+    <script src="../js/api.js" defer></script>
+    <!-- 미디어 페이지 기능 -->
+    <script src="../js/media.js" defer></script>
 </head>
 <body>
     <header class="header">
@@ -26,38 +30,34 @@
         </nav>
     </header>
 
-    <section class="filter-section">
-        <div class="filter-container">
-            <div class="filter-tabs">
-                <button class="filter-tab active">상영 예정작</button>
-            </div>
-            <div class="sort-dropdown">
-                <button class="sort-button">개봉일순 ▼</button>
-                <div class="sort-options">
-                    <button class="sort-option">개봉일순</button>
-                    <button class="sort-option">관람등급</button>
-                    <button class="sort-option">장르별</button>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="media-page-container">
+        <div class="section-title media-main-title">미디어</div>
 
-    <section class="movies-section">
-        <div class="movies-container">
-            <div class="movie-grid">
-                <!-- 영화 목록이 여기에 동적으로 추가됩니다 -->
+        <div class="media-category-title category-video">동영상/트레일러</div>
+        <div class="video-grid">
+            <div class="video-item video-item-1"></div>
+            <div class="video-item video-item-2"></div>
+        </div>
+
+        <div class="media-category-title category-stills">포스터/스틸컷</div>
+        <div class="stills-section-container">
+            <div class="poster-grid">
+                <div class="poster-item poster-item-1"></div>
+                <div class="poster-item poster-item-2"></div>
+                <div class="poster-item poster-item-3"></div>
+                <div class="poster-item poster-item-4"></div>
+                <div class="poster-item poster-item-5"></div>
+                <div class="poster-item poster-item-6"></div>
+                <div class="poster-item poster-item-7"></div>
+                <div class="poster-item poster-item-8"></div>
+                <div class="poster-item poster-item-9"></div>
+                <div class="poster-item poster-item-10"></div>
             </div>
         </div>
-    </section>
+    </div>
 
     <footer class="footer">
         <div class="footer-text">© 2025 CineX. All rights reserved.</div>
     </footer>
-
-    
-    <!-- API 및 페이지 스크립트 -->
-    <script src="../js/api.js"></script>
-    <script src="../js/upcoming.js"></script>
-    <script src="../js/header.js"></script>
 </body>
 </html>
