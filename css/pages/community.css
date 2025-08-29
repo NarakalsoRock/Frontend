@@ -1,0 +1,381 @@
+/* frontend/css/pages/community.css */
+
+/* 공통 스타일은 common.css에 있다고 가정하고 import 합니다. */
+@import url(../common/common.css);
+@import url(../common/footer.css); /* 푸터 스타일 */
+@import url(../common/header.css); /* 헤더 스타일 */
+
+/* 기본적인 body 스타일 */
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-width: 320px;
+    max-width: 1440px;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+
+
+/* Main Content Wrapper */
+.community-main-content {
+    width: 100%;
+    max-width: 1440px;
+    padding: 80px 49px 40px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* 메인 타이틀 (커뮤니티) */
+.main-title {
+    color: #673AB7;
+    font-size: 48px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-bottom: 40px; /* 탭과의 간격 */
+}
+
+/* 카테고리 탭 */
+.category-tabs {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.category-tab {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 700;
+    padding: 10px 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.category-tab.active {
+    color: #673AB7;
+    cursor: default;
+}
+
+.category-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #673AB7;
+}
+
+.tab-content {
+    transition: opacity 0.3s ease;
+}
+
+/* 섹션 타이틀 공통 */
+.section-title {
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-bottom: 20px; /* 카드와의 간격 */
+}
+
+/* 가장 핫한 게시물 섹션 */
+.hot-posts-section {
+    margin-bottom: 40px; /* 다음 섹션과의 간격 */
+}
+
+/* 게시판 섹션 (게시물 카드와 보드 카드 포함) */
+.board-sections {
+    margin-bottom: 40px; /* 푸터와의 간격 */
+}
+
+
+/* 게시물 카드 공통 스타일 */
+.post-card {
+    background: #393740;
+    padding: 15px 17px; /* 원본의 left/top 값 고려 */
+    margin-bottom: 30px; /* 게시물 카드 간 간격 */
+    border-radius: 0; /* 원본에 border-radius 없음 */
+    overflow: hidden; /* 내부 텍스트 넘침 처리 */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 아이콘, 닉네임, 시간 간격 */
+    margin-bottom: 10px; /* 유저 정보와 제목 사이 간격 */
+}
+
+.user-profile-icon {
+    width: 37px;
+    height: 37px;
+    background: transparent; /* 배경 없음 */
+    border-radius: 50%; /* 원형 */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-profile-icon-inner {
+    width: 24.67px;
+    height: 27.75px;
+    background: transparent; /* 배경 없음 */
+    outline: 4px white solid; /* 원본의 아웃라인 */
+    outline-offset: -2px;
+}
+
+.user-nickname {
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+}
+
+.post-datetime {
+    color: white;
+    font-size: 14px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-left: auto; /* 시간을 오른쪽으로 밀착 */
+}
+
+.post-title {
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-bottom: 10px; /* 제목과 내용 사이 간격 */
+}
+
+.post-content {
+    color: #D9D9D9;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    line-height: 1.5; /* 가독성 */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 3줄까지 표시하고 넘치면 ... */
+    -webkit-box-orient: vertical;
+}
+
+.post-content .underline {
+    text-decoration: underline;
+}
+
+.post-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.action-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.like-button, .comment-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 20px;
+    color: white;
+}
+
+.action-count {
+    color: white;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 700;
+}
+
+/* 게시판 그리드 (정보, 리뷰, 토론 게시판) */
+.board-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 반응형 그리드 */
+    gap: 30px; /* 카드 간 간격 */
+    justify-content: center; /* 카드 중앙 정렬 */
+    margin-top: 30px; /* 게시판 섹션 타이틀과의 간격 */
+}
+
+.board-card {
+    background: #393740;
+    padding: 15px; /* 내부 여백 */
+    border-radius: 8px; /* 약간의 둥근 모서리 */
+    overflow: hidden;
+    box-sizing: border-box;
+    text-align: center; /* 내부 텍스트 가운데 정렬 */
+    height: 206px; /* 원본 높이 유지 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.board-card:hover {
+    transform: translateY(-5px);
+    background: #454450;
+}
+
+.board-title {
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-bottom: 15px; /* 제목과 설명 사이 간격 */
+}
+
+.board-description {
+    color: #D9D9D9;
+    font-size: 20px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* 설명 4줄까지 표시 */
+    -webkit-box-orient: vertical;
+}
+
+/* 게시물 카드 링크 스타일 */
+.post-card-link {
+    text-decoration: none;
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.post-card-link:hover {
+    transform: translateY(-2px);
+}
+
+.post-card-link:hover .post-card {
+    background: #454450;
+}
+
+.post-card-link .post-card {
+    transition: background-color 0.2s ease;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .main-title {
+        font-size: 40px;
+    }
+    .category-tab {
+        font-size: 28px;
+    }
+    .user-nickname, .post-title, .action-count, .board-title {
+        font-size: 20px;
+    }
+    .post-content, .board-description {
+        font-size: 18px;
+    }
+    .post-card {
+        padding: 10px;
+    }
+    .board-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .community-main-content {
+        padding: 90px 20px 30px;
+    }
+    .main-title {
+        font-size: 32px;
+    }
+    .category-tab {
+        font-size: 24px;
+    }
+    .section-title {
+        font-size: 20px;
+    }
+    .user-nickname, .post-title, .action-count, .board-title {
+        font-size: 18px;
+    }
+    .post-content, .board-description {
+        font-size: 16px;
+        -webkit-line-clamp: 2; /* 모바일에서 더 짧게 */
+    }
+    .post-datetime {
+        font-size: 12px;
+    }
+    .board-grid {
+        grid-template-columns: 1fr; /* 세로로 쌓이도록 */
+        gap: 15px;
+    }
+    .board-card {
+        height: auto; /* 내용에 따라 높이 조절 */
+        min-height: 150px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .community-main-content {
+        padding: 80px 15px 20px;
+    }
+    .main-title {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+    .category-tab {
+        font-size: 20px;
+    }
+    .section-title {
+        font-size: 18px;
+    }
+    .user-nickname, .post-title, .action-count, .board-title {
+        font-size: 16px;
+    }
+    .post-content, .board-description {
+        font-size: 14px;
+    }
+    .user-profile-icon {
+        width: 30px;
+        height: 30px;
+    }
+    .user-profile-icon-inner {
+        width: 18px;
+        height: 20px;
+        outline-width: 3px;
+    }
+    .action-icon {
+        width: 20px;
+        height: 20px;
+    }
+}

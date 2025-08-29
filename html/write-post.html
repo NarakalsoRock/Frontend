@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - 글쓰기</title>
+    <link rel="stylesheet" href="../css/pages/write-post.css">
+    <script src="../js/api.js" defer></script>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">CineX</a>
+        <div class="header-search-container">
+            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
+            <button type="button" class="header-search-button" aria-label="검색">
+                <svg class="header-search-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="nav">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item active">Community</a>
+            <a href="mypage.html" class="nav-item">My page</a>
+        </nav>
+    </header>
+
+    <main class="write-post-content">
+        <div class="write-post-header">
+            <h1 class="write-post-title">글쓰기</h1>
+        </div>
+
+        <form class="write-form" id="writeForm">
+            <div class="form-group">
+                <label for="postTitle" class="form-label">제목</label>
+                <input type="text" id="postTitle" class="form-input" placeholder="제목을 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+                <label for="postContent" class="form-label">내용</label>
+                <textarea id="postContent" class="form-textarea" placeholder="내용을 입력하세요" required></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="submit-button">등록하기</button>
+                <button type="button" class="cancel-button" id="cancelButton">취소</button>
+            </div>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
+
+    <script>
+        let currentBoardType;
+
+        async function initializePage() {
+            const isLoggedIn = await window.checkLoginStatus(); // api.js의 함수 호출
+            if (!isLoggedIn) {
+                alert('글을 작성하려면 로그인이 필요합니다.');
+                // 로그인 후 현재 글쓰기 페이지로 돌아오도록 URL 저장
+                const params = new URLSearchParams(window.location.search);
+                const typeForRedirect = params.get('type') || '';
+                localStorage.setItem('redirectAfterLogin', `write-post.html${typeForRedirect ? '?type=' + typeForRedirect : ''}`);
+                window.location.href = 'login.html';
+                return; // 리다이렉션 후 스크립트 실행 중단
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            currentBoardType = urlParams.get('type');
+            const writePostTitleElement = document.querySelector('.write-post-title');
+
+            if (currentBoardType) {
+                let pageTitle = "CineX - ";
+                let formTitle = "";
+                switch (currentBoardType) {
+                    case 'info':
+                        pageTitle += '정보 게시판 글쓰기';
+                        formTitle = '정보 게시판 글쓰기';
+                        break;
+                    case 'review':
+                        pageTitle += '리뷰 게시판 글쓰기';
+                        formTitle = '리뷰 게시판 글쓰기';
+                        break;
+                    case 'discussion':
+                        pageTitle += '토론 게시판 글쓰기';
+                        formTitle = '토론 게시판 글쓰기';
+                        break;
+                    default:
+                        alert('유효하지 않은 게시판 타입입니다.');
+                        window.location.href = 'community.html';
+                        return;
+                }
+                document.title = pageTitle;
+                writePostTitleElement.textContent = formTitle;
+            } else {
+                alert('게시판 타입이 지정되지 않았습니다.');
+                window.location.href = 'community.html';
+                return;
+            }
+        }
+
+        document.getElementById('writeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // 로그인 상태 재확인 (필수는 아니나, 토큰 만료 등의 경우 대비)
+            const isLoggedIn = await window.checkLoginStatus();
+            if (!isLoggedIn) {
+                 alert('세션이 만료되었거나 로그인이 필요합니다. 로그인 페이지로 이동합니다.');
+                 const params = new URLSearchParams(window.location.search);
+                 const typeForRedirect = params.get('type') || '';
+                 localStorage.setItem('redirectAfterLogin', `write-post.html${typeForRedirect ? '?type=' + typeForRedirect : ''}`);
+                 window.location.href = 'login.html';
+                 return;
+            }
+
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+
+            if (!title || !content) {
+                alert('제목과 내용을 모두 입력해주세요.');
+                return;
+            }
+            if (!currentBoardType) { // currentBoardType이 설정되지 않은 경우 방어
+                alert('게시판 타입 정보가 없습니다. 페이지를 새로고침하거나 다시 시도해주세요.');
+                return;
+            }
+
+            try {
+                // window.createPost는 내부적으로 로그인 체크 및 리다이렉션을 수행함
+                const response = await window.createPost(title, content, currentBoardType);
+                if (response && response.success) { // createPost가 성공 시 객체를, 실패/리다이렉션 시 null을 반환하도록 수정했으므로 확인
+                    alert('게시글이 성공적으로 등록되었습니다.');
+                    window.location.href = `post-detail.html?id=${response.data._id}&type=${currentBoardType}`;
+                } else if(response === null) {
+                    // createPost 함수 내부에서 이미 alert 및 리다이렉션 처리됨
+                    console.log("createPost returned null, likely due to redirection for login.");
+                } else {
+                     // createPost 내부에서 alert이 이미 발생했을 수 있음
+                    alert(response ? response.error : '게시글 등록에 실패했습니다. 다시 시도해주세요.');
+                }
+            } catch (error) {
+                // createPost 함수 내부에서 이미 alert을 처리했을 수 있음
+                // console.error("게시글 등록 중 최종 오류:", error);
+                // alert('게시글 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+            }
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            if (currentBoardType) {
+                window.location.href = `board.html?type=${currentBoardType}`;
+            } else {
+                history.back();
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

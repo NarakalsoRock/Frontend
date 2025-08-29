@@ -1,7 +1,7 @@
 // signup.js
 document.addEventListener('DOMContentLoaded', () => {
     const signupForm = document.getElementById('signupForm');
-    const signupNicknameInput = document.getElementById('signupNickname');
+    const signupUsernameInput = document.getElementById('signupUsername');
     const signupEmailInput = document.getElementById('signupEmail');
     const signupPasswordInput = document.getElementById('signupPassword');
     //const signupBtn = document.getElementById('signupBtn');
@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
         signupForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             
-            const nickname = signupNicknameInput.value.trim();
+            const username = signupUsernameInput.value.trim();
             const email = signupEmailInput.value.trim();
             const password = signupPasswordInput.value.trim();
 
-            if (!nickname || !email || !password) {
+            if (!username || !email || !password) {
                 alert('모든 필드를 입력해주세요.');
                 return;
             }
@@ -34,14 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             */
             
-
             try {
-                const response = await fetch('http://localhost:8080/api/auth/signup', { // 백엔드 회원가입 API 주소
+                const response = await fetch('http://localhost:5000/api/auth/signup', { // 백엔드 회원가입 API 주소
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ nickname, email, password })
+                    body: JSON.stringify({ username, email, password })
                 });
 
                 const data = await response.json();

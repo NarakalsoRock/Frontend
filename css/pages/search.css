@@ -1,0 +1,192 @@
+@import url(../common/common.css);
+@import url(../common/footer.css);
+@import url(../common/header.css);
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #000; 
+    color: #fff; 
+}
+
+.search-page-container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto; 
+    padding: 0 20px; 
+    box-sizing: border-box; 
+}
+
+.search-bar-display-section {
+    width: 60%; 
+    max-width: 700px; 
+    margin: 100px auto 20px auto; 
+    padding: 10px 15px;
+    background: #1e1e1e; 
+    border-radius: 25px; 
+    display: flex;
+    align-items: center;
+    border: 1px solid #444; 
+    box-sizing: border-box;
+}
+
+.displayed-search-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: #e0e0e0; 
+    font-size: 1.2em; 
+    outline: none;
+    text-align: center; 
+    padding: 5px; 
+}
+
+.search-results-title-section {
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 30px; 
+}
+
+#searchResultsTitle {
+    font-size: 1.8em;
+    color: #fff;
+    font-weight: bold;
+}
+
+.movie-results-area {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+    gap: 25px; 
+    padding-bottom: 40px;
+    min-height: 300px; 
+}
+
+.movie-item-result { 
+    background-color: #1c1c1e; 
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    color: #fff;
+    display: flex;
+    flex-direction: column; 
+}
+
+.movie-item-result:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(103, 58, 183, 0.3); 
+}
+
+.movie-item-result .poster-link {
+    display: block; 
+    text-decoration: none;
+}
+
+.movie-item-result .poster-link img {
+    width: 100%;
+    height: 270px; 
+    object-fit: cover; 
+    display: block;
+    background-color: #2a2a2a; 
+    border-bottom: 1px solid #333; 
+}
+
+.movie-item-result .title-result {
+    padding: 12px 8px; 
+    font-size: 0.95em; 
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #e0e0e0; 
+    min-height: 40px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.movie-item-result .known-for {
+    color: #888;
+    font-size: 0.85em;
+    padding: 0 8px 12px 8px;
+    text-align: center;
+}
+
+/* 좋아요/북마크 버튼을 위한 스타일 (now-playing.css 등 참고) */
+.movie-item-buttons {
+    display: flex;
+    justify-content: space-around; /* 버튼 간 간격 */
+    padding: 8px 0;
+    background-color: #1c1c1e; /* 아이템 배경과 동일하게 또는 약간 다르게 */
+}
+
+.movie-item-buttons .like-button,
+.movie-item-buttons .bookmark-button {
+    background: none;
+    border: none;
+    color: #777; /* 기본 아이콘 색상 */
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1.3em; /* 아이콘 크기 */
+}
+
+.movie-item-buttons .like-button .heart-icon::before {
+    content: '♡'; /* 빈 하트 */
+}
+.movie-item-buttons .like-button.active .heart-icon::before {
+    content: '♥'; /* 채워진 하트 */
+    color: #ff4081; /* 활성 하트 색상 */
+}
+
+.movie-item-buttons .bookmark-button .bookmark-icon {
+    fill: #777; /* 기본 북마크 아이콘 색상 */
+    width: 20px; /* SVG 아이콘 크기 */
+    height: 20px;
+}
+.movie-item-buttons .bookmark-button.active .bookmark-icon {
+    fill: #ffc107; /* 활성 북마크 아이콘 색상 */
+}
+
+
+.loading,
+.no-results {
+    grid-column: 1 / -1; 
+    text-align: center;
+    font-size: 1.2em;
+    color: #888;
+    margin-top: 50px;
+    padding: 20px;
+}
+
+.pagination-container {
+    text-align: center;
+    padding: 30px 0;
+}
+
+.pagination-container button {
+    background-color: #673AB7;
+    color: white;
+    border: none;
+    padding: 10px 18px; 
+    margin: 0 8px; 
+    border-radius: 5px; 
+    cursor: pointer;
+    font-size: 1em; 
+    transition: background-color 0.2s ease;
+}
+
+.pagination-container button:hover:not(:disabled) {
+    background-color: #512DA8; 
+}
+
+.pagination-container button:disabled {
+    background-color: #333;
+    color: #777;
+    cursor: not-allowed;
+}
+
+.pagination-container .page-info {
+    margin: 0 15px; 
+    font-size: 1em; 
+    color: #ccc;
+}

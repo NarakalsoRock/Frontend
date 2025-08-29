@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineX - 커뮤니티</title>
+    <link rel="stylesheet" href="../css/pages/community.css">
+    <script src="../js/api.js" defer></script>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">CineX</a>
+        <div class="header-search-container">
+            <input type="text" class="header-search-input" placeholder="제목, 사람, 장르">
+            <button type="button" class="header-search-button" aria-label="검색">
+                <svg class="header-search-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="nav">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="now-playing.html" class="nav-item">Now playing</a>
+            <a href="upcoming.html" class="nav-item">Upcoming</a>
+            <a href="community.html" class="nav-item active">Community</a>
+            <a href="mypage.html" class="nav-item">My page</a>
+        </nav>
+    </header>
+
+    <main class="community-main-content">
+        <h1 class="main-title">커뮤니티</h1>
+
+        <div class="category-tabs">
+            <button class="category-tab active" data-tab="board">게시판</button>
+        </div>
+
+        <div class="tab-content" id="boardContent">
+            <section class="hot-posts-section" id="hotPostSection">
+                <h2 class="section-title">가장 핫한 게시물</h2>
+                <div class="post-card-placeholder">가장 핫한 게시물을 불러오는 중입니다...</div>
+            </section>
+
+            <section class="board-sections">
+                <h2 class="section-title">게시판</h2>
+                <div class="board-grid">
+                    <a href="board.html?type=info" class="board-card">
+                        <h3 class="board-title">정보 게시판</h3>
+                        <p class="board-description">영화 관련 최신 소식, 흥미로운 사실, 개봉 예정작 정보, 이벤트 소식 등 다양한 정보성 콘텐츠를 공유하고 얻을 수 있는 커뮤니티 공간입니다.</p>
+                    </a>
+                    <a href="board.html?type=review" class="board-card">
+                        <h3 class="board-title">리뷰 게시판</h3>
+                        <p class="board-description">영화에 대한 개인적인 감상, 평가, 비평 등을 자유롭게 작성하고 공유하며, 다른 사용자들의 다양한 의견을 탐색하고 소통할 수 있도록 설계된 커뮤니티 공간입니다.</p>
+                    </a>
+                    <a href="board.html?type=discussion" class="board-card">
+                        <h3 class="board-title">토론 게시판</h3>
+                        <p class="board-description">특정 영화나 영화 관련 주제에 대해 사용자들이 자유롭게 의견을 교환하고, 심층적인 논의를 펼칠 수 있도록 설계된 커뮤니티 공간입니다.</p>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">© 2025 CineX. All rights reserved.</div>
+    </footer>
+
+    <script>
+        function formatDate(dateString, format = 'short') {
+            const date = new Date(dateString);
+            if (format === 'short') {
+                return `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            }
+            return date.toLocaleDateString('ko-KR'); // 기본 포맷
+        }
+
+        function nl2br(str) {
+            return str ? str.replace(/(\r\n|\n\r|\r|\n)/g, "<br>") : "";
+        }
+
+        async function loadHotPost() {
+            const hotPostSection = document.getElementById('hotPostSection');
+            const placeholder = hotPostSection.querySelector('.post-card-placeholder');
+
+            try {
+                const types = ['info', 'review', 'discussion'];
+                let allPosts = [];
+
+                for (const type of types) {
+                    const response = await window.getPosts(type, 1, 100); // api.js
+                    if (response.success && response.data) {
+                        allPosts = allPosts.concat(response.data);
+                    }
+                }
+
+                if (allPosts.length === 0) {
+                    placeholder.textContent = '아직 게시글이 없습니다.';
+                    return;
+                }
+
+                const hotPost = allPosts.sort((a, b) => (b.views || 0) - (a.views || 0))[0];
+
+                if (hotPost) {
+                    placeholder.remove();
+                    const postCardLink = document.createElement('a');
+                    postCardLink.href = `post-detail.html?id=${hotPost._id}&type=${hotPost.boardType}`;
+                    postCardLink.className = 'post-card-link';
+
+                    const postContentHTML = nl2br(hotPost.content).substring(0, 150) + (hotPost.content.length > 150 ? '...' : '');
+
+                    postCardLink.innerHTML = `
+                        <div class="post-card">
+                            <div class="user-info">
+                                <div class="user-profile-icon">
+                                    <div class="user-profile-icon-inner"></div>
+                                </div>
+                                <span class="user-nickname">${hotPost.username || '익명'}</span>
+                                <span class="post-datetime">${formatDate(hotPost.createdAt, 'short')}</span>
+                            </div>
+                            <h3 class="post-title">${hotPost.title}</h3>
+                            <p class="post-content">
+                                ${postContentHTML}
+                            </p>
+                            <div class="post-actions">
+                                <div class="action-item">
+                                    <button class="like-button" aria-label="좋아요">
+                                        <div class="action-icon">♥</div>
+                                    </button>
+                                    <span class="action-count">${hotPost.likes ? hotPost.likes.length : 0}</span>
+                                </div>
+                                <div class="action-item">
+                                    <button class="comment-button" aria-label="댓글">
+                                        <div class="action-icon">💬</div>
+                                    </button>
+                                    <span class="action-count">${hotPost.commentsCount || 0}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    hotPostSection.appendChild(postCardLink);
+                    
+                    const likeButton = postCardLink.querySelector('.like-button');
+                    if (likeButton) {
+                        likeButton.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            alert('좋아요 기능은 게시글 상세 페이지에서 이용해주세요.');
+                        });
+                    }
+
+                } else {
+                    placeholder.textContent = '핫한 게시물을 찾을 수 없습니다.';
+                }
+
+            } catch (error) {
+                console.error('가장 핫한 게시물을 불러오는데 실패했습니다:', error);
+                placeholder.textContent = '핫한 게시물을 불러오는데 오류가 발생했습니다.';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 페이지가 로드되면 바로 핫 포스트를 불러옵니다.
+            loadHotPost();
+        });
+    </script>
+</body>
+</html>

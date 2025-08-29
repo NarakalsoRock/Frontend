@@ -1,0 +1,16 @@
+/* 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: black;
+    color: white;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    min-height: 100vh; /* 뷰포트 높이 최소 */
+    display: flex;
+    flex-direction: column; /* 푸터를 하단에 고정하기 위함 */
+}

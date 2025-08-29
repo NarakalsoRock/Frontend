@@ -1,0 +1,148 @@
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    z-index: 1000;
+}
+
+.logo {
+    color: #673AB7;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 2rem;
+}
+
+.header-search-container {
+    position: relative;
+    min-width: 240px;
+    margin-right: 2rem;
+}
+
+.header-search-input {
+    width: 100%;
+    height: 40px;
+    background-color: #1A1A1A;
+    border: none;
+    border-radius: 4px;
+    padding: 0 40px 0 16px;
+    color: white;
+    font-size: 14px;
+}
+
+.header-search-input::placeholder {
+    color: #666;
+}
+
+.header-search-input:focus {
+    outline: none;
+    background-color: #2A2A2A;
+}
+
+.header-search-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.header-search-button:hover {
+    color: white;
+}
+
+.header-search-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-left: auto;
+}
+/* --- 내비게이션 바 스타일 수정 (크기 축소) --- */
+
+/* 1. 내비게이션 아이템 기본 스타일 (크기 및 둥글기 조절) */
+.nav-item {
+    padding: 8px 18px;        /* 버튼 크기를 줄이기 위해 패딩을 조절합니다. */
+    border-radius: 25px;      /* 둥근 형태는 유지합니다. */
+    font-size: 16px;          /* 폰트 크기를 약간 줄입니다. */
+    font-weight: 500;
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 2. 마우스를 올렸을 때(hover) 효과 */
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* 3. 현재 활성화된 페이지 스타일 강조 */
+.nav-item.active {
+    background-color: #673AB7; /* 현재 페이지 배경색 */
+    color: white;
+    font-weight: 700;         /* 굵은 글씨로 강조 */
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1024px) {
+    .header-search-container {
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 1rem;
+    }
+
+    .logo {
+        margin-right: 1rem;
+    }
+
+    .header-search-container {
+        min-width: 180px;
+        margin-right: 1rem;
+    }
+
+    .nav {
+        gap: 1rem;
+    }
+
+    .nav-item {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 20px;
+    }
+
+    .header-search-container {
+        min-width: 140px;
+    }
+
+    .nav-item {
+        font-size: 13px;
+    }
+}

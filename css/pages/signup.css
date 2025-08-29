@@ -1,65 +1,6 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: black;
-    color: #ffffff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background: rgba(0, 0, 0, 0.9); /* Semi-transparent background for fixed header */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%; /* 5% padding on left/right */
-    z-index: 1000;
-    box-sizing: border-box; /* Include padding in width/height */
-}
-
-.logo {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #673AB7;
-}
-
-
-.logo {
-    color: #673AB7; /* 보라색 */
-    font-size: 36px;
-    font-weight: 700;
-    /* '뒤로 가기' 아이콘 대신 'CineX' 텍스트 로고로 통일 */
-}
-
-.nav {
-    display: flex;
-    gap: 30px; /* now-playing.css와 동일한 간격 */
-    margin-right: 0; /* 우측 정렬을 위해 margin-right 제거 */
-}
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    font-size: 18px; /* now-playing.css와 동일한 폰트 사이즈 */
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.nav-item:hover {
-    color: #673AB7;
-}
+@import url(../common/common.css);
+@import url(../common/footer.css);
+@import url(../common/header.css);
 
 .container {
     flex: 1;
@@ -141,12 +82,3 @@ body {
     background-color: #673AB7;
 }
 
-.footer {
-    background-color: #000000;
-    padding: 1rem;
-    text-align: center;
-}
-
-.footer-text {
-    color: #666666;
-}
